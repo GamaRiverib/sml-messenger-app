@@ -1,0 +1,7 @@
+{
+  "name": "SML Mensajero",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
