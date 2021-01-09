@@ -1,35 +1,32 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button [text]="getBackButtonText()" defaultHref="/"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Guide: <b>{{ order ? order.guide : '' }}</b></ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-tabs (ionTabsDidChange)="tabChange($event)">    
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button [text]="getBackButtonText()" defaultHref="/"></ion-back-button>
+      </ion-buttons>
+      <ion-title><span>Guide: </span><b>{{ order ? order.guide : '' }}</b></ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="general" selected="true">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      <ion-label>General</ion-label>
+    </ion-tab-button>
 
-<ion-content>
-  <ion-tabs (ionTabsDidChange)="tabChange($event)">
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="general">
-        <ion-icon name="information-outline"></ion-icon>
-        <ion-label>General</ion-label>
-      </ion-tab-button>
-  
-      <ion-tab-button tab="directions">
-        <ion-icon name="compass-outline"></ion-icon>
-        <ion-label>Directions</ion-label>
-      </ion-tab-button>
-  
-      <ion-tab-button tab="packages">
-        <ion-icon name="cube-outline"></ion-icon>
-        <ion-label>Packages</ion-label>
-      </ion-tab-button>
-  
-      <ion-tab-button tab="log">
-        <ion-icon name="list-outline"></ion-icon>
-        <ion-label>Log</ion-label>
-        <!--ion-badge>6</ion-badge-->
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
-</ion-content>
+    <ion-tab-button tab="directions">
+      <ion-icon name="compass-outline"></ion-icon>
+      <ion-label>Directions</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="packages">
+      <ion-icon name="cube-outline"></ion-icon>
+      <ion-label>Packages</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="log">
+      <ion-icon name="list-outline"></ion-icon>
+      <ion-label>Log</ion-label>
+      <!--ion-badge>6</ion-badge-->
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

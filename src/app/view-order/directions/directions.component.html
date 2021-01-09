@@ -1,52 +1,55 @@
-<ion-list>
-  <ion-list-header>
-    <ion-label color="secondary">
-      Pickup
-    </ion-label>
-  </ion-list-header>
-  <ion-item>
-    <ion-label position="fixed">Address</ion-label>
-    <ion-textarea>Fresnillo 1236 Col. Villa Aurora CP. 85154</ion-textarea>
-  </ion-item>
-  <ion-item>
-    <ion-icon name="person-outline"></ion-icon>
-    <ion-label class="ion-padding-start">Jesús</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-icon name="mail-outline"></ion-icon>
-    <ion-label class="ion-padding-start">jesus@gmail.com</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-icon name="phone-portrait-outline"></ion-icon>
-    <ion-label class="ion-padding-start">644 123 6458</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label position="fixed">Notes</ion-label>
-    <ion-textarea>Casa color verde, enseguida de taller.</ion-textarea>
-  </ion-item>
-  <ion-list-header>
-    <ion-label color="secondary">
-      Dropoff
-    </ion-label>
-  </ion-list-header>
-  <ion-item>
-    <ion-label position="fixed">Address</ion-label>
-    <ion-textarea>Guerrero 1806 Col. Infonavit Yukujimari CP. 85120</ion-textarea>
-  </ion-item>
-  <ion-item>
-    <ion-icon name="person-outline"></ion-icon>
-    <ion-label class="ion-padding-start">María</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-icon name="mail-outline"></ion-icon>
-    <ion-label class="ion-padding-start">maria@gmail.com</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-icon name="phone-portrait-outline"></ion-icon>
-    <ion-label class="ion-padding-start">644 123 7419</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label position="fixed">Notes</ion-label>
-    <ion-textarea>Estética</ion-textarea>
-  </ion-item>
-</ion-list>
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+      <ion-label color="secondary">
+        Pickup
+      </ion-label>
+    </ion-list-header>
+    <!--ion-item href="geo:27.476375,-109.967445"-->
+    <ion-item href="https://maps.google.com/?q=27.476387491390238,-109.96740146990781" target="_blank">
+      <ion-icon name="location-outline"></ion-icon>
+      <ion-label class="ion-padding-start ion-text-wrap">Fresnillo 1236 Col. Villa Aurora CP. 85154</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label class="ion-padding-start">Jesús</ion-label>
+    </ion-item>
+    <ion-item href="mailto:jesus@gmail.com">
+      <ion-icon name="mail-outline"></ion-icon>
+      <ion-label class="ion-padding-start">jesus@gmail.com</ion-label>
+    </ion-item>
+    <ion-item href="tel:6441236458">
+      <ion-icon name="phone-portrait-outline"></ion-icon>
+      <ion-label class="ion-padding-start">644 123 6458</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="information-outline"></ion-icon>
+      <ion-label class="ion-padding-start ion-text-wrap">Casa color verde, enseguida de taller. Una nota más larga para validar cómo se ve.</ion-label>
+    </ion-item>
+    <ion-list-header>
+      <ion-label color="secondary">
+        Dropoff
+      </ion-label>
+    </ion-list-header>
+    <ion-item href="https://maps.google.com/?q=27.493992398975752,-109.95784882570251" target="_blank">
+      <ion-icon name="location-outline"></ion-icon>
+      <ion-label class="ion-padding-start ion-text-wrap">Guerrero 1806 Col. Infonavit Yukujimari CP. 85120</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label class="ion-padding-start">María</ion-label>
+    </ion-item>
+    <ion-item href="mailto:maria@gmail.com">
+      <ion-icon name="mail-outline"></ion-icon>
+      <ion-label class="ion-padding-start">maria@gmail.com</ion-label>
+    </ion-item>
+    <ion-item href="tel:6441237419">
+      <ion-icon name="phone-portrait-outline"></ion-icon>
+      <ion-label class="ion-padding-start">644 123 7419</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="information-outline"></ion-icon>
+      <ion-label class="ion-padding-start ion-text-wrap">En el negocio de estética</ion-label>
+    </ion-item>  
+  </ion-list>
+</ion-content>
