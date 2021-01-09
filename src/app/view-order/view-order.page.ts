@@ -24,7 +24,12 @@ export class ViewOrderPage implements OnInit {
   getBackButtonText() {
     const win = window as any;
     const mode = win && win.Ionic && win.Ionic.mode;
-    return mode === 'ios' ? 'Inbox' : '';
+    return mode === 'ios' ? 'Orders' : '';
+  }
+
+  tabChange(event: any) {
+    console.log('Tab change event', event);
+    
   }
 
 }

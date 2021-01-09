@@ -11,6 +11,7 @@ ion-label {
 ion-item h2 {
   font-weight: 600;
   margin: 0;
+  margin-bottom: 5px;
 }
 
 ion-item p {
@@ -20,7 +21,7 @@ ion-item p {
   width: 95%;
 }
 
-ion-item .date {
+ion-item .note {
   float: right;
   align-items: center;
   display: flex;

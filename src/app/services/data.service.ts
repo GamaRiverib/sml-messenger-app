@@ -38,6 +38,7 @@ export interface Location {
 export interface MeetingPoint {
   contact?: Contact;
   location: Location;
+  done?: boolean;
 }
 
 export interface Pickup extends MeetingPoint {
@@ -84,7 +85,7 @@ export interface OrderHistoryItem {
   notes?: string;
 }
 
-export interface Client {
+export interface Customer {
   id: string;
   name: string;
   contact: Contact;
@@ -94,7 +95,7 @@ export interface Client {
 
 export interface Order {
   id: string;
-  client: Client;
+  customer: Customer;
   status: OrderStatus;
   date: string;
   read: boolean;
@@ -114,7 +115,7 @@ export class DataService {
   public orders: Order[] = [
     {
       id: '00001',
-      client: {
+      customer: {
         id: '23234',
         name: 'Jesús',
         contact: {
@@ -133,12 +134,12 @@ export class DataService {
           email: 'jose@gmail.com'
         },
         location: {
-          street: 'Calle Siempre Viva',
+          street: 'Fresnillo',
           longitude: 99.2091224,
           latitude: -109.0291092,
           zipCode: 12345,
-          externalNumber: '123',
-          neighborhood: 'Villa',
+          externalNumber: '1236',
+          neighborhood: 'Villa Aurora',
           state: 'SON',
           city: 'CAJEME',
           instructions: 'Casa color cereza'
@@ -193,7 +194,7 @@ export class DataService {
     },
     {
       id: '00002',
-      client: {
+      customer: {
         id: '23234',
         name: 'Jesús',
         contact: {
@@ -203,7 +204,7 @@ export class DataService {
       status: OrderStatus.CREATED,
       date: '6/1/2021 19:07:45',
       read: false,
-      type: ServiceType.ON_DEMAND,
+      type: ServiceType.SAME_DAY,
       storeId: 'test_store',
       pickup: {
         contact: {
@@ -212,12 +213,12 @@ export class DataService {
           email: 'jose@gmail.com'
         },
         location: {
-          street: 'Calle Siempre Viva',
+          street: 'Guerrero',
           longitude: 99.2091224,
           latitude: -109.0291092,
           zipCode: 12345,
-          externalNumber: '123',
-          neighborhood: 'Villa',
+          externalNumber: '1806',
+          neighborhood: 'Infonavit Yukujimari',
           state: 'SON',
           city: 'CAJEME',
           instructions: 'Casa color cereza'
@@ -272,7 +273,7 @@ export class DataService {
     },
     {
       id: '00003',
-      client: {
+      customer: {
         id: '23234',
         name: 'Jesús',
         contact: {
@@ -282,7 +283,7 @@ export class DataService {
       status: OrderStatus.CREATED,
       date: '6/1/2021 19:07:45',
       read: false,
-      type: ServiceType.ON_DEMAND,
+      type: ServiceType.NEXT_DAY,
       storeId: 'test_store',
       pickup: {
         contact: {
@@ -351,7 +352,7 @@ export class DataService {
     },
     {
       id: '00004',
-      client: {
+      customer: {
         id: '23234',
         name: 'Jesús',
         contact: {
@@ -430,7 +431,7 @@ export class DataService {
     },
     {
       id: '00005',
-      client: {
+      customer: {
         id: '23234',
         name: 'Jesús',
         contact: {
@@ -509,7 +510,7 @@ export class DataService {
     },
     {
       id: '00006',
-      client: {
+      customer: {
         id: '23234',
         name: 'Jesús',
         contact: {
@@ -588,7 +589,7 @@ export class DataService {
     },
     {
       id: '00007',
-      client: {
+      customer: {
         id: '23234',
         name: 'Jesús',
         contact: {
@@ -667,7 +668,7 @@ export class DataService {
     },
     {
       id: '00008',
-      client: {
+      customer: {
         id: '23234',
         name: 'Jesús',
         contact: {
