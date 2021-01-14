@@ -12,8 +12,8 @@ const orders: Order[] = [];
 const address: Address[] = [{
   Id: 1,
   FullAddress: "Fresnillo 1236 Col Villa Aurora CP 85154 Ciudad Obregón Sonora",
-  Latitude: 99.2091224,
-  Longitude: -109.0291092
+  Latitude: 27.476384442957702,
+  Longitude: -109.96744362284186
 }, {
   Id: 2,
   Street: "Fresnillo",
@@ -25,8 +25,8 @@ const address: Address[] = [{
   Zip: 85154,
   Country: "México",
   Indications: "Enseguida de casa con reja azul",
-  Latitude: 99.2091224,
-  Longitude: -109.0291092
+  Latitude: 27.476384442957702,
+  Longitude: -109.96744362284186
 }, {
   Id: 3,
   Street: "Guerrero",
@@ -38,13 +38,13 @@ const address: Address[] = [{
   Zip: 85120,
   Country: "México",
   Indications: "Hay un local de una estética",
-  Latitude: 99.2091224,
-  Longitude: -109.0291092
+  Latitude: 27.493996725705582,
+  Longitude: -109.95783394127278
 }, {
   Id: 4,
   FullAddress: "Guerrero 1806, Infonavit Yukujimari, 85120 Cd Obregón Sonora",
-  Latitude: 99.2091224,
-  Longitude: -109.0291092
+  Latitude: 27.493996725705582,
+  Longitude: -109.95783394127278
 }, {
   Id: 5,
   FullAddress: "Calle Michoacán 417, Morelos, 85110 Cd Obregón, Son.",

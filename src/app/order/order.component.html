@@ -14,6 +14,12 @@
       </span>
     </h3>
     <h3>
+      {{ Distance | number:'.1-1' }} Km.
+      <span class="note">
+        <ion-note>{{ EstimatedTime }} minutes</ion-note>
+      </span>
+    </h3>
+    <h3>
       {{ order.ServiceType }}
       <span class="note">
         <ion-note>{{ order.DeliveryStatus }}</ion-note>
