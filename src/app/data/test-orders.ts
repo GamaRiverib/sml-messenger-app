@@ -11,7 +11,7 @@ const orders: Order[] = [];
 
 const address: Address[] = [{
   Id: 1,
-  FullAddress: "Fresnillo 1236 Col Villa Aurora CP 85154 Ciudad Obregón Sonora",
+  FullAddress: "Calle Fresnillo 1236, Villa Aurora, 85154 Cd Obregón Sonora",
   Latitude: 27.476384442957702,
   Longitude: -109.96744362284186
 }, {
@@ -42,7 +42,7 @@ const address: Address[] = [{
   Longitude: -109.95783394127278
 }, {
   Id: 4,
-  FullAddress: "Guerrero 1806, Infonavit Yukujimari, 85120 Cd Obregón Sonora",
+  FullAddress: "Calle Guerrero 1806, Infonavit Yukujimari, 85120 Cd Obregón Sonora",
   Latitude: 27.493996725705582,
   Longitude: -109.95783394127278
 }, {
@@ -95,6 +95,60 @@ for (let i = 0; i < address.length; i++) {
   if (!a.FullAddress) {
     a.FullAddress = `${a.Street} ${a.Number}, ${a.Suburb}, ${a.Zip} ${a.City} ${a.State}`;
   }
+}
+
+function getRandomLatitude(): number {
+  const p5 = Math.pow(10,5);
+  const p10 = Math.pow(10,10);
+  const a = Math.trunc((Math.floor(Math.random() * 9617 + 43667) / p5) * p5);
+  const b = Math.trunc((Math.floor(Math.random() * 623278317 + 8715845527) / p10) * p10);
+  return parseFloat(`27.${a}${b}`);
+}
+
+function getRandomLongitude(): number {
+  const p5 = Math.pow(10,5);
+  const p7 = Math.pow(10,7);
+  const a = Math.trunc((Math.floor(Math.random() * 10608 + 89213) / p5) * p5);
+  const b = Math.trunc((Math.floor(Math.random() * 147321 + 4249496) / p7) * p7);
+  return parseFloat(`-109.${a}${b}`);
+}
+
+const street_names = [
+  "Hermenegildo Galeana", "Blvd. Rodolfo Elías Calles", "Av. Jesús García", "Calle Vicente Guerrero",
+  "Calle Ignacio Allende", "Av. 6 de Abril", "Av. Nainari", "Calle Cajeme", "Calle Norte", "Calle Cananea",
+  "Blvd. Ignacio Ramírez", "Av. Rodolfo Félix Váldes", "Calle Ejercito Nacional", "Calle Blvd. C.T.M.", 
+  "Calle Manuel de Jesús Clouthier", "Francisco Eusebio Kino", "Calle París", "Calle Michoacán", "Calle California",
+  "Calle Tabasco", "Calle Coahuila", "Av. Miguel Aleman", "Calle Jalisco", "Calle Sufragio Efectivo", "Blvd. Las Torres"
+];
+
+const neiborhood_names = [
+  "Santa Fe", "Real del Sol", "Matías Méndez", "Beltrones", "Puente Real", "Nuevo Cajeme", "Cincuentenario",
+  "Morelos", "Los Misioneros", "Yukujimari", "Cumuripa", "Centro", "Benito Juárez", "Parque Industrial", 
+  "Villas del Nainari", "Prados del Tepeyac", "Campestre", "Sochiloa", "Miravalle", "Municipio Libre",
+  "Faustino Félix", "Robles del Castillo", "Primero de Mayo", "Aves del Castillo", "Valle Verde", "Valle Dorado"
+];
+
+function getRandomStreetName(): string {
+  const i = Math.floor(Math.random() * street_names.length);
+  return street_names[i];
+}
+
+function getRandomNeiborhoodName(): string {
+  const i = Math.floor(Math.random() * neiborhood_names.length);
+  return neiborhood_names[i];
+}
+
+function createRandomAddress(): Address {
+  const Id = address.length;
+  const a = {
+    Id,
+    FullAddress: `${getRandomStreetName()} ${getRandomNumber(4)}, ${getRandomNeiborhoodName()}, 85${getRandomNumber(3)} Cd Obregón, Sonora`,
+    Latitude: getRandomLatitude(),
+    Longitude: getRandomLongitude()
+  };
+  // console.log({address: a});
+  address.push(a);
+  return a;
 }
 
 const names: string[] = [
@@ -276,7 +330,7 @@ function getRandomOrder(): Order {
   return {
     Id: ++counter,
     CreatedAt: new Date("2021-01-12T16:51:11.352Z").toString(),
-    SourceAddress: getRandomAddress(),
+    SourceAddress: createRandomAddress(),
     SourceAddressInstruction: getRandomAddressInstruction(),
     DestinationAddress: getRandomAddress(),
     DestinationAddressInstruction: getRandomAddressInstruction(),
@@ -290,7 +344,7 @@ function getRandomOrder(): Order {
   };
 }
 
-const max = Math.floor(Math.random() * 50);
+const max = Math.floor(Math.random() * 10);
 for (let i = 0; i < max; i++) {
   orders.push(getRandomOrder());
 }

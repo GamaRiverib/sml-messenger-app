@@ -14,12 +14,21 @@ export class OrderComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log({
-      source: this.order.SourceAddress.FullAddress,
-      destination: this.order.DestinationAddress.FullAddress,
+    /*console.log({
+      source: {
+        address: this.order.SourceAddress.FullAddress,
+        lat: this.order.SourceAddress.Latitude,
+        lon: this.order.SourceAddress.Longitude
+      },
+      destination: {
+        address: this.order.DestinationAddress.FullAddress,
+        lat: this.order.DestinationAddress.Latitude,
+        lon: this.order.DestinationAddress.Longitude
+      },
+      directions: `https://maps.google.com?saddr=${this.order.SourceAddress.Latitude},${this.order.SourceAddress.Longitude}&daddr=${this.order.DestinationAddress.Latitude},${this.order.DestinationAddress.Longitude}`,
       distance: this.Distance,
       estimatedTime: this.EstimatedTime
-    });
+    });*/
   }
 
   isIos() {
@@ -42,7 +51,7 @@ export class OrderComponent implements OnInit {
   }
 
   get EstimatedTime(): number {
-    return Math.ceil(this.Distance * 1.5);
+    return Math.ceil(this.Distance * 2);
   }
 
 }

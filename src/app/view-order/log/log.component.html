@@ -1,12 +1,23 @@
 <ion-content>
-  <ion-list>
-    <ion-item>
-      <ion-label position="fixed">Date</ion-label>
-      <ion-input>6/1/2021 19:07:45</ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="fixed">Status</ion-label>
-      <ion-input>CREATED</ion-input>
-    </ion-item>
+  <ion-list *ngIf="order">
+    <div *ngFor="let log of order.DeliveryLog; let i = index" style="margin-bottom: 10px;">
+      <ion-list-header>
+        <ion-label color="secondary">
+          {{ log.Date | date:'short' }}
+        </ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label position="fixed">Status</ion-label>
+        <ion-input readonly>{{ log.CurrentStatus }}</ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="fixed">Previous</ion-label>
+        <ion-input readonly>{{ log.PreviousStatus }}</ion-input>
+      </ion-item>
+      <ion-item *ngIf="log.Notes">
+        <ion-label position="fixed">Notes</ion-label>
+        <ion-input readonly>{{ log.Notes }}</ion-input>
+      </ion-item>
+    </div>
   </ion-list>
 </ion-content>

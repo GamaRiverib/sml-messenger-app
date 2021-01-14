@@ -1,20 +1,29 @@
 <ion-content>
-  <ion-list>
-    <ion-item>
-      <ion-icon name="cube-outline"></ion-icon>
-      <ion-label class="ion-padding-start">SMALL</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="help-outline"></ion-icon>
-      <ion-label class="ion-padding-start">10x12x15 cm.</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="barbell-outline"></ion-icon>
-      <ion-label class="ion-padding-start">400 gr.</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="information-outline"></ion-icon>
-      <ion-label class="ion-padding-start"></ion-label>
-    </ion-item>
+  <ion-list *ngIf="order">
+    <div *ngFor="let package of order.Packages; let i = index">
+      <ion-list-header>
+        <ion-label color="secondary">
+          Package {{ i + 1 }}
+        </ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-icon name="cube-outline"></ion-icon>
+        <ion-label class="ion-padding-start">{{ package.Size }}</ion-label>
+      </ion-item>
+      <ion-item *ngIf="package.Dimension">
+        <ion-icon name="help-outline"></ion-icon>
+        <ion-label class="ion-padding-start">
+          {{ package.Dimension.Height }} x {{ package.Dimension.Width }} x {{ package.Dimension.Length }} {{ package.Dimension.LongitudeUnit }}
+        </ion-label>
+      </ion-item>
+      <ion-item *ngIf="package.Weight">
+        <ion-icon name="barbell-outline"></ion-icon>
+        <ion-label class="ion-padding-start">{{ package.Weight.Weight }} {{ package.Weight.WeightUnit }}</ion-label>
+      </ion-item>
+      <ion-item *ngIf="package.Description">
+        <ion-icon name="information-outline"></ion-icon>
+        <ion-label class="ion-padding-start">{{ package.Description }}</ion-label>
+      </ion-item>
+    </div>
   </ion-list>
 </ion-content>

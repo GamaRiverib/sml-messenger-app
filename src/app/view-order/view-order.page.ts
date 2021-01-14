@@ -20,7 +20,6 @@ export class ViewOrderPage implements OnInit {
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.order = this.data.getOrderById(parseInt(id, 10));
-
   }
 
   getBackButtonText() {

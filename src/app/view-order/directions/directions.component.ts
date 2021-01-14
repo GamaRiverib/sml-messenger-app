@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Order } from 'src/app/model/order';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-directions',
@@ -7,8 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DirectionsComponent implements OnInit {
 
-  constructor() { }
+  public order: Order;
 
-  ngOnInit() {}
+  constructor(private data: DataService) { }
+
+  ngOnInit() {
+    this.order = this.data.getSelectedOrder();
+  }
 
 }

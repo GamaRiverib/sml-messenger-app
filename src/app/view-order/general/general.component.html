@@ -1,5 +1,5 @@
 <ion-content>
-  <ion-list>
+  <ion-list *ngIf="order">
     <ion-list-header>
       <ion-label color="secondary">
         Information
@@ -7,37 +7,43 @@
     </ion-list-header>
     <ion-item>
       <ion-label position="fixed">Status</ion-label>
-      <ion-input>CREATED</ion-input>
+      <ion-input>{{ order.DeliveryStatus }}</ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="fixed">Date</ion-label>
-      <ion-input>6/1/2021 19:07:45</ion-input>
+      <ion-input>{{ order.CreatedAt | date:'short' }}</ion-input>
     </ion-item>
     <ion-item>
-      <ion-label position="fixed">Delivery</ion-label>
-      <ion-input>ON_DEMAND</ion-input>
+      <ion-label position="fixed">Service</ion-label>
+      <ion-input>{{ order.ServiceType }}</ion-input>
     </ion-item>
     <ion-list-header>
       <ion-label color="secondary">
         Customer
       </ion-label>
     </ion-list-header>
-    <ion-item>
-      <ion-icon name="person-outline"></ion-icon>
-      <ion-label class="ion-padding-start">José</ion-label>
-    </ion-item>
-    <ion-item href="mailto:jose@gmail.com">
-      <ion-icon name="mail-outline"></ion-icon>
-      <ion-label class="ion-padding-start">
-        jose@gmail.com
-      </ion-label>
-    </ion-item>
-    <ion-item href="tel:6441235852">
-      <ion-icon name="phone-portrait-outline"></ion-icon>
-      <ion-label class="ion-padding-start">
-        644 123 5852
-      </ion-label>
-    </ion-item>
+    <div *ngIf="order.CustomerContact">
+      <ion-item *ngIf="order.CustomerContact.Name">
+        <ion-icon name="person-outline"></ion-icon>
+        <ion-label class="ion-padding-start">{{ order.CustomerContact.Name }}</ion-label>
+      </ion-item>
+      <ion-item
+        *ngIf="order.CustomerContact.Email"
+        [href]="'mailto:' + order.CustomerContact.Email">
+        <ion-icon name="mail-outline"></ion-icon>
+        <ion-label class="ion-padding-start">
+          {{ order.CustomerContact.Email }}
+        </ion-label>
+      </ion-item>
+      <ion-item
+        *ngIf="order.CustomerContact.Phone"
+        [href]="'tel:' + order.CustomerContact.Phone">
+        <ion-icon name="phone-portrait-outline"></ion-icon>
+        <ion-label class="ion-padding-start">
+          {{ order.CustomerContact.Phone }}
+        </ion-label>
+      </ion-item>
+    </div>
   </ion-list>
   <!--ion-button expand="block">Take order</ion-button-->
 </ion-content>

@@ -8,6 +8,8 @@ import { Order } from '../model/order';
 })
 export class DataService {
 
+  private selected: number;
+
   constructor() { }
 
   public getOrders(): OrderDto[] {
@@ -15,6 +17,11 @@ export class DataService {
   }
 
   public getOrderById(id: number): Order {
+    this.selected = id;
     return TestData.getOrderById(id);
+  }
+
+  public getSelectedOrder(): Order {
+    return TestData.getOrderById(this.selected);
   }
 }
