@@ -2,21 +2,21 @@
   <div slot="start" [class]="!order.read ? 'dot dot-unread' : 'dot'"></div>
   <ion-label class="ion-text-wrap">
     <h2> 
-      {{ getNextAddress() }}
+      {{ order.SourceAddress.FullAddress }}
       <span class="note">
         <ion-icon name="chevron-forward" size="small" *ngIf="isIos()"></ion-icon>
       </span>
     </h2>
     <h3>
-      {{ order.date }}
+      {{ order.CreatedAt | date:'short' }}
       <span class="note">
-        <ion-note>{{ order.pickup.done ? 'Dropoff' : 'Pickup' }}</ion-note>
+        <!--ion-note>{{ order.DeliveryStatus ? 'Dropoff' : 'Pickup' }}</ion-note-->
       </span>
     </h3>
     <h3>
-      {{ getTypeText() }}
+      {{ order.ServiceType }}
       <span class="note">
-        <ion-note>{{ getStatusText() }}</ion-note>
+        <ion-note>{{ order.DeliveryStatus }}</ion-note>
       </span>
     </h3>
   </ion-label>

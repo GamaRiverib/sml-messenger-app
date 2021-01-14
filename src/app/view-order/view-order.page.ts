@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DataService, Order } from '../services/data.service';
+import { Order } from '../model/order';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-view-order',

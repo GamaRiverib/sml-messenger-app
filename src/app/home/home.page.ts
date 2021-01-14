@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { DataService, Order } from '../services/data.service';
+import { OrderDto } from '../model/order-dto';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,7 @@ export class HomePage {
     }, 3000);
   }
 
-  getOrders(): Order[] {
+  getOrders(): OrderDto[] {
     return this.data.getOrders();
   }
 
