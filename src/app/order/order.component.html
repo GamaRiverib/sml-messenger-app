@@ -1,17 +1,17 @@
 <ion-item-sliding *ngIf="order">
 
-  <ion-item-options side="start" *ngIf="order.DeliveryStatus == 'READY_TO_DELIVERY'">
+  <ion-item-options side="start" *ngIf="order.DeliveryStatus == 'IN_ORDER'">
     <ion-item-option 
-      [href]="'https://maps.google.com?saddr=My+Location&daddr=' + order.DestinationAddress.Latitude + ',' + order.DestinationAddress.Longitude"
+      [href]="directionsToSource"
       target="_blank">
       <ion-icon slot="icon-only" name="compass-outline"></ion-icon>
       Directions
     </ion-item-option>
   </ion-item-options>
 
-  <ion-item-options side="start" *ngIf="order.DeliveryStatus == 'IN_ORDER'">
+  <ion-item-options side="start" *ngIf="order.DeliveryStatus == 'READY_TO_DELIVERY'">
     <ion-item-option 
-      [href]="'https://maps.google.com?saddr=My+Location&daddr=' + order.SourceAddress.Latitude + ',' + order.SourceAddress.Longitude"
+      [href]="directionsToDestination"
       target="_blank">
       <ion-icon slot="icon-only" name="compass-outline"></ion-icon>
       Directions
@@ -19,24 +19,30 @@
   </ion-item-options>
 
   <ion-item [routerLink]="'/order/' + order.Id" [detail]="false">
-    <ion-icon name="location-outline"></ion-icon>
+    <ion-icon [name]="icon + '-outline'" [color]="color"></ion-icon>
     <ion-label class="ion-text-wrap">
-      <h2> 
+      <h2 *ngIf="order.DeliveryStatus == 'QUEUED' || order.DeliveryStatus == 'IN_ORDER'"> 
         {{ order.SourceAddress.FullAddress }}
         <span class="note">
           <ion-icon name="chevron-forward" size="small" *ngIf="isIos()"></ion-icon>
         </span>
       </h2>
-      <h3>
-        {{ order.DeliveryStatus | deliveryStatus | uppercase }}
+      <h2 *ngIf="order.DeliveryStatus != 'QUEUED' && order.DeliveryStatus != 'IN_ORDER'"> 
+        {{ order.DestinationAddress.FullAddress }}
         <span class="note">
-          <ion-note>{{ order.ServiceType | serviceType | uppercase }}</ion-note>
+          <ion-icon name="chevron-forward" size="small" *ngIf="isIos()"></ion-icon>
+        </span>
+      </h2>
+      <h3>
+        {{ order.ServiceType | serviceType | uppercase }}
+        <span class="note">
+          <ion-note>{{ order.DeliveryStatus | deliveryStatus | uppercase }}</ion-note>
         </span>
       </h3>
       <h3>
-        {{ Distance | number:'.1-1' }} Km.
+        {{ distance | number:'.1-1' }} Km.
         <span class="note">
-          <ion-note>{{ EstimatedTime }} minutes</ion-note>
+          <ion-note>{{ estimatedTime }} minutes</ion-note>
         </span>
       </h3>
     </ion-label>

@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
+// import { HttpClient } from '@angular/common/http';
 import { OrderDto } from '../model/order-dto';
 import * as TestData from '../data/test-orders';
 import { Order } from '../model/order';
+import { AddressDto } from '../model/address-dto';
+
+// const SERVER_URL = 'http://localhost:3000';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +14,36 @@ export class DataService {
 
   private selected: Order = null;
 
-  constructor() { }
+  constructor(/*private http: HttpClient*/) { }
 
-  public getOrders(): Promise<OrderDto[]> {
+  public getSpeed(): number {
+    // TODO: calcular velocidad promedio de acuerdo al día y hora
+    return 40;
+  }
+
+  public getPickupDelay(): number {
+    // TODO: estadística sobre el tiempo de recolección promedio
+    return 10;
+  }
+
+  public getStorageAddress(): AddressDto {
+    // TODO: En environment establecer las Address del almacén
+    const FullAddress = "Calle Vicente Guerrero s/n, Infonavit, 85120 Cd Obregón, Son."
+    const Latitude = 27.493168146428467;
+    const Longitude = -109.95447145273737;
+    return {
+      Id: 0,
+      FullAddress,
+      Latitude,
+      Longitude
+    };
+  }
+
+  public async getOrders(): Promise<OrderDto[]> {
+    /*const url = `${SERVER_URL}/orders`;
+    const response = await this.http.get<{ orders: OrderDto[] }>(url)
+      .toPromise<{ orders: OrderDto[] }>();
+    return response.orders || [];*/
     return new Promise<OrderDto[]>((resolve, reject) => {
       setTimeout(() => {
         const orders = TestData.getAllOrders();
@@ -21,7 +52,11 @@ export class DataService {
     });
   }
 
-  public getOrderById(id: number): Promise<Order> {
+  public async getOrderById(id: number): Promise<Order> {
+    /*const url = `${SERVER_URL}/orders/${id}`;
+    const response = await this.http.get<{ order: Order }>(url)
+      .toPromise<{ order: Order }>();
+    return response.order;*/
     return new Promise<Order>((resolve, reject) => {
       setTimeout(() => {
         const order = TestData.getOrderById(id);
@@ -42,7 +77,11 @@ export class DataService {
     return TestData.reload();
   }
 
-  public reject(order: OrderDto | Order): Promise<void> {
+  public async reject(order: OrderDto | Order): Promise<void> {
+    /*const url = `${SERVER_URL}/orders/${order.Id}/reject`;
+    const response = await this.http.post<void>(url, {})
+      .toPromise<void>();
+    return;*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'CREATED';
@@ -51,7 +90,11 @@ export class DataService {
     });
   }
 
-  public take(order: OrderDto | Order): Promise<void> {
+  public async take(order: OrderDto | Order): Promise<void> {
+    /*const url = `${SERVER_URL}/orders/${order.Id}/take`;
+    const response = await this.http.post<void>(url, {})
+      .toPromise<void>();
+    return;*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'IN_ORDER';
@@ -60,7 +103,17 @@ export class DataService {
     });
   }
 
-  public cancel(order: OrderDto | Order): Promise<void> {
+  public async cancel(order: OrderDto | Order): Promise<void> {
+    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    const body = {
+      order: {
+        DeliveryStatus: 'CREATED'
+      }
+    };
+    if (estimatedTime) {
+      body.order['EstimatedDeliveryTime'] = estimatedTime;
+    }
+    return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'CREATED';
@@ -69,7 +122,17 @@ export class DataService {
     });
   }
 
-  public collect(order: OrderDto | Order): Promise<void> {
+  public async collect(order: OrderDto | Order, estimatedTime?: number): Promise<void> {
+    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    const body = {
+      order: {
+        DeliveryStatus: 'COLLECTED'
+      }
+    };
+    if (estimatedTime) {
+      body.order['EstimatedDeliveryTime'] = estimatedTime;
+    }
+    return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'COLLECTED';
@@ -79,6 +142,13 @@ export class DataService {
   }
 
   public toStorage(order: OrderDto | Order): Promise<void> {
+    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    const body = {
+      order: {
+        DeliveryStatus: 'READY_TO_STORAGE'
+      }
+    };
+    return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'READY_TO_STORAGE';
@@ -87,7 +157,17 @@ export class DataService {
     });
   }
 
-  public toDelivery(order: OrderDto | Order): Promise<void> {
+  public toDelivery(order: OrderDto | Order, estimatedTime?: number): Promise<void> {
+    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    const body = {
+      order: {
+        DeliveryStatus: 'READY_TO_DELIVERY'
+      }
+    };
+    if (estimatedTime) {
+      body.order['EstimatedDeliveryTime'] = estimatedTime;
+    }
+    return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'READY_TO_DELIVERY';
@@ -97,6 +177,13 @@ export class DataService {
   }
 
   public storage(order: OrderDto | Order): Promise<void> {
+    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    const body = {
+      order: {
+        DeliveryStatus: 'TO_STORAGE'
+      }
+    };
+    return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'TO_STORAGE';
@@ -106,6 +193,13 @@ export class DataService {
   }
 
   public fail(order: OrderDto | Order): Promise<void> {
+    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    const body = {
+      order: {
+        DeliveryStatus: 'VISIT_DONE'
+      }
+    };
+    return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'VISIT_DONE';
@@ -115,6 +209,13 @@ export class DataService {
   }
 
   public done(order: OrderDto | Order): Promise<void> {
+    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    const body = {
+      order: {
+        DeliveryStatus: 'DELIVERED'
+      }
+    };
+    return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'DELIVERED';

@@ -1,7 +1,26 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { OrderDto } from '../model/order-dto';
 import { DataService } from '../services/data.service';
-import LatLonSpherical from '../services/latlonspherical';
+import { MylocationService } from '../services/mylocation.service';
+
+const icons = {
+  CREATED: 'help-circle',
+  QUEUED: 'help-circle',
+  IN_ORDER: 'location',
+  COLLECTED: 'location',
+  READY_TO_STORAGE: 'location',
+  READY_TO_DELIVERY: 'location',
+  DELIVERED: 'checkmark-done-circle',
+  TO_STORAGE: 'archive',
+  TO_NEXT_VISIT: 'help-circle',
+  VISIT_DONE: 'warning',
+  STORAGED: 'archive',
+  VISIT_CANCELLED: 'warning',
+  DELETED: 'close-circle',
+  VISIT_SUSPENDED: 'warning',
+  RETURNED: 'warning',
+  LOST: 'warning'
+};
 
 @Component({
   selector: 'app-order',
@@ -11,13 +30,18 @@ import LatLonSpherical from '../services/latlonspherical';
 export class OrderComponent implements OnInit {
 
   @Input() order: OrderDto;
+  public distance: number;
+  public estimatedTime: number;
+  public directionsToSource: string;
+  public directionsToDestination: string;
 
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, private myLocation: MylocationService) { }
 
-  ngOnInit() {
-    /*
-    `https://maps.google.com?saddr=${this.order.SourceAddress.Latitude},${this.order.SourceAddress.Longitude}&daddr=${this.order.DestinationAddress.Latitude},${this.order.DestinationAddress.Longitude}`,
-    */
+  async ngOnInit() {
+    this.updateDistanceAndTime();
+    const baseUrl = 'https://maps.google.com?saddr=My+Location&daddr=';
+    this.directionsToSource = `${baseUrl}${this.order.SourceAddress.Latitude},${this.order.SourceAddress.Longitude}`;
+    this.directionsToDestination = `${baseUrl}${this.order.DestinationAddress.Latitude},${this.order.DestinationAddress.Longitude}`;
   }
 
   isIos() {
@@ -25,24 +49,64 @@ export class OrderComponent implements OnInit {
     return win && win.Ionic && win.Ionic.mode === 'ios';
   }
 
-  get Distance(): number {
+  private async updateDistanceAndTime(): Promise<void> {
     if (!this.order) {
-      return 0;
+      return;
     }
-    const p1 = new LatLonSpherical(this.order.SourceAddress.Latitude, this.order.SourceAddress.Longitude);
-    const p2 = new LatLonSpherical(this.order.DestinationAddress.Latitude, this.order.DestinationAddress.Longitude);
-    const p3 = new LatLonSpherical(this.order.SourceAddress.Latitude, this.order.DestinationAddress.Longitude);
-    const p4 = new LatLonSpherical(this.order.DestinationAddress.Latitude, this.order.SourceAddress.Longitude);
-
-    const d1 = p1.distanceTo(p3) + p3.distanceTo(p2);
-    const d2 = p1.distanceTo(p4) + p4.distanceTo(p2);
-    return Math.floor((d1 + d2) / 2) / 1000;
+    const source = this.order.SourceAddress;
+    const destination = this.order.DestinationAddress;
+    const resp = this.myLocation.calculateRoute(source, destination);
+    this.distance = (await resp).distance;
+    this.estimatedTime = (await resp).time;
   }
 
-  get EstimatedTime(): number {
-    let speed = 40;
-    const factor = 60 / speed;
-    return Math.ceil(this.Distance * factor);
+  get icon(): string {
+    if (!this.order) {
+      return 'alert-circle';
+    }
+    return icons[this.order.DeliveryStatus] || 'alert-circle'
+  }
+
+  get color(): string {
+    if (!this.order) {
+      return '';
+    }
+    const s = this.order.DeliveryStatus;
+    const t = this.order.ServiceType;
+    if (s === 'QUEUED' || s === 'CREATED') {
+      if (t === 'NEXT_DAY') {
+        return 'warning';
+      }
+      return 'danger';
+    }
+    if (s === 'IN_ORDER') {
+      if (t === 'NEXT_DAY') {
+        return 'tertiary';
+      }
+      return 'warning'
+    }
+    if (s === 'COLLECTED') {
+      if (t === 'NEXT_DAY') {
+        return 'tertiary';
+      }
+      return 'success';
+    }
+    if (s === 'READY_TO_DELIVERY') {
+      return 'warning';
+    }
+    if (s === 'DELIVERED') {
+      return 'success';
+    }
+    if (s === 'VISIT_DONE' || s === 'RETURNED' || s === 'VISIT_CANCELLED') {
+      return 'danger';
+    }
+    if (s === 'VISIT_SUSPENDED') {
+      return 'warning';
+    }
+    if (s === 'TO_STORAGE') {
+      return 'tertiary';
+    }
+    return '';
   }
 
   reject(): void {
