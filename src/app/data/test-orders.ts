@@ -7,7 +7,7 @@ import { Order } from "../model/order";
 import { OrderDto } from "../model/order-dto"
 import { Package } from "../model/package";
 
-const orders: Order[] = [];
+let orders: Order[] = [];
 
 const address: Address[] = [{
   Id: 1,
@@ -258,7 +258,7 @@ function getRandomServiceType(): string {
 }
 
 function getRandomDeliveryStatus(): string {
-  const status = ["CREATED", "QUEUED", "IN_ORDER", "COLLECTED", "READY_TO_STORAGE", "READY_TO_DELIVERY", "DELIVERED", "TO_STORAGE", "TO_NEXT_VISIT", "VISIT_DONE", "STORAGED", "VISIT_CANCELLED", "DELETED", "VISIT_SUSPENDED", "RETURNED", "LOST"];
+  const status = ["QUEUED", "IN_ORDER", "COLLECTED", "READY_TO_STORAGE", "READY_TO_DELIVERY", "TO_STORAGE", "VISIT_DONE", "VISIT_CANCELLED", "VISIT_SUSPENDED", "RETURNED"];
   const i = Math.floor(Math.random() * status.length);
   return status[i];
 }
@@ -344,10 +344,15 @@ function getRandomOrder(): Order {
   };
 }
 
-const max = Math.floor(Math.random() * 10);
-for (let i = 0; i < max; i++) {
-  orders.push(getRandomOrder());
+function reload() {
+  orders = [];
+  const max = Math.floor(Math.random() * 10);
+  for (let i = 0; i < max; i++) {
+    orders.push(getRandomOrder());
+  }
 }
+
+reload();
 
 function address2dto(a: Address): AddressDto {
   return {
@@ -378,5 +383,5 @@ function getOrderById(Id: number): Order {
 }
 
 export {
-  getAllOrders, getOrderById
+  getAllOrders, getOrderById, reload
 };

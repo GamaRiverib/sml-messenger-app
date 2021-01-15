@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { OrderDto } from '../model/order-dto';
+import { DataService } from '../services/data.service';
 import LatLonSpherical from '../services/latlonspherical';
 
 @Component({
@@ -11,24 +12,12 @@ export class OrderComponent implements OnInit {
 
   @Input() order: OrderDto;
 
-  constructor() { }
+  constructor(private data: DataService) { }
 
   ngOnInit() {
-    /*console.log({
-      source: {
-        address: this.order.SourceAddress.FullAddress,
-        lat: this.order.SourceAddress.Latitude,
-        lon: this.order.SourceAddress.Longitude
-      },
-      destination: {
-        address: this.order.DestinationAddress.FullAddress,
-        lat: this.order.DestinationAddress.Latitude,
-        lon: this.order.DestinationAddress.Longitude
-      },
-      directions: `https://maps.google.com?saddr=${this.order.SourceAddress.Latitude},${this.order.SourceAddress.Longitude}&daddr=${this.order.DestinationAddress.Latitude},${this.order.DestinationAddress.Longitude}`,
-      distance: this.Distance,
-      estimatedTime: this.EstimatedTime
-    });*/
+    /*
+    `https://maps.google.com?saddr=${this.order.SourceAddress.Latitude},${this.order.SourceAddress.Longitude}&daddr=${this.order.DestinationAddress.Latitude},${this.order.DestinationAddress.Longitude}`,
+    */
   }
 
   isIos() {
@@ -51,7 +40,45 @@ export class OrderComponent implements OnInit {
   }
 
   get EstimatedTime(): number {
-    return Math.ceil(this.Distance * 2);
+    let speed = 40;
+    const factor = 60 / speed;
+    return Math.ceil(this.Distance * factor);
+  }
+
+  reject(): void {
+    this.data.reject(this.order);
+  }
+
+  take(): void {
+    this.data.take(this.order);
+  }
+
+  cancel(): void {
+    this.data.cancel(this.order);
+  }
+
+  collect(): void {
+    this.data.collect(this.order);
+  }
+
+  toStorage(): void {
+    this.data.toStorage(this.order);
+  }
+
+  toDelivery(): void {
+    this.data.toDelivery(this.order);
+  }
+
+  storage(): void {
+    this.data.storage(this.order);
+  }
+
+  fail(): void {
+    this.data.storage(this.order);
+  }
+
+  done(): void {
+    this.data.done(this.order);
   }
 
 }

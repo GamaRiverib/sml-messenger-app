@@ -1,29 +1,96 @@
-<ion-item *ngIf="order" [routerLink]="'/order/' + order.Id" [detail]="false">
-  <div slot="start" [class]="!order.read ? 'dot dot-unread' : 'dot'"></div>
-  <ion-label class="ion-text-wrap">
-    <h2> 
-      {{ order.SourceAddress.FullAddress }}
-      <span class="note">
-        <ion-icon name="chevron-forward" size="small" *ngIf="isIos()"></ion-icon>
-      </span>
-    </h2>
-    <h3>
-      {{ order.CreatedAt | date:'short' }}
-      <span class="note">
-        <!--ion-note>{{ order.DeliveryStatus ? 'Dropoff' : 'Pickup' }}</ion-note-->
-      </span>
-    </h3>
-    <h3>
-      {{ Distance | number:'.1-1' }} Km.
-      <span class="note">
-        <ion-note>{{ EstimatedTime }} minutes</ion-note>
-      </span>
-    </h3>
-    <h3>
-      {{ order.ServiceType }}
-      <span class="note">
-        <ion-note>{{ order.DeliveryStatus }}</ion-note>
-      </span>
-    </h3>
-  </ion-label>
-</ion-item>
+<ion-item-sliding *ngIf="order">
+
+  <ion-item-options side="start" *ngIf="order.DeliveryStatus == 'READY_TO_DELIVERY'">
+    <ion-item-option 
+      [href]="'https://maps.google.com?saddr=My+Location&daddr=' + order.DestinationAddress.Latitude + ',' + order.DestinationAddress.Longitude"
+      target="_blank">
+      <ion-icon slot="icon-only" name="compass-outline"></ion-icon>
+      Directions
+    </ion-item-option>
+  </ion-item-options>
+
+  <ion-item-options side="start" *ngIf="order.DeliveryStatus == 'IN_ORDER'">
+    <ion-item-option 
+      [href]="'https://maps.google.com?saddr=My+Location&daddr=' + order.SourceAddress.Latitude + ',' + order.SourceAddress.Longitude"
+      target="_blank">
+      <ion-icon slot="icon-only" name="compass-outline"></ion-icon>
+      Directions
+    </ion-item-option>
+  </ion-item-options>
+
+  <ion-item [routerLink]="'/order/' + order.Id" [detail]="false">
+    <ion-icon name="location-outline"></ion-icon>
+    <ion-label class="ion-text-wrap">
+      <h2> 
+        {{ order.SourceAddress.FullAddress }}
+        <span class="note">
+          <ion-icon name="chevron-forward" size="small" *ngIf="isIos()"></ion-icon>
+        </span>
+      </h2>
+      <h3>
+        {{ Distance | number:'.1-1' }} Km.
+        <span class="note">
+          <ion-note>{{ EstimatedTime }} minutes</ion-note>
+        </span>
+      </h3>
+      <h3>
+        {{ order.DeliveryStatus | deliveryStatus }}
+      </h3>
+      <h3>
+        {{ order.ServiceType | serviceType }}
+      </h3>
+    </ion-label>
+  </ion-item>
+
+  <ion-item-options side="end"  *ngIf="order.DeliveryStatus == 'QUEUED'">
+    <ion-item-option color="danger" (click)="reject()">
+      <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      Reject
+    </ion-item-option>
+    <ion-item-option (click)="take()">
+      <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
+      Take
+    </ion-item-option>
+  </ion-item-options>
+
+  <ion-item-options side="end"  *ngIf="order.DeliveryStatus == 'IN_ORDER'">
+    <ion-item-option color="danger" (click)="cancel()">
+      <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      Cancel
+    </ion-item-option>
+    <ion-item-option (click)="collect()">
+      <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
+      Collect
+    </ion-item-option>
+  </ion-item-options>
+
+  <ion-item-options side="end"  *ngIf="order.DeliveryStatus == 'COLLECTED'">
+    <ion-item-option color="secondary" (click)="toStorage()">
+      <ion-icon slot="icon-only" name="archive-outline"></ion-icon>
+      To storage
+    </ion-item-option>
+    <ion-item-option (click)="toDelivery()">
+      <ion-icon slot="icon-only" name="rocket-outline"></ion-icon>
+      Delivery
+    </ion-item-option>
+  </ion-item-options>
+
+  <ion-item-options side="end" *ngIf="order.DeliveryStatus == 'READY_TO_STORAGE' || order.DeliveryStatus == 'TO_STORAGE'">
+    <ion-item-option color="tertiary" (click)="storage()">
+      <ion-icon slot="icon-only" name="archive-outline"></ion-icon>
+      Store
+    </ion-item-option>
+  </ion-item-options>
+
+  <ion-item-options side="end"  *ngIf="order.DeliveryStatus == 'READY_TO_DELIVERY'">
+    <ion-item-option color="danger" (click)="fail()">
+      <ion-icon slot="icon-only" name="warning-outline"></ion-icon>
+      Fail
+    </ion-item-option>
+    <ion-item-option (click)="done()">
+      <ion-icon slot="icon-only" name="checkmark-done-outline"></ion-icon>
+      Done
+    </ion-item-option>
+  </ion-item-options>
+
+</ion-item-sliding>

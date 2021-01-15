@@ -11,6 +11,8 @@ import { GeneralComponent } from './general/general.component';
 import { DirectionsComponent } from './directions/directions.component';
 import { PackagesComponent } from './packages/packages.component';
 import { LogComponent } from './log/log.component';
+import { ServiceTypePipe } from '../pipes/service-type.pipe';
+import { DeliveryStatusPipe } from '../pipes/delivery-status.pipe';
 
 @NgModule({
   entryComponents: [
@@ -30,13 +32,17 @@ import { LogComponent } from './log/log.component';
     GeneralComponent,
     DirectionsComponent,
     PackagesComponent,
-    LogComponent
+    LogComponent,
+    DeliveryStatusPipe,
+    ServiceTypePipe
   ],
   exports: [
     GeneralComponent,
     DirectionsComponent,
     PackagesComponent,
-    LogComponent
+    LogComponent,
+    DeliveryStatusPipe,
+    ServiceTypePipe
   ],
 })
 export class ViewOrderPageModule {}

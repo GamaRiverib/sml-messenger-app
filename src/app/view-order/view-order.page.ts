@@ -17,9 +17,13 @@ export class ViewOrderPage implements OnInit {
     private activatedRoute: ActivatedRoute
   ) { }
 
+  private async loadOrder(id: number): Promise<void> {
+    this.order = await this.data.getOrderById(id);
+  }
+
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.order = this.data.getOrderById(parseInt(id, 10));
+    this.loadOrder(parseInt(id));
   }
 
   getBackButtonText() {
@@ -28,7 +32,7 @@ export class ViewOrderPage implements OnInit {
     return mode === 'ios' ? 'Orders' : '';
   }
 
-  tabChange(event: any) {
+  tabChange(ev: any) {
     // console.log('Tab change event', event);
   }
 
