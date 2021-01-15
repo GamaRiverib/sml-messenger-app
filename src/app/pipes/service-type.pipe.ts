@@ -6,13 +6,29 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ServiceTypePipe implements PipeTransform {
 
   private names = {
-    'ON_DEMAND': 'Service on demand', 
-    'SAME_DAY': 'Service same day', 
-    'NEXT_DAY': 'Service next day'
+    ON_DEMAND: {
+      short: 'On demand',
+      long: 'On demand service'
+    }, 
+    SAME_DAY: {
+      short: 'Same day',
+      long: 'Same day service'
+    }, 
+    NEXT_DAY: {
+      short: 'Next day',
+      long: 'Next day service'
+    }
   };
 
-  transform(value: string): string {
-    return this.names[value] || 'Unknown service type';
+  transform(value: string, format?: string): string {
+    if (value == null || value === '' || value !== value) {
+      return null;
+    }
+    if(this.names[value] === undefined) {
+      return 'Unknow status';
+    }
+    format = format || 'short';
+    return (this.names[value])[format] || 'Unknown';
   }
 
 }

@@ -28,16 +28,16 @@
         </span>
       </h2>
       <h3>
+        {{ order.DeliveryStatus | deliveryStatus | uppercase }}
+        <span class="note">
+          <ion-note>{{ order.ServiceType | serviceType | uppercase }}</ion-note>
+        </span>
+      </h3>
+      <h3>
         {{ Distance | number:'.1-1' }} Km.
         <span class="note">
           <ion-note>{{ EstimatedTime }} minutes</ion-note>
         </span>
-      </h3>
-      <h3>
-        {{ order.DeliveryStatus | deliveryStatus }}
-      </h3>
-      <h3>
-        {{ order.ServiceType | serviceType }}
       </h3>
     </ion-label>
   </ion-item>

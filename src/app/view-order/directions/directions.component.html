@@ -5,9 +5,8 @@
         Pickup
       </ion-label>
     </ion-list-header>
-    <!--ion-item href="geo:27.476375,-109.967445"-->
     <ion-item
-      [href]="'https://maps.google.com/?q=' + order.SourceAddress.Latitude + ',' + order.SourceAddress.Longitude"
+      [href]="'https://maps.google.com?saddr=My+Location&daddr=' + order.SourceAddress.Latitude + ',' + order.SourceAddress.Longitude"
       target="_blank">
       <ion-icon name="location-outline"></ion-icon>
       <ion-label class="ion-padding-start ion-text-wrap">{{ order.SourceAddress.FullAddress }}</ion-label>
@@ -42,7 +41,7 @@
       </ion-label>
     </ion-list-header>
     <ion-item
-      [href]="'https://maps.google.com/?q=' + order.DestinationAddress.Latitude + ',' + order.DestinationAddress.Longitude"
+      [href]="'https://maps.google.com?saddr=My+Location&daddr=' + order.DestinationAddress.Latitude + ',' + order.DestinationAddress.Longitude"
       target="_blank">
       <ion-icon name="location-outline"></ion-icon>
       <ion-label class="ion-padding-start ion-text-wrap">{{ order.DestinationAddress.FullAddress }}</ion-label>
