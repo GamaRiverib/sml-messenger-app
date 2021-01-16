@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { Order } from 'src/app/model/order';
 import { DataService } from 'src/app/services/data.service';
 import { MylocationService } from 'src/app/services/mylocation.service';
@@ -14,11 +15,15 @@ export class GeneralComponent implements OnInit {
   public distance: number;
   public estimatedTime: number;
 
-  constructor(private data: DataService, private myLocation: MylocationService) { }
+  constructor(
+    private data: DataService,
+    private myLocation: MylocationService,
+    private navCtrl: NavController) { }
 
   async ngOnInit() {
     this.order = this.data.getSelectedOrder();
     if (!this.order) {
+      this.navCtrl.back();
       return;
     }
 

@@ -318,7 +318,7 @@ function getRandomLog(): DeliveryHistoryItem {
 }
 
 function getRandomDeliveryLog(): DeliveryHistoryItem[] {
-  const l = Math.floor(Math.random() * 4);
+  const l = Math.floor(Math.random() * 10);
   const logs = [];
   for(let i = 0; i < l; i++) {
     logs.push(getRandomLog());

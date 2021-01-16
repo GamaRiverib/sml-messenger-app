@@ -3,6 +3,11 @@
     <ion-title>
       Orders
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="showOptions($event)">
+        <ion-toggle checked></ion-toggle>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -19,7 +24,17 @@
     </ion-toolbar>
   </ion-header>
   
-  <ion-list>
+  <ion-list *ngIf="orders && orders.length > 0">
     <app-order *ngFor="let order of orders" [order]="order"></app-order>
   </ion-list>
+  <ion-grid class="ion-padding-top" *ngIf="!orders || orders.length == 0">
+    <ion-row class="ion-padding-top ion-padding-bottom ion-align-items-center">
+      <ion-col size="12" class="ion-text-center">
+        <ion-text>
+          {{ loadingMessage }}
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
 </ion-content>

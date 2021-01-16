@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, NavController } from '@ionic/angular';
 import { Order } from '../model/order';
 import { DataService } from '../services/data.service';
 
@@ -16,11 +16,15 @@ export class ViewOrderPage implements OnInit {
   constructor(
     private data: DataService,
     private actionSheetCtrl: ActionSheetController,
+    private navCtrl: NavController ,
     private activatedRoute: ActivatedRoute
   ) { }
 
   private async loadOrder(id: number): Promise<void> {
     this.order = await this.data.getOrderById(id);
+    if (!this.order) {
+      this.navCtrl.back();
+    }
   }
 
   ngOnInit() {
@@ -80,7 +84,7 @@ export class ViewOrderPage implements OnInit {
     this.data.lost(this.order);
   }
 
-  async showOptions() {
+  async showOptions(ev: any) {
     if (!this.order) {
       return;
     }

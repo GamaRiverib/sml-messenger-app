@@ -1,26 +1,26 @@
 <ion-content>
   <ion-list *ngIf="order">
-    <div *ngFor="let package of order.Packages; let i = index">
+    <div *ngFor="let package of order.Packages; let i = index" class="ion-padding-bottom">
       <ion-list-header>
         <ion-label color="secondary">
           Package {{ i + 1 }}
         </ion-label>
       </ion-list-header>
-      <ion-item>
+      <ion-item lines="none">
         <ion-icon name="cube-outline"></ion-icon>
         <ion-label class="ion-padding-start">{{ package.Size }}</ion-label>
       </ion-item>
-      <ion-item *ngIf="package.Dimension">
+      <ion-item lines="none" *ngIf="package.Dimension">
         <ion-icon name="help-outline"></ion-icon>
         <ion-label class="ion-padding-start">
           {{ package.Dimension.Height }} x {{ package.Dimension.Width }} x {{ package.Dimension.Length }} {{ package.Dimension.LongitudeUnit }}
         </ion-label>
       </ion-item>
-      <ion-item *ngIf="package.Weight">
+      <ion-item lines="none" *ngIf="package.Weight">
         <ion-icon name="barbell-outline"></ion-icon>
         <ion-label class="ion-padding-start">{{ package.Weight.Weight }} {{ package.Weight.WeightUnit }}</ion-label>
       </ion-item>
-      <ion-item *ngIf="package.Description">
+      <ion-item lines="none" *ngIf="package.Description">
         <ion-icon name="information-outline"></ion-icon>
         <ion-label class="ion-padding-start">{{ package.Description }}</ion-label>
       </ion-item>

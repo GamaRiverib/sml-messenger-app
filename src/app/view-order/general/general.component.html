@@ -5,23 +5,23 @@
         Information
       </ion-label>
     </ion-list-header>
-    <ion-item>
+    <ion-item lines="none">
       <ion-label position="fixed">Status</ion-label>
       <ion-input>{{ order.DeliveryStatus | deliveryStatus:'long' }}</ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item lines="none">
       <ion-label position="fixed">Date</ion-label>
       <ion-input>{{ order.CreatedAt | date:'short' }}</ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item lines="none">
       <ion-label position="fixed">Service</ion-label>
       <ion-input>{{ order.ServiceType | serviceType }}</ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item lines="none">
       <ion-label position="fixed">Distance</ion-label>
       <ion-input>{{ distance | number:'.1-1' }} Km.</ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item lines="none" class="ion-padding-bottom">
       <ion-label position="fixed">Time</ion-label>
       <ion-input>{{ estimatedTime }} minutes</ion-input>
     </ion-item>
@@ -31,11 +31,12 @@
       </ion-label>
     </ion-list-header>
     <div *ngIf="order.CustomerContact">
-      <ion-item *ngIf="order.CustomerContact.Name">
+      <ion-item lines="none" *ngIf="order.CustomerContact.Name">
         <ion-icon name="person-outline"></ion-icon>
         <ion-label class="ion-padding-start">{{ order.CustomerContact.Name }}</ion-label>
       </ion-item>
       <ion-item
+        lines="none"
         *ngIf="order.CustomerContact.Email"
         [href]="'mailto:' + order.CustomerContact.Email">
         <ion-icon name="mail-outline"></ion-icon>
@@ -44,6 +45,7 @@
         </ion-label>
       </ion-item>
       <ion-item
+        lines="none"
         *ngIf="order.CustomerContact.Phone"
         [href]="'tel:' + order.CustomerContact.Phone">
         <ion-icon name="phone-portrait-outline"></ion-icon>
