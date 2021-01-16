@@ -258,7 +258,7 @@ function getRandomServiceType(): string {
 }
 
 function getRandomDeliveryStatus(): string {
-  const status = ["QUEUED", "IN_ORDER", "COLLECTED", "READY_TO_STORAGE", "READY_TO_DELIVERY", "TO_STORAGE", "VISIT_DONE", "VISIT_CANCELLED", "VISIT_SUSPENDED", "RETURNED"];
+  const status = ["QUEUED", "IN_ORDER", "COLLECTED", "READY_TO_STORAGE", "READY_TO_DELIVERY", "TO_STORAGE", "VISIT_DONE", "VISIT_CANCELED", "VISIT_SUSPENDED", "RETURNED"];
   const i = Math.floor(Math.random() * status.length);
   return status[i];
 }

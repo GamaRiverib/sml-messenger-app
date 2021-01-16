@@ -224,4 +224,20 @@ export class DataService {
     });
   }
 
+  public lost(order: OrderDto | Order): Promise<void> {
+    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    const body = {
+      order: {
+        DeliveryStatus: 'LOST'
+      }
+    };
+    return this.http.put<void>(url, body).toPromise<void>();*/
+    return new Promise<void>((resolve, reject) => {
+      setTimeout(() => {
+        order.DeliveryStatus = 'LOST';
+        resolve();
+      }, 600);
+    });
+  }
+
 }

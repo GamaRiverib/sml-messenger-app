@@ -17,7 +17,7 @@ export class HomePage implements OnInit {
     const status_priority = [
       "QUEUED", "READY_TO_DELIVERY", "IN_ORDER", "COLLECTED", "READY_TO_STORAGE", 
       "TO_STORAGE", "RETURNED", "VISIT_DONE", "TO_NEXT_VISIT", "VISIT_SUSPENDED",
-      "VISIT_CANCELLED", "STORAGED", "CREATED", "DELIVERED", "LOST"];
+      "VISIT_CANCELED", "STORAGED", "CREATED", "DELIVERED", "LOST"];
     const service_type_priority = ["ON_DEMAND", "SAME_DAY", "NEXT_DAY"];
     this.orders = (await this.data.getOrders() || []).sort((a: OrderDto, b: OrderDto) => {
       const avalue = status_priority.indexOf(a.DeliveryStatus) + service_type_priority.indexOf(a.ServiceType);

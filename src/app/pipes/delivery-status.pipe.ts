@@ -51,8 +51,8 @@ export class DeliveryStatusPipe implements PipeTransform {
       short: 'Storaged',
       long: 'Package is in the warehouse'
     },
-    VISIT_CANCELLED: {
-      short: 'Visit cancelled',
+    VISIT_CANCELED: {
+      short: 'Visit canceled',
       long: 'Visit was canceled by the customer'
     },
     DELETED: {

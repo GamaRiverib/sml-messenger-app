@@ -15,7 +15,7 @@ const icons = {
   TO_NEXT_VISIT: 'help-circle',
   VISIT_DONE: 'warning',
   STORAGED: 'archive',
-  VISIT_CANCELLED: 'warning',
+  VISIT_CANCELED: 'warning',
   DELETED: 'close-circle',
   VISIT_SUSPENDED: 'warning',
   RETURNED: 'warning',
@@ -97,7 +97,7 @@ export class OrderComponent implements OnInit {
     if (s === 'DELIVERED') {
       return 'success';
     }
-    if (s === 'VISIT_DONE' || s === 'RETURNED' || s === 'VISIT_CANCELLED') {
+    if (s === 'VISIT_DONE' || s === 'RETURNED' || s === 'VISIT_CANCELED') {
       return 'danger';
     }
     if (s === 'VISIT_SUSPENDED') {
