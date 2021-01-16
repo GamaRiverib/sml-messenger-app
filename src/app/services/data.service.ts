@@ -6,15 +6,29 @@ import { Order } from '../model/order';
 import { AddressDto } from '../model/address-dto';
 
 // const SERVER_URL = 'http://localhost:3000';
+const status_priority = [
+  "QUEUED", "READY_TO_DELIVERY", "IN_ORDER", "COLLECTED", "READY_TO_STORAGE", 
+  "TO_STORAGE", "RETURNED", "VISIT_DONE", "TO_NEXT_VISIT", "VISIT_SUSPENDED",
+  "VISIT_CANCELED", "STORAGED", "CREATED", "DELIVERED", "LOST"];
+const service_type_priority = ["ON_DEMAND", "SAME_DAY", "NEXT_DAY"];
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
+  private orders: OrderDto[];
   private selected: Order = null;
 
   constructor(/*private http: HttpClient*/) { }
+
+  private sortOrders(): void {
+    this.orders = this.orders.sort((a: OrderDto, b: OrderDto) => {
+      const avalue = status_priority.indexOf(a.DeliveryStatus) + service_type_priority.indexOf(a.ServiceType);
+      const bvalue = status_priority.indexOf(b.DeliveryStatus) + service_type_priority.indexOf(b.ServiceType);
+      return avalue - bvalue;
+    });
+  }
 
   public getSpeed(): number {
     // TODO: calcular velocidad promedio de acuerdo al día y hora
@@ -46,9 +60,10 @@ export class DataService {
     return response.orders || [];*/
     return new Promise<OrderDto[]>((resolve, reject) => {
       setTimeout(() => {
-        const orders = TestData.getAllOrders();
-        resolve(orders);
-      }, 2000);
+        this.orders = TestData.getAllOrders() || [];
+        this.sortOrders();
+        resolve(this.orders);
+      }, 1200);
     });
   }
 
@@ -73,10 +88,6 @@ export class DataService {
     return this.selected;
   }
 
-  public reload(): void {
-    return TestData.reload();
-  }
-
   public async reject(order: OrderDto | Order): Promise<void> {
     /*const url = `${SERVER_URL}/orders/${order.Id}/reject`;
     const response = await this.http.post<void>(url, {})
@@ -85,6 +96,7 @@ export class DataService {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'CREATED';
+        this.sortOrders();
         resolve();
       }, 600);
     });
@@ -98,6 +110,7 @@ export class DataService {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'IN_ORDER';
+        this.sortOrders();
         resolve();
       }, 600);
     });
@@ -117,6 +130,7 @@ export class DataService {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'CREATED';
+        this.sortOrders();
         resolve();
       }, 600);
     });
@@ -136,6 +150,7 @@ export class DataService {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'COLLECTED';
+        this.sortOrders();
         resolve();
       }, 600);
     });
@@ -152,6 +167,7 @@ export class DataService {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'READY_TO_STORAGE';
+        this.sortOrders();
         resolve();
       }, 600);
     });
@@ -171,6 +187,7 @@ export class DataService {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'READY_TO_DELIVERY';
+        this.sortOrders();
         resolve();
       }, 600);
     });
@@ -187,6 +204,7 @@ export class DataService {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'TO_STORAGE';
+        this.sortOrders();
         resolve();
       }, 600);
     });
@@ -203,6 +221,7 @@ export class DataService {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'VISIT_DONE';
+        this.sortOrders();
         resolve();
       }, 600);
     });
@@ -219,6 +238,7 @@ export class DataService {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'DELIVERED';
+        this.sortOrders();
         resolve();
       }, 600);
     });
@@ -235,6 +255,7 @@ export class DataService {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         order.DeliveryStatus = 'LOST';
+        this.sortOrders();
         resolve();
       }, 600);
     });

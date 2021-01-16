@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IonItemSliding } from '@ionic/angular';
 import { OrderDto } from '../model/order-dto';
 import { DataService } from '../services/data.service';
 import { MylocationService } from '../services/mylocation.service';
@@ -109,40 +110,49 @@ export class OrderComponent implements OnInit {
     return '';
   }
 
-  reject(): void {
-    this.data.reject(this.order);
+  async reject(slidingItem: IonItemSliding): Promise<void> {
+    await this.data.reject(this.order);
+    slidingItem.close();
   }
 
-  take(): void {
-    this.data.take(this.order);
+  async take(slidingItem: IonItemSliding): Promise<void> {
+    await this.data.take(this.order);
+    slidingItem.close();
   }
 
-  cancel(): void {
-    this.data.cancel(this.order);
+  async cancel(slidingItem: IonItemSliding): Promise<void> {
+    await this.data.cancel(this.order);
+    slidingItem.close();
   }
 
-  collect(): void {
-    this.data.collect(this.order);
+  async collect(slidingItem: IonItemSliding): Promise<void> {
+    await this.data.collect(this.order);
+    slidingItem.close();
   }
 
-  toStorage(): void {
-    this.data.toStorage(this.order);
+  async toStorage(slidingItem: IonItemSliding): Promise<void> {
+    await this.data.toStorage(this.order);
+    slidingItem.close();
   }
 
-  toDelivery(): void {
-    this.data.toDelivery(this.order);
+  async toDelivery(slidingItem: IonItemSliding): Promise<void> {
+    await this.data.toDelivery(this.order);
+    slidingItem.close();
   }
 
-  storage(): void {
-    this.data.storage(this.order);
+  async storage(slidingItem: IonItemSliding): Promise<void> {
+    await this.data.storage(this.order);
+    slidingItem.close();
   }
 
-  fail(): void {
-    this.data.storage(this.order);
+  async fail(slidingItem: IonItemSliding): Promise<void> {
+    await this.data.storage(this.order);
+    slidingItem.close();
   }
 
-  done(): void {
-    this.data.done(this.order);
+  async done(slidingItem: IonItemSliding): Promise<void> {
+    await this.data.done(this.order);
+    slidingItem.close();
   }
 
 }

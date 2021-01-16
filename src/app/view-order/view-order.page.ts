@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ActionSheetController, NavController } from '@ionic/angular';
+import { ActionSheetController } from '@ionic/angular';
 import { Order } from '../model/order';
 import { DataService } from '../services/data.service';
 
@@ -16,20 +16,16 @@ export class ViewOrderPage implements OnInit {
   constructor(
     private data: DataService,
     private actionSheetCtrl: ActionSheetController,
-    private navCtrl: NavController ,
     private activatedRoute: ActivatedRoute
   ) { }
 
   private async loadOrder(id: number): Promise<void> {
     this.order = await this.data.getOrderById(id);
-    if (!this.order) {
-      this.navCtrl.back();
-    }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.loadOrder(parseInt(id));
+    await this.loadOrder(parseInt(id));
   }
 
   getBackButtonText() {

@@ -344,16 +344,6 @@ function getRandomOrder(): Order {
   };
 }
 
-function reload() {
-  orders = [];
-  const max = Math.floor(Math.random() * 10);
-  for (let i = 0; i < max; i++) {
-    orders.push(getRandomOrder());
-  }
-}
-
-reload();
-
 function address2dto(a: Address): AddressDto {
   return {
     Id: a.Id,
@@ -364,6 +354,10 @@ function address2dto(a: Address): AddressDto {
 }
 
 function getAllOrders(): OrderDto[] {
+  const max = Math.floor(Math.random() * 3);
+  for (let i = 0; i < max; i++) {
+    orders.push(getRandomOrder());
+  }
   return orders.map(o => {
     return {
       Id: o.Id,
@@ -383,5 +377,5 @@ function getOrderById(Id: number): Order {
 }
 
 export {
-  getAllOrders, getOrderById, reload
+  getAllOrders, getOrderById
 };

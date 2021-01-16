@@ -15,17 +15,8 @@ export class HomePage implements OnInit {
   constructor(private data: DataService) {}
 
   private async loadOrders(): Promise<void> {
-    const status_priority = [
-      "QUEUED", "READY_TO_DELIVERY", "IN_ORDER", "COLLECTED", "READY_TO_STORAGE", 
-      "TO_STORAGE", "RETURNED", "VISIT_DONE", "TO_NEXT_VISIT", "VISIT_SUSPENDED",
-      "VISIT_CANCELED", "STORAGED", "CREATED", "DELIVERED", "LOST"];
-    const service_type_priority = ["ON_DEMAND", "SAME_DAY", "NEXT_DAY"];
     this.loadingMessage = 'Loading...'
-    this.orders = (await this.data.getOrders() || []).sort((a: OrderDto, b: OrderDto) => {
-      const avalue = status_priority.indexOf(a.DeliveryStatus) + service_type_priority.indexOf(a.ServiceType);
-      const bvalue = status_priority.indexOf(b.DeliveryStatus) + service_type_priority.indexOf(b.ServiceType);
-      return avalue - bvalue;
-    });
+    this.orders = await this.data.getOrders();
     if (this.orders.length === 0) {
       this.loadingMessage = 'No orders';
     } else {
@@ -34,7 +25,6 @@ export class HomePage implements OnInit {
   }
 
   async refresh(ev: any) {
-    this.data.reload();
     await this.loadOrders();
     ev.detail.complete();
   }
