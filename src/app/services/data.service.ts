@@ -10,7 +10,27 @@ const STATUS_PRIORITY = [
   "QUEUED", "READY_TO_DELIVERY", "IN_ORDER", "COLLECTED", "READY_TO_STORAGE", 
   "TO_STORAGE", "RETURNED", "VISIT_DONE", "TO_NEXT_VISIT", "VISIT_SUSPENDED",
   "VISIT_CANCELED", "STORAGED", "CREATED", "DELIVERED", "LOST"];
+
 const SERVICE_TYPE_PRIORITY = ["ON_DEMAND", "SAME_DAY", "NEXT_DAY"];
+
+const STATUS_ICONS = {
+  CREATED: 'ellipse',
+  QUEUED: 'help-circle',
+  IN_ORDER: 'navigate',
+  COLLECTED: 'navigate',
+  READY_TO_STORAGE: 'archive',
+  READY_TO_DELIVERY: 'navigate',
+  DELIVERED: 'checkmark-done-circle',
+  TO_STORAGE: 'archive',
+  TO_NEXT_VISIT: 'help-circle',
+  VISIT_DONE: 'alert-circle',
+  STORAGED: 'archive',
+  VISIT_CANCELED: 'warning',
+  DELETED: 'close-circle',
+  VISIT_SUSPENDED: 'warning',
+  RETURNED: 'warning',
+  LOST: 'warning'
+};
 
 const ORDER_PROGRESS = {
   CREATED: 0.1,
@@ -66,6 +86,58 @@ export class DataService {
     });
   }
 
+  public getStatusIcon(order: OrderDto | Order): string {
+    return STATUS_ICONS[order.deliveryStatus] || 'alert-circle';
+  }
+
+  public getStatusIconColor(order: OrderDto | Order): string {
+    const s = order.deliveryStatus;
+    const t = order.serviceType;
+    if (s === 'CREATED') {
+      return 'secondary';
+    }
+    if (s === 'QUEUED') {
+      if (t === 'NEXT_DAY') {
+        return 'warning';
+      }
+      return 'danger';
+    }
+    if (s === 'IN_ORDER') {
+      if (t === 'NEXT_DAY') {
+        return 'tertiary';
+      }
+      if (t === 'SAME_DAY') {
+        return 'warning'        
+      }
+      return 'danger'
+    }
+    if (s === 'COLLECTED') {
+      if (t === 'NEXT_DAY') {
+        return 'tertiary';
+      }
+      return '';
+    }
+    if (s === 'READY_TO_DELIVERY') {
+      return 'success';
+    }
+    if (s === 'DELIVERED') {
+      return 'success';
+    }
+    if (s === 'VISIT_DONE' || s === 'RETURNED' || s === 'VISIT_CANCELED') {
+      return 'danger';
+    }
+    if (s === 'VISIT_SUSPENDED') {
+      return 'warning';
+    }
+    if (s === 'TO_STORAGE') {
+      return 'tertiary';
+    }
+    if (s === 'STORAGED') {
+      return 'success';
+    }
+    return '';
+  }
+
   public getOrderProgress(order: OrderDto | Order): number {
     return ORDER_PROGRESS[order.deliveryStatus] || 0;
   }
@@ -81,7 +153,7 @@ export class DataService {
 
   public getPickupDelay(): number {
     // TODO: estadística sobre el tiempo de recolección promedio
-    return 10;
+    return 3;
   }
 
   public getStorageAddress(): AddressDto {

@@ -1,27 +1,10 @@
-import { Component, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AlertController, IonItemSliding } from '@ionic/angular';
+import { AddressDto } from '../model/address-dto';
 import { OrderDto } from '../model/order-dto';
 import { DataService } from '../services/data.service';
 import { MylocationService } from '../services/mylocation.service';
-
-const icons = {
-  CREATED: 'ellipse',
-  QUEUED: 'help-circle',
-  IN_ORDER: 'navigate',
-  COLLECTED: 'navigate',
-  READY_TO_STORAGE: 'archive',
-  READY_TO_DELIVERY: 'navigate',
-  DELIVERED: 'checkmark-done-circle',
-  TO_STORAGE: 'archive',
-  TO_NEXT_VISIT: 'help-circle',
-  VISIT_DONE: 'alert-circle',
-  STORAGED: 'archive',
-  VISIT_CANCELED: 'warning',
-  DELETED: 'close-circle',
-  VISIT_SUSPENDED: 'warning',
-  RETURNED: 'warning',
-  LOST: 'warning'
-};
 
 @Component({
   selector: 'app-order',
@@ -32,6 +15,7 @@ export class OrderComponent implements OnInit {
 
   @Input() order: OrderDto;
   @Output() change: EventEmitter<any> = new EventEmitter();
+  public nextAddress: string;
   public distance: number;
   public estimatedTime: number;
   public directionsToSource: string;
@@ -57,71 +41,53 @@ export class OrderComponent implements OnInit {
 
   private async updateDistanceAndTime(): Promise<void> {
     if (!this.order) {
+      this.nextAddress = '';
       return;
     }
-    const source = this.order.sourceAddress;
-    const destination = this.order.destinationAddress;
-    const resp = this.myLocation.calculateRoute(source, destination);
-    this.distance = (await resp).distance;
-    this.estimatedTime = (await resp).time;
+    
+    // CREATED, QUEUED, IN_ORDER, RETURNED -> SourceAddress
+    let destination: AddressDto | null = this.order.sourceAddress;
+    
+    if (
+      this.order.deliveryStatus === 'READY_TO_DELIVERY' ||
+      this.order.deliveryStatus === 'DELIVERED' ||
+      this.order.deliveryStatus === 'VISIT_DONE'||
+      this.order.deliveryStatus === 'VISIT_CANCELED' ||
+      this.order.deliveryStatus === 'VISIT_SUSPENDED') {
+        destination = this.order.destinationAddress;
+    } else if (
+      this.order.deliveryStatus === 'READY_TO_STORAGE' ||
+      this.order.deliveryStatus === 'TO_STORAGE' ||
+      this.order.deliveryStatus === 'TO_NEXT_VISIT' ||
+      this.order.deliveryStatus === 'STORAGED') {
+        destination = this.data.getStorageAddress();
+    } else if (this.order.deliveryStatus === 'COLLECTED') {
+      if (this.order.serviceType === 'NEXT_DAY') {
+        destination = this.data.getStorageAddress();
+      } else {
+        destination = this.order.destinationAddress;
+      }
+    }
+    if (destination) {
+      const resp = this.myLocation.distanceFromMyPosition(destination);
+      this.nextAddress = destination.fullAddress;
+      this.distance = (await resp).distance;
+      this.estimatedTime = (await resp).time;
+    }
   }
 
   get icon(): string {
     if (!this.order) {
       return 'alert-circle';
     }
-    return icons[this.order.deliveryStatus] || 'alert-circle'
+    return this.data.getStatusIcon(this.order);
   }
 
   get color(): string {
     if (!this.order) {
       return '';
     }
-    const s = this.order.deliveryStatus;
-    const t = this.order.serviceType;
-    if (s === 'CREATED') {
-      return 'secondary';
-    }
-    if (s === 'QUEUED') {
-      if (t === 'NEXT_DAY') {
-        return 'warning';
-      }
-      return 'danger';
-    }
-    if (s === 'IN_ORDER') {
-      if (t === 'NEXT_DAY') {
-        return 'tertiary';
-      }
-      if (t === 'SAME_DAY') {
-        return 'warning'        
-      }
-      return 'danger'
-    }
-    if (s === 'COLLECTED') {
-      if (t === 'NEXT_DAY') {
-        return 'tertiary';
-      }
-      return '';
-    }
-    if (s === 'READY_TO_DELIVERY') {
-      return 'success';
-    }
-    if (s === 'DELIVERED') {
-      return 'success';
-    }
-    if (s === 'VISIT_DONE' || s === 'RETURNED' || s === 'VISIT_CANCELED') {
-      return 'danger';
-    }
-    if (s === 'VISIT_SUSPENDED') {
-      return 'warning';
-    }
-    if (s === 'TO_STORAGE') {
-      return 'tertiary';
-    }
-    if (s === 'STORAGED') {
-      return 'success';
-    }
-    return '';
+    return this.data.getStatusIconColor(this.order);
   }
 
   async reject(slidingItem: IonItemSliding): Promise<void> {

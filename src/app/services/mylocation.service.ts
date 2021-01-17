@@ -28,11 +28,43 @@ export class MylocationService {
       latlon = new LatLonSpherical(lat, lon);
     } catch (err) {
       console.log(err);
+      console.log('Using test position');
+      if (err && err.code && err.code === 1) {
+        latlon = new LatLonSpherical(27.495495276788983, -109.96622502330013);
+      }
     }
     return latlon;
   }
 
-  async calculateDistance(source: AddressDto | Address, destination: AddressDto | Address): Promise<{ distance: number, time: number }> {
+  async distanceFromMyPosition(destination: AddressDto | Address): Promise<{ distance: number, time: number }> {
+    const myPosition = await this.getMyCurrentPosition();
+    if (!myPosition) {
+      return { distance: 0, time: 0 };
+    }
+    const destinationPoint = new LatLonSpherical(destination.latitude, destination.longitude);
+    let distance1 = 0;
+    let distance2 = 0;
+    const point1 = new LatLonSpherical(myPosition.lat, destinationPoint.lon);
+    const point2 = new LatLonSpherical(destinationPoint.lat, myPosition.lon);
+
+    distance1 += myPosition.distanceTo(point1);
+    distance1 += point1.distanceTo(destinationPoint);
+    distance1 = Math.floor(distance1) / 1000;
+
+    distance2 += myPosition.distanceTo(point2);
+    distance2 += point2.distanceTo(destinationPoint);
+    distance2 = Math.floor(distance2) / 1000;
+
+    const distance = (distance1 + distance2) / 2
+    const speed = this.data.getSpeed();
+    const factor = 60 / speed;
+    const pickupDelay = this.data.getPickupDelay();
+    const time = Math.ceil(distance * factor + pickupDelay);
+
+    return { distance: distance1, time };
+  }
+
+  async calculateDeliveryDistance(source: AddressDto | Address, destination: AddressDto | Address): Promise<{ distance: number, time: number }> {
     const pickup = new LatLonSpherical(source.latitude, source.longitude);
     const dropoff = new LatLonSpherical(destination.latitude, destination.longitude);
     let distance = 0;
@@ -49,7 +81,7 @@ export class MylocationService {
     return { distance, time };
   }
 
-  async calculateRoute(source: AddressDto | Address, destination: AddressDto | Address): Promise<{ distance: number, time: number }> {
+  async deliveryDistanceFromMyPosition(source: AddressDto | Address, destination: AddressDto | Address): Promise<{ distance: number, time: number }> {
     const pickup = new LatLonSpherical(source.latitude, source.longitude);
     const dropoff = new LatLonSpherical(destination.latitude, destination.longitude);
     const myPosition = await this.getMyCurrentPosition();

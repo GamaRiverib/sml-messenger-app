@@ -30,7 +30,7 @@ export class GeneralComponent implements OnInit {
       }
       const source = this.order.sourceAddress;
       const destination = this.order.destinationAddress;
-      const resp = this.myLocation.calculateDistance(source, destination);
+      const resp = this.myLocation.calculateDeliveryDistance(source, destination);
       this.distance = (await resp).distance;
       this.estimatedTime = (await resp).time;
     }

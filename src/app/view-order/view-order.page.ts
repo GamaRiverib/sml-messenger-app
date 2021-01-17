@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 import { Order } from '../model/order';
 import { DataService } from '../services/data.service';
 import { MylocationService } from '../services/mylocation.service';
@@ -18,7 +18,8 @@ export class ViewOrderPage implements OnInit {
     private data: DataService,
     private myLocation: MylocationService,
     private actionSheetCtrl: ActionSheetController,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private alertCtrl: AlertController
   ) { }
 
   private async loadOrder(id: number): Promise<void> {
@@ -46,20 +47,60 @@ export class ViewOrderPage implements OnInit {
     }
     const source = this.order.sourceAddress;
     const destination = this.order.destinationAddress;
-    const resp = await this.myLocation.calculateRoute(source, destination);
+    const resp = await this.myLocation.deliveryDistanceFromMyPosition(source, destination);
     return resp.time;
   }
 
-  private reject() {
-    this.data.reject(this.order);
+  private async reject() {
+    const alert = await this.alertCtrl.create({
+      header: 'Reject order!',
+      message: 'Are you sure you want to <b>REJECT</b> the order?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Yes',
+          handler: async () => {
+            await this.data.reject(this.order);
+            // this.change.emit();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   private take() {
     this.data.take(this.order);
   }
 
-  private cancel() {
-    this.data.cancel(this.order);
+  private async cancel() {
+    const alert = await this.alertCtrl.create({
+      header: 'Cancel order!',
+      message: 'Are you sure you want to <b>CANCEL</b> the order?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Yes',
+          handler: async () => {
+            await this.data.cancel(this.order);
+            // this.change.emit();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   private async collect() {

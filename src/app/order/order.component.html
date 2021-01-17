@@ -24,14 +24,8 @@
       <h3>
         Order #{{ order.id }}
       </h3>
-      <h2 *ngIf="order.deliveryStatus == 'QUEUED' || order.deliveryStatus == 'IN_ORDER' || order.deliveryStatus == 'RETURNED'"> 
-        {{ order.sourceAddress.fullAddress }}
-        <span class="note">
-          <ion-icon name="chevron-forward" size="small" *ngIf="isIos()"></ion-icon>
-        </span>
-      </h2>
-      <h2 *ngIf="order.deliveryStatus != 'QUEUED' && order.deliveryStatus != 'IN_ORDER' && order.deliveryStatus != 'RETURNED'">
-        {{ order.destinationAddress.fullAddress }}
+      <h2> 
+        {{ nextAddress }}
         <span class="note">
           <ion-icon name="chevron-forward" size="small" *ngIf="isIos()"></ion-icon>
         </span>
