@@ -1,4 +1,5 @@
 <ion-content>
+  <ion-progress-bar *ngIf="order" [value]="progress" [color]="progressColor"></ion-progress-bar>
   <ion-list *ngIf="order">
     <div *ngFor="let log of order.deliveryLog; let i = index" style="margin-bottom: 12px;">
       <ion-list-header>

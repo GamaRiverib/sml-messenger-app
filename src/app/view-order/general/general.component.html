@@ -1,4 +1,5 @@
 <ion-content>
+  <ion-progress-bar *ngIf="order" [value]="progress" [color]="progressColor"></ion-progress-bar>
   <ion-list *ngIf="order">
     <ion-list-header>
       <ion-label color="secondary">

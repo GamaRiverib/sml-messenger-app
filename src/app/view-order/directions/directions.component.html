@@ -1,4 +1,5 @@
 <ion-content>
+  <ion-progress-bar *ngIf="order" [value]="progress" [color]="progressColor"></ion-progress-bar>
   <ion-list *ngIf="order">
     <ion-list-header>
       <ion-label color="secondary">
@@ -11,6 +12,12 @@
       target="_blank">
       <ion-icon name="location-outline"></ion-icon>
       <ion-label class="ion-padding-start ion-text-wrap">{{ order.sourceAddress.fullAddress }}</ion-label>
+      <ion-icon 
+        *ngIf="order.deliveryStatus != 'CREATED' && order.deliveryStatus != 'QUEUED' && order.deliveryStatus != 'IN_ORDER'" 
+        color="success"
+        name="checkmark-circle"
+        slot="end">
+      </ion-icon>
     </ion-item>
     <div *ngIf="order.sourceAddressInstruction" class="ion-padding-bottom">
       <div *ngIf="order.sourceAddressInstruction.contact">
@@ -49,6 +56,7 @@
       target="_blank">
       <ion-icon name="location-outline"></ion-icon>
       <ion-label class="ion-padding-start ion-text-wrap">{{ order.destinationAddress.fullAddress }}</ion-label>
+      <ion-icon *ngIf="order.deliveryStatus == 'DELIVERED'" color="success" name="checkmark-circle" slot="end"></ion-icon>
     </ion-item>
     <div *ngIf="order.destinationAddressInstruction">
       <div *ngIf="order.destinationAddressInstruction.contact">

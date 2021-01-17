@@ -17,4 +17,18 @@ export class LogComponent implements OnInit {
     this.order = this.data.getSelectedOrder();
   }
 
+  get progress(): number {
+    if (!this.order) {
+      return 0;
+    }
+    return this.data.getOrderProgress(this.order);
+  }
+
+  get progressColor(): string {
+    if (!this.order) {
+      return '';
+    }
+    return this.data.getOrderProgressColor(this.order);
+  }
+
 }

@@ -6,11 +6,47 @@ import { Order } from '../model/order';
 import { AddressDto } from '../model/address-dto';
 
 // const SERVER_URL = 'http://localhost:3000';
-const status_priority = [
+const STATUS_PRIORITY = [
   "QUEUED", "READY_TO_DELIVERY", "IN_ORDER", "COLLECTED", "READY_TO_STORAGE", 
   "TO_STORAGE", "RETURNED", "VISIT_DONE", "TO_NEXT_VISIT", "VISIT_SUSPENDED",
   "VISIT_CANCELED", "STORAGED", "CREATED", "DELIVERED", "LOST"];
-const service_type_priority = ["ON_DEMAND", "SAME_DAY", "NEXT_DAY"];
+const SERVICE_TYPE_PRIORITY = ["ON_DEMAND", "SAME_DAY", "NEXT_DAY"];
+
+const ORDER_PROGRESS = {
+  CREATED: 0.1,
+  QUEUED: 0.1,
+  IN_ORDER: 0.25,
+  COLLECTED: 0.5,
+  RETURNED: 0.5,
+  READY_TO_DELIVERY: 0.75,
+  READY_TO_STORAGE: 0.75,
+  TO_STORAGE: 0.75,
+  DELIVERED: 1,
+  STORAGED: 1,
+  LOST: 1,
+  VISIT_DONE: 0.5,
+  TO_NEXT_VISIT: 0.2,
+  VISIT_CANCELED: 0.5,
+  VISIT_SUSPENDED: 0.5
+};
+
+const ORDER_PROGRESS_COLOR = {
+  CREATED: 'secondary',
+  QUEUED: 'secondary',
+  IN_ORDER: 'primary',
+  COLLECTED: 'primary',
+  RETURNED: 'warning',
+  READY_TO_DELIVERY: 'primary',
+  READY_TO_STORAGE: 'primary',
+  TO_STORAGE: 'primary',
+  DELIVERED: 'success',
+  STORAGED: 'success',
+  LOST: 'danger',
+  VISIT_DONE: 'warning',
+  TO_NEXT_VISIT: 'tertiary',
+  VISIT_CANCELED: 'warning',
+  VISIT_SUSPENDED: 'warning'
+};
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +60,18 @@ export class DataService {
 
   private sortOrders(): void {
     this.orders = this.orders.sort((a: OrderDto, b: OrderDto) => {
-      const avalue = status_priority.indexOf(a.deliveryStatus) + service_type_priority.indexOf(a.serviceType);
-      const bvalue = status_priority.indexOf(b.deliveryStatus) + service_type_priority.indexOf(b.serviceType);
+      const avalue = STATUS_PRIORITY.indexOf(a.deliveryStatus) + SERVICE_TYPE_PRIORITY.indexOf(a.serviceType);
+      const bvalue = STATUS_PRIORITY.indexOf(b.deliveryStatus) + SERVICE_TYPE_PRIORITY.indexOf(b.serviceType);
       return avalue - bvalue;
     });
+  }
+
+  public getOrderProgress(order: OrderDto | Order): number {
+    return ORDER_PROGRESS[order.deliveryStatus] || 0;
+  }
+
+  public getOrderProgressColor(order: OrderDto | Order): string {
+    return ORDER_PROGRESS_COLOR[order.deliveryStatus] || '';
   }
 
   public getSpeed(): number {

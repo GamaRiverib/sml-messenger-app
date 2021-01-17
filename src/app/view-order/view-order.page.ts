@@ -96,6 +96,9 @@ export class ViewOrderPage implements OnInit {
     if (!this.order) {
       return;
     }
+    if (this.order.deliveryStatus === 'DELIVERED' || this.order.deliveryStatus === 'STORAGED') {
+      return;
+    }
     const status = this.order.deliveryStatus;
     const buttons = [];
 
