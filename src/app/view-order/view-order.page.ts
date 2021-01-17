@@ -1,34 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { Order } from '../model/order';
 import { DataService } from '../services/data.service';
 import { MylocationService } from '../services/mylocation.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-view-order',
   templateUrl: './view-order.page.html',
   styleUrls: ['./view-order.page.scss'],
 })
-export class ViewOrderPage implements OnInit {
+export class ViewOrderPage implements OnInit, OnDestroy {
 
   public order: Order;
 
   constructor(
     private data: DataService,
     private myLocation: MylocationService,
+    private toast: ToastService,
     private actionSheetCtrl: ActionSheetController,
     private activatedRoute: ActivatedRoute,
     private alertCtrl: AlertController
   ) { }
 
   private async loadOrder(id: number): Promise<void> {
-    this.order = await this.data.getOrderById(id);
+    this.order = await this.data.selectOrderById(id);
   }
 
   async ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     await this.loadOrder(parseInt(id));
+  }
+
+  ngOnDestroy() {
+    this.data.clearSelectedOrder();
+    this.order = null;
   }
 
   getBackButtonText() {
@@ -59,14 +66,12 @@ export class ViewOrderPage implements OnInit {
         {
           text: 'No',
           role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
+          cssClass: 'secondary'
         }, {
           text: 'Yes',
           handler: async () => {
             await this.data.reject(this.order);
+            this.toast.showLongTop(`Order #${this.order.id} rejected.`);
             // this.change.emit();
           }
         }
@@ -79,22 +84,20 @@ export class ViewOrderPage implements OnInit {
     this.data.take(this.order);
   }
 
-  private async cancel() {
+  private async suspend() {
     const alert = await this.alertCtrl.create({
-      header: 'Cancel order!',
-      message: 'Are you sure you want to <b>CANCEL</b> the order?',
+      header: 'Suspend order!',
+      message: 'Are you sure you want to <b>SUSPEND</b> the order?',
       buttons: [
         {
           text: 'No',
           role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
+          cssClass: 'secondary'
         }, {
           text: 'Yes',
           handler: async () => {
             await this.data.cancel(this.order);
+            this.toast.showLongTop(`Order #${this.order.id} suspended.`);
             // this.change.emit();
           }
         }
@@ -106,31 +109,38 @@ export class ViewOrderPage implements OnInit {
   private async collect() {
     const estimatedTime = await this.estimateTime();
     this.data.collect(this.order, estimatedTime);
+    this.toast.showLongTop(`Order #${this.order.id} collected.`);
   }
 
   private gotoStorage() {
     this.data.toStorage(this.order);
+    this.toast.showLongTop(`Order #${this.order.id} on the way to the warehouse.`);
   }
 
   private async gotoDelivery() {
     const estimatedTime = await this.estimateTime();
     this.data.toDelivery(this.order, estimatedTime);
+    this.toast.showLongTop(`Order #${this.order.id} in delivery.`);
   }
 
   private store() {
     this.data.storage(this.order);
+    this.toast.showLongTop(`Order #${this.order.id} in the warehouse.`);
   }
 
   private fail() {
     this.data.fail(this.order);
+    this.toast.showLongTop(`Order #${this.order.id} could not be delivered.`);
   }
 
   private done() {
     this.data.done(this.order);
+    this.toast.showLongTop(`Order #${this.order.id} was delivered.`);
   }
 
   private lost() {
     this.data.lost(this.order);
+    this.toast.showLongTop(`Order #${this.order.id} is lost.`);
   }
 
   async showOptions(ev: any) {
@@ -157,10 +167,10 @@ export class ViewOrderPage implements OnInit {
       });
     } else if (status === 'IN_ORDER') {
       buttons.push({
-        text: 'Cancel order',
+        text: 'Suspend order',
         role: 'desctructive',
         icon: 'close',
-        handler: this.cancel.bind(this)
+        handler: this.suspend.bind(this)
       });
       buttons.push({
         text: 'Collected',

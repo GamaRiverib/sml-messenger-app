@@ -9,7 +9,7 @@ import { AddressDto } from '../model/address-dto';
 const STATUS_PRIORITY = [
   "QUEUED", "READY_TO_DELIVERY", "IN_ORDER", "COLLECTED", "READY_TO_STORAGE", 
   "TO_STORAGE", "RETURNED", "VISIT_DONE", "TO_NEXT_VISIT", "VISIT_SUSPENDED",
-  "VISIT_CANCELED", "STORAGED", "CREATED", "DELIVERED", "LOST"];
+  "VISIT_CANCELED", "CREATED", "STORAGED", "DELIVERED", "LOST"];
 
 const SERVICE_TYPE_PRIORITY = ["ON_DEMAND", "SAME_DAY", "NEXT_DAY"];
 
@@ -75,6 +75,9 @@ export class DataService {
 
   private orders: OrderDto[];
   private selected: Order = null;
+
+  private online: boolean = true;
+  private autoAcceptOrders: boolean = false;
 
   constructor(/*private http: HttpClient*/) { }
 
@@ -158,7 +161,7 @@ export class DataService {
 
   public getStorageAddress(): AddressDto {
     // TODO: En environment establecer las Address del almacén
-    const fullAddress = "Calle Vicente Guerrero s/n, Infonavit, 85120 Cd Obregón, Son."
+    const fullAddress = 'Calle Vicente Guerrero s/n, Infonavit, 85120 Cd Obregón, Son.'
     const latitude = 27.493168146428467;
     const longitude = -109.95447145273737;
     return {
@@ -169,28 +172,46 @@ export class DataService {
     };
   }
 
+  public getOnlineMode(): boolean {
+    return this.online;
+  }
+
+  public setOnlineMode(val: boolean): void {
+    this.online = val;
+  }
+
+  public getAutoAcceptOrders(): boolean {
+    return this.autoAcceptOrders;
+  }
+
+  public setAutoAcceptOrders(val: boolean): void {
+    this.autoAcceptOrders = val;
+  }
+
   public async getOrders(cache?: boolean): Promise<OrderDto[]> {
     /*const url = `${SERVER_URL}/orders`;
     const response = await this.http.get<{ orders: OrderDto[] }>(url)
       .toPromise<{ orders: OrderDto[] }>();
     return response.orders || [];*/
+    // TODO: Testing purposes only
+    if (cache) {
+      return this.orders;
+    }
     return new Promise<OrderDto[]>((resolve, reject) => {
-      if (cache) {
-        return this.orders;
-      }
       setTimeout(() => {
         this.orders = TestData.getAllOrders() || [];
         this.sortOrders();
         resolve(this.orders);
-      }, 1200);
+      }, 1000);
     });
   }
 
-  public async getOrderById(id: number): Promise<Order> {
+  public async selectOrderById(id: number): Promise<Order> {
     /*const url = `${SERVER_URL}/orders/${id}`;
     const response = await this.http.get<{ order: Order }>(url)
       .toPromise<{ order: Order }>();
     return response.order;*/
+    // TODO: Testing purposes only
     return new Promise<Order>((resolve, reject) => {
       setTimeout(() => {
         const order = TestData.getOrderById(id);
@@ -198,7 +219,7 @@ export class DataService {
           return reject();
         }
         this.selected = order;
-        resolve(order);
+        resolve(this.selected);
       }, 800);
     });
   }
@@ -207,16 +228,20 @@ export class DataService {
     return this.selected;
   }
 
+  public clearSelectedOrder(): void {
+    this.selected = null;
+  }
+
   public async reject(order: OrderDto | Order): Promise<void> {
     /*const url = `${SERVER_URL}/orders/${order.id}/reject`;
     const response = await this.http.post<void>(url, {})
       .toPromise<void>();
     return;*/
+    // TODO: Testing purposes only
     return new Promise<void>(async (resolve, reject) => {
       setTimeout(() => {
-        order.deliveryStatus = 'CREATED';
-        this.getOrderById(order.id)
-          .then(o => o.deliveryStatus = 'CREATED');
+        TestData.updateStatusOrder(order.id, 'CREATED');
+        this.selected = TestData.getOrderById(order.id);
         this.sortOrders();
         resolve();
       }, 600);
@@ -228,11 +253,11 @@ export class DataService {
     const response = await this.http.post<void>(url, {})
       .toPromise<void>();
     return;*/
+    // TODO: Testing purposes only
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.deliveryStatus = 'IN_ORDER';
-        this.getOrderById(order.id)
-          .then(o => o.deliveryStatus = 'IN_ORDER');
+        TestData.updateStatusOrder(order.id, 'IN_ORDER');
+        this.selected = TestData.getOrderById(order.id);
         this.sortOrders();
         resolve();
       }, 600);
@@ -250,11 +275,11 @@ export class DataService {
       body.order['EstimatedDeliveryTime'] = estimatedTime;
     }
     return this.http.put<void>(url, body).toPromise<void>();*/
+    // TODO: Testing purposes only
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.deliveryStatus = 'CREATED';
-        this.getOrderById(order.id)
-          .then(o => o.deliveryStatus = 'CREATED');
+        TestData.updateStatusOrder(order.id, 'CREATED');
+        this.selected = TestData.getOrderById(order.id);
         this.sortOrders();
         resolve();
       }, 600);
@@ -272,11 +297,11 @@ export class DataService {
       body.order['EstimatedDeliveryTime'] = estimatedTime;
     }
     return this.http.put<void>(url, body).toPromise<void>();*/
+    // TODO: Testing purposes only
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.deliveryStatus = 'COLLECTED';
-        this.getOrderById(order.id)
-          .then(o => o.deliveryStatus = 'COLLECTED');
+        TestData.updateStatusOrder(order.id, 'COLLECTED');
+        this.selected = TestData.getOrderById(order.id);
         this.sortOrders();
         resolve();
       }, 600);
@@ -291,11 +316,11 @@ export class DataService {
       }
     };
     return this.http.put<void>(url, body).toPromise<void>();*/
+    // TODO: Testing purposes only
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.deliveryStatus = 'READY_TO_STORAGE';
-        this.getOrderById(order.id)
-          .then(o => o.deliveryStatus = 'READY_TO_STORAGE');
+        TestData.updateStatusOrder(order.id, 'READY_TO_STORAGE');
+        this.selected = TestData.getOrderById(order.id);
         this.sortOrders();
         resolve();
       }, 600);
@@ -313,11 +338,11 @@ export class DataService {
       body.order['EstimatedDeliveryTime'] = estimatedTime;
     }
     return this.http.put<void>(url, body).toPromise<void>();*/
+    // TODO: Testing purposes only
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.deliveryStatus = 'READY_TO_DELIVERY';
-        this.getOrderById(order.id)
-          .then(o => o.deliveryStatus = 'READY_TO_DELIVERY');
+        TestData.updateStatusOrder(order.id, 'READY_TO_DELIVERY');
+        this.selected = TestData.getOrderById(order.id);
         this.sortOrders();
         resolve();
       }, 600);
@@ -332,11 +357,11 @@ export class DataService {
       }
     };
     return this.http.put<void>(url, body).toPromise<void>();*/
+    // TODO: Testing purposes only
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.deliveryStatus = 'STORAGED';
-        this.getOrderById(order.id)
-          .then(o => o.deliveryStatus = 'STORAGED');
+        TestData.updateStatusOrder(order.id, 'STORAGED');
+        this.selected = TestData.getOrderById(order.id);
         this.sortOrders();
         resolve();
       }, 600);
@@ -351,11 +376,11 @@ export class DataService {
       }
     };
     return this.http.put<void>(url, body).toPromise<void>();*/
+    // TODO: Testing purposes only
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.deliveryStatus = 'VISIT_DONE';
-        this.getOrderById(order.id)
-          .then(o => o.deliveryStatus = 'VISIT_DONE');
+        TestData.updateStatusOrder(order.id, 'VISIT_DONE');
+        this.selected = TestData.getOrderById(order.id);
         this.sortOrders();
         resolve();
       }, 600);
@@ -370,11 +395,11 @@ export class DataService {
       }
     };
     return this.http.put<void>(url, body).toPromise<void>();*/
+    // TODO: Testing purposes only
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.deliveryStatus = 'DELIVERED';
-        this.getOrderById(order.id)
-          .then(o => o.deliveryStatus = 'DELIVERED');
+        TestData.updateStatusOrder(order.id, 'DELIVERED');
+        this.selected = TestData.getOrderById(order.id);
         this.sortOrders();
         resolve();
       }, 600);
@@ -389,11 +414,11 @@ export class DataService {
       }
     };
     return this.http.put<void>(url, body).toPromise<void>();*/
+    // TODO: Testing purposes only
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.deliveryStatus = 'LOST';
-        this.getOrderById(order.id)
-          .then(o => o.deliveryStatus = 'LOST');
+        TestData.updateStatusOrder(order.id, 'LOST');
+        this.selected = TestData.getOrderById(order.id);
         this.sortOrders();
         resolve();
       }, 600);

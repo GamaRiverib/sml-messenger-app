@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Order } from 'src/app/model/order';
 import { DataService } from 'src/app/services/data.service';
 import { MylocationService } from 'src/app/services/mylocation.service';
@@ -28,6 +28,7 @@ export class GeneralComponent implements OnInit {
         setTimeout(this.ngOnInit.bind(this), 1000);
         return;
       }
+      this.loadIntents = 3;
       const source = this.order.sourceAddress;
       const destination = this.order.destinationAddress;
       const resp = this.myLocation.calculateDeliveryDistance(source, destination);

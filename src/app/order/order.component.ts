@@ -1,10 +1,10 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AlertController, IonItemSliding } from '@ionic/angular';
 import { AddressDto } from '../model/address-dto';
 import { OrderDto } from '../model/order-dto';
 import { DataService } from '../services/data.service';
 import { MylocationService } from '../services/mylocation.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-order',
@@ -12,7 +12,7 @@ import { MylocationService } from '../services/mylocation.service';
   styleUrls: ['./order.component.scss'],
 })
 export class OrderComponent implements OnInit {
-
+  
   @Input() order: OrderDto;
   @Output() change: EventEmitter<any> = new EventEmitter();
   public nextAddress: string;
@@ -24,6 +24,7 @@ export class OrderComponent implements OnInit {
   constructor(
     private data: DataService,
     private myLocation: MylocationService,
+    private toast: ToastService,
     private alertCtrl: AlertController
     ) { }
 
@@ -99,14 +100,12 @@ export class OrderComponent implements OnInit {
         {
           text: 'No',
           role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
+          cssClass: 'secondary'
         }, {
           text: 'Yes',
           handler: async () => {
             await this.data.reject(this.order);
+            this.toast.showLongTop(`Order #${this.order.id} rejected.`);
             this.change.emit();
           }
         }
@@ -118,26 +117,25 @@ export class OrderComponent implements OnInit {
   async take(slidingItem: IonItemSliding): Promise<void> {
     await slidingItem.close();
     await this.data.take(this.order);
+    this.toast.showLongTop(`Order #${this.order.id} was assigned to you.`);
     this.change.emit();
   }
 
-  async cancel(slidingItem: IonItemSliding): Promise<void> {
+  async suspend(slidingItem: IonItemSliding): Promise<void> {
     await slidingItem.close();
     const alert = await this.alertCtrl.create({
-      header: 'Cancel order!',
-      message: 'Are you sure you want to <b>CANCEL</b> the order?',
+      header: 'Suspend order!',
+      message: 'Are you sure you want to <b>SUSPEND</b> the order?',
       buttons: [
         {
           text: 'No',
           role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
+          cssClass: 'secondary'
         }, {
           text: 'Yes',
           handler: async () => {
             await this.data.cancel(this.order);
+            this.toast.showLongTop(`Order #${this.order.id} suspended.`);
             this.change.emit();
           }
         }
@@ -149,36 +147,42 @@ export class OrderComponent implements OnInit {
   async collect(slidingItem: IonItemSliding): Promise<void> {
     await slidingItem.close();
     await this.data.collect(this.order, this.estimatedTime);
+    this.toast.showLongTop(`Order #${this.order.id} collected.`);
     this.change.emit();
   }
 
   async toStorage(slidingItem: IonItemSliding): Promise<void> {
     await slidingItem.close();
     await this.data.toStorage(this.order);
+    this.toast.showLongTop(`Order #${this.order.id} on the way to the warehouse.`);
     this.change.emit();
   }
 
   async toDelivery(slidingItem: IonItemSliding): Promise<void> {
     await slidingItem.close();
     await this.data.toDelivery(this.order, this.estimatedTime);
+    this.toast.showLongTop(`Order #${this.order.id} in delivery.`);
     this.change.emit();
   }
 
   async storage(slidingItem: IonItemSliding): Promise<void> {
     await slidingItem.close();
     await this.data.storage(this.order);
+    this.toast.showLongTop(`Order #${this.order.id} in the warehouse.`);
     this.change.emit();
   }
 
   async fail(slidingItem: IonItemSliding): Promise<void> {  
     await slidingItem.close();
     await this.data.fail(this.order);
+    this.toast.showLongTop(`Order #${this.order.id} could not be delivered.`);
     this.change.emit();
   }
 
   async done(slidingItem: IonItemSliding): Promise<void> {
     await slidingItem.close();
     await this.data.done(this.order);
+    this.toast.showLongTop(`Order #${this.order.id} was delivered.`);
     this.change.emit();
   }
 

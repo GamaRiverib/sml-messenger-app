@@ -7,7 +7,8 @@ import { Order } from "../model/order";
 import { OrderDto } from "../model/order-dto"
 import { Package } from "../model/package";
 
-let orders: Order[] = [];
+let fullOders: Order[] = [];
+let dtoOrders: OrderDto[] = [];
 
 const address: Address[] = [{
   id: 1,
@@ -300,7 +301,7 @@ function getRandomPackage(): Package {
 }
 
 function getRandomPackages(): Package[] {
-  const l = Math.floor(Math.random() * 4);
+  const l = Math.floor(Math.random() * 3) + 1;
   const packages = [];
   for(let i = 0; i < l; i++) {
     packages.push(getRandomPackage());
@@ -312,14 +313,17 @@ function getRandomLog(): DeliveryHistoryItem {
   return {
     previousStatus: getRandomDeliveryStatus(),
     currentStatus: getRandomDeliveryStatus(),
-    date: new Date("2021-01-12T16:51:11.352Z").toString(),
+    date: new Date().toString(),
     notes: ""
   }
 }
 
 function getRandomDeliveryLog(): DeliveryHistoryItem[] {
-  const l = Math.floor(Math.random() * 10);
-  const logs = [];
+  const l = Math.floor(Math.random() * 4);
+  const logs = [{
+    currentStatus: "CREATED",
+    date: new Date().toString(),
+  }];
   for(let i = 0; i < l; i++) {
     logs.push(getRandomLog());
   }
@@ -335,9 +339,7 @@ function getRandomOrder(): Order {
     destinationAddress: getRandomAddress(),
     destinationAddressInstruction: getRandomAddressInstruction(),
     serviceType: getRandomServiceType(),
-    deliveryStatus: getRandomDeliveryStatus(),
-    distance: getRandomNumber(2),
-    estimatedDeliveryTime: getRandomNumber(3),
+    deliveryStatus: 'QUEUED',
     packages: getRandomPackages(),
     customerContact: getRandomContact(),
     deliveryLog: getRandomDeliveryLog()
@@ -357,31 +359,49 @@ let lastOrderAt = 0;
 
 function getAllOrders(): OrderDto[] {
   let now: number = Date.now();
-  if (now - lastOrderAt >= 30*1000) {
+  if (now - lastOrderAt >= 60*1000) {
     const max = Math.floor(Math.random() * 3);
     for (let i = 0; i < max; i++) {
-      orders.push(getRandomOrder());
+      const order = getRandomOrder();
+      const orderDto = {
+        id: order.id,
+        createdAt: order.createdAt,
+        sourceAddress: address2dto(order.sourceAddress),
+        destinationAddress: address2dto(order.destinationAddress),
+        serviceType: order.serviceType,
+        deliveryStatus: order.deliveryStatus,
+        distance: order.distance,
+        estimatedDeliveryTime: order.estimatedDeliveryTime
+      };
+      fullOders.push(order);
+      dtoOrders.push(orderDto);
       lastOrderAt = now;
     }
   }
-  return orders.map(o => {
-    return {
-      id: o.id,
-      createdAt: o.createdAt,
-      sourceAddress: address2dto(o.sourceAddress),
-      destinationAddress: address2dto(o.destinationAddress),
-      serviceType: o.serviceType,
-      deliveryStatus: o.deliveryStatus,
-      distance: o.distance,
-      estimatedDeliveryTime: o.estimatedDeliveryTime
-    };
-  });
+  return dtoOrders;
 }
 
 function getOrderById(id: number): Order {
-  return orders.find((o => o.id === id));
+  return fullOders.find((o => o.id === id));
+}
+
+function updateStatusOrder(orderId: number, status: string): void {
+  const order = fullOders.find(o => o.id === orderId);
+  if (order) {
+    const previous = order.deliveryStatus;
+    order.deliveryStatus = status;
+    order.deliveryLog.push({
+      previousStatus: previous,
+      currentStatus: status,
+      date: new Date().toString()
+    });
+  }
+  const dto = dtoOrders.find(o => o.id === orderId);
+  if (dto) {
+    dto.deliveryStatus = status;
+  }
 }
 
 export {
-  getAllOrders, getOrderById
+  getAllOrders, getOrderById, updateStatusOrder
 };

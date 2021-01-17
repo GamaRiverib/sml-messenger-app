@@ -1,0 +1,20 @@
+<ion-list>
+  <ion-list-header>Actions</ion-list-header>
+  
+  <ion-item>
+    <ion-label>Mode online</ion-label>
+    <ion-toggle [(ngModel)]="online"></ion-toggle>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Take automatically all orders</ion-label>
+    <ion-toggle [(ngModel)]="autoTake"></ion-toggle>
+  </ion-item>
+
+  <ion-item lines="none" detail="false" button (click)="dismissPopover('close')">
+    <ion-icon size="medium" slot="start" name="close-outline"></ion-icon>
+    <ion-label>
+      <h2>Close</h2>
+    </ion-label>
+  </ion-item>
+</ion-list>

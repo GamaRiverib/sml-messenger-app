@@ -3,11 +3,19 @@
     <ion-title>
       Orders
     </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="showOptions($event)">
+    <!--ion-buttons slot="end">
+      <ion-button (click)="onlineMode($event)">
         <ion-toggle checked></ion-toggle>
       </ion-button>
+    </ion-buttons-->
+    <ion-buttons slot="end">
+      <ion-button (click)="showOptions($event)">
+        <ion-icon slot="icon-only" name="person-circle-outline" size="large"></ion-icon>
+      </ion-button>
     </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="orders && orders.length > 0">
+    <ion-searchbar (ionChange)="onSearchChange($event)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -15,7 +23,6 @@
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">
@@ -30,6 +37,7 @@
   <ion-grid class="ion-padding-top" *ngIf="!orders || orders.length == 0">
     <ion-row class="ion-padding-top ion-padding-bottom ion-align-items-center">
       <ion-col size="12" class="ion-text-center">
+        <ion-spinner color="primary" *ngIf="loading"></ion-spinner>
         <ion-text>
           {{ loadingMessage }}
         </ion-text>
