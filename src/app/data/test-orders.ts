@@ -10,90 +10,90 @@ import { Package } from "../model/package";
 let orders: Order[] = [];
 
 const address: Address[] = [{
-  Id: 1,
-  FullAddress: "Calle Fresnillo 1236, Villa Aurora, 85154 Cd Obregón Sonora",
-  Latitude: 27.476384442957702,
-  Longitude: -109.96744362284186
+  id: 1,
+  fullAddress: "Calle Fresnillo 1236, Villa Aurora, 85154 Cd Obregón Sonora",
+  latitude: 27.476384442957702,
+  longitude: -109.96744362284186
 }, {
-  Id: 2,
-  Street: "Fresnillo",
-  Number: "1236",
-  BetweenStreets: "Compostela y Anáhuac",
-  Suburb: "Villa Aurora",
-  City: "Ciudad Obregón",
-  State: "Sonora",
-  Zip: 85154,
-  Country: "México",
-  Indications: "Enseguida de casa con reja azul",
-  Latitude: 27.476384442957702,
-  Longitude: -109.96744362284186
+  id: 2,
+  street: "Fresnillo",
+  number: "1236",
+  betweenStreets: "Compostela y Anáhuac",
+  suburb: "Villa Aurora",
+  city: "Ciudad Obregón",
+  state: "Sonora",
+  zip: 85154,
+  country: "México",
+  indications: "Enseguida de casa con reja azul",
+  latitude: 27.476384442957702,
+  longitude: -109.96744362284186
 }, {
-  Id: 3,
-  Street: "Guerrero",
-  Number: "1806",
-  BetweenStreets: "Cocobi y Toapa",
-  Suburb: "Infonavit Yukujimari",
-  City: "Ciudad Obregón",
-  State: "Sonora",
-  Zip: 85120,
-  Country: "México",
-  Indications: "Hay un local de una estética",
-  Latitude: 27.493996725705582,
-  Longitude: -109.95783394127278
+  id: 3,
+  street: "Guerrero",
+  number: "1806",
+  betweenStreets: "Cocobi y Toapa",
+  suburb: "Infonavit Yukujimari",
+  city: "Ciudad Obregón",
+  state: "Sonora",
+  zip: 85120,
+  country: "México",
+  indications: "Hay un local de una estética",
+  latitude: 27.493996725705582,
+  longitude: -109.95783394127278
 }, {
-  Id: 4,
-  FullAddress: "Calle Guerrero 1806, Infonavit Yukujimari, 85120 Cd Obregón Sonora",
-  Latitude: 27.493996725705582,
-  Longitude: -109.95783394127278
+  id: 4,
+  fullAddress: "Calle Guerrero 1806, Infonavit Yukujimari, 85120 Cd Obregón Sonora",
+  latitude: 27.493996725705582,
+  longitude: -109.95783394127278
 }, {
-  Id: 5,
-  FullAddress: "Calle Michoacán 417, Morelos, 85110 Cd Obregón, Son.",
-  Latitude: 27.503159134504582,
-  Longitude: -109.95340823675087
+  id: 5,
+  fullAddress: "Calle Michoacán 417, Morelos, 85110 Cd Obregón, Son.",
+  latitude: 27.503159134504582,
+  longitude: -109.95340823675087
 }, {
-  Id: 6,
-  FullAddress: "Flavio Bórquez 2150, Prados de la Laguna, Cd Obregón, Son.",
-  Latitude: 27.480614242956626,
-  Longitude: -109.96660767629292
+  id: 6,
+  fullAddress: "Flavio Bórquez 2150, Prados de la Laguna, Cd Obregón, Son.",
+  latitude: 27.480614242956626,
+  longitude: -109.96660767629292
 }, {
-  Id: 7,
-  FullAddress: "Bretaña 1907, Fraccionamiento Torre de París, Cd Obregón, Son.",
-  Latitude: 27.47505808892123,
-  Longitude: -109.96232484293019
+  id: 7,
+  fullAddress: "Bretaña 1907, Fraccionamiento Torre de París, Cd Obregón, Son.",
+  latitude: 27.47505808892123,
+  longitude: -109.96232484293019
 }, {
-  Id: 8,
-  Street: "Av. Enramada",
-  Number: "624",
-  BetweenStreets: "De la luna y Loma azul",
-  Suburb: "Casa Blanca",
-  City: "Ciudad Obregón",
-  State: "Sonora",
-  Zip: 85134,
-  Country: "México",
-  Latitude: 27.488512106277305, 
-  Longitude: -109.98619694331903
+  id: 8,
+  street: "Av. Enramada",
+  number: "624",
+  betweenStreets: "De la luna y Loma azul",
+  suburb: "Casa Blanca",
+  city: "Ciudad Obregón",
+  state: "Sonora",
+  zip: 85134,
+  country: "México",
+  latitude: 27.488512106277305, 
+  longitude: -109.98619694331903
 }, {
-  Id: 9,
-  Street: "Miguel Guerrero",
-  Number: "739A",
-  Suburb: "Nuevo Cajeme",
-  City: "Cd Obregón",
-  State: "Sonora",
-  Zip: 85050,
-  Country: "México",
-  Latitude: 27.510098525468266,
-  Longitude: -109.92615077617862
+  id: 9,
+  street: "Miguel Guerrero",
+  number: "739A",
+  suburb: "Nuevo Cajeme",
+  city: "Cd Obregón",
+  state: "Sonora",
+  zip: 85050,
+  country: "México",
+  latitude: 27.510098525468266,
+  longitude: -109.92615077617862
 }, {
-  Id: 10,
-  FullAddress: "Calle Privada Palma Areca 328 Palma Real, 85190 Cd Obregón, Sonora",
-  Latitude: 27.45594290068994,
-  Longitude: -109.94257184262565
+  id: 10,
+  fullAddress: "Calle Privada Palma Areca 328 Palma Real, 85190 Cd Obregón, Sonora",
+  latitude: 27.45594290068994,
+  longitude: -109.94257184262565
 }];
 
 for (let i = 0; i < address.length; i++) {
   const a = address[i];
-  if (!a.FullAddress) {
-    a.FullAddress = `${a.Street} ${a.Number}, ${a.Suburb}, ${a.Zip} ${a.City} ${a.State}`;
+  if (!a.fullAddress) {
+    a.fullAddress = `${a.street} ${a.number}, ${a.suburb}, ${a.zip} ${a.city} ${a.state}`;
   }
 }
 
@@ -139,12 +139,12 @@ function getRandomNeiborhoodName(): string {
 }
 
 function createRandomAddress(): Address {
-  const Id = address.length;
+  const id = address.length;
   const a = {
-    Id,
-    FullAddress: `${getRandomStreetName()} ${getRandomNumber(4)}, ${getRandomNeiborhoodName()}, 85${getRandomNumber(3)} Cd Obregón, Sonora`,
-    Latitude: getRandomLatitude(),
-    Longitude: getRandomLongitude()
+    id,
+    fullAddress: `${getRandomStreetName()} ${getRandomNumber(4)}, ${getRandomNeiborhoodName()}, 85${getRandomNumber(3)} Cd Obregón, Sonora`,
+    latitude: getRandomLatitude(),
+    longitude: getRandomLongitude()
   };
   // console.log({address: a});
   // address.push(a);
@@ -231,16 +231,16 @@ function getRandomEmail(): string {
 
 function getRandomContact(): Contact {
   return {
-    Name: getRandomName(),
-    Email: getRandomEmail(),
-    Phone: getRandomPhone()
+    name: getRandomName(),
+    email: getRandomEmail(),
+    phone: getRandomPhone()
   }
 }
 
 function getRandomAddressInstruction(): AddressInstruction {
   return {
-    Description: "",
-    Contact: getRandomContact()
+    description: "",
+    contact: getRandomContact()
   };
 }
 
@@ -283,19 +283,19 @@ function getRandomPackageWeightUnit(): string {
 
 function getRandomPackage(): Package {
   return {
-    Size: getRandomPackageSize(),
-    Description: "",
-    Dimension: {
-      Height: getRandomNumber(2),
-      Width: getRandomNumber(2),
-      Length: getRandomNumber(2),
-      LongitudeUnit: getRandomPackageLengthUnit()
+    size: getRandomPackageSize(),
+    description: "",
+    dimension: {
+      height: getRandomNumber(2),
+      width: getRandomNumber(2),
+      length: getRandomNumber(2),
+      longitudeUnit: getRandomPackageLengthUnit()
     },
-    Weight: {
-      Weight: getRandomNumber(3),
-      WeightUnit: getRandomPackageWeightUnit()
+    weight: {
+      weight: getRandomNumber(3),
+      weightUnit: getRandomPackageWeightUnit()
     },
-    Content: ""
+    content: ""
   };
 }
 
@@ -310,10 +310,10 @@ function getRandomPackages(): Package[] {
 
 function getRandomLog(): DeliveryHistoryItem {
   return {
-    PreviousStatus: getRandomDeliveryStatus(),
-    CurrentStatus: getRandomDeliveryStatus(),
-    Date: new Date("2021-01-12T16:51:11.352Z").toString(),
-    Notes: ""
+    previousStatus: getRandomDeliveryStatus(),
+    currentStatus: getRandomDeliveryStatus(),
+    date: new Date("2021-01-12T16:51:11.352Z").toString(),
+    notes: ""
   }
 }
 
@@ -328,52 +328,58 @@ function getRandomDeliveryLog(): DeliveryHistoryItem[] {
 
 function getRandomOrder(): Order {
   return {
-    Id: ++counter,
-    CreatedAt: new Date("2021-01-12T16:51:11.352Z").toString(),
-    SourceAddress: createRandomAddress(),
-    SourceAddressInstruction: getRandomAddressInstruction(),
-    DestinationAddress: getRandomAddress(),
-    DestinationAddressInstruction: getRandomAddressInstruction(),
-    ServiceType: getRandomServiceType(),
-    DeliveryStatus: getRandomDeliveryStatus(),
-    Distance: getRandomNumber(2),
-    EstimatedDeliveryTime: getRandomNumber(3),
-    Packages: getRandomPackages(),
-    CustomerContact: getRandomContact(),
-    DeliveryLog: getRandomDeliveryLog()
+    id: ++counter,
+    createdAt: new Date("2021-01-12T16:51:11.352Z").toString(),
+    sourceAddress: createRandomAddress(),
+    sourceAddressInstruction: getRandomAddressInstruction(),
+    destinationAddress: getRandomAddress(),
+    destinationAddressInstruction: getRandomAddressInstruction(),
+    serviceType: getRandomServiceType(),
+    deliveryStatus: getRandomDeliveryStatus(),
+    distance: getRandomNumber(2),
+    estimatedDeliveryTime: getRandomNumber(3),
+    packages: getRandomPackages(),
+    customerContact: getRandomContact(),
+    deliveryLog: getRandomDeliveryLog()
   };
 }
 
 function address2dto(a: Address): AddressDto {
   return {
-    Id: a.Id,
-    FullAddress: a.FullAddress,
-    Latitude: a.Latitude,
-    Longitude: a.Longitude
+    id: a.id,
+    fullAddress: a.fullAddress,
+    latitude: a.latitude,
+    longitude: a.longitude
   };
 }
 
+let lastOrderAt = 0;
+
 function getAllOrders(): OrderDto[] {
-  const max = Math.floor(Math.random() * 3);
-  for (let i = 0; i < max; i++) {
-    orders.push(getRandomOrder());
+  let now: number = Date.now();
+  if (now - lastOrderAt >= 30*1000) {
+    const max = Math.floor(Math.random() * 3);
+    for (let i = 0; i < max; i++) {
+      orders.push(getRandomOrder());
+      lastOrderAt = now;
+    }
   }
   return orders.map(o => {
     return {
-      Id: o.Id,
-      CreatedAt: o.CreatedAt,
-      SourceAddress: address2dto(o.SourceAddress),
-      DestinationAddress: address2dto(o.DestinationAddress),
-      ServiceType: o.ServiceType,
-      DeliveryStatus: o.DeliveryStatus,
-      Distance: o.Distance,
-      EstimatedDeliveryTime: o.EstimatedDeliveryTime
+      id: o.id,
+      createdAt: o.createdAt,
+      sourceAddress: address2dto(o.sourceAddress),
+      destinationAddress: address2dto(o.destinationAddress),
+      serviceType: o.serviceType,
+      deliveryStatus: o.deliveryStatus,
+      distance: o.distance,
+      estimatedDeliveryTime: o.estimatedDeliveryTime
     };
   });
 }
 
-function getOrderById(Id: number): Order {
-  return orders.find((o => o.Id == Id));
+function getOrderById(id: number): Order {
+  return orders.find((o => o.id === id));
 }
 
 export {

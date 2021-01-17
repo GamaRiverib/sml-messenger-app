@@ -1,16 +1,16 @@
 export class Address {
-  Id: number;
-  FullAddress?: string;
-  Street?: string;
-  Number?: string;
-  InteriorNumber?: string;
-  BetweenStreets?: string;
-  Suburb?: string;
-  City?: string;
-  State?: string;
-  Zip?: number;
-  Country?: string;
-  Indications?: string;
-  Latitude: number;
-  Longitude: number;
+  id: number;
+  fullAddress?: string;
+  street?: string;
+  number?: string;
+  interiorNumber?: string;
+  betweenStreets?: string;
+  suburb?: string;
+  city?: string;
+  state?: string;
+  zip?: number;
+  country?: string;
+  indications?: string;
+  latitude: number;
+  longitude: number;
 }

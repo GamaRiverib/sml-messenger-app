@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { Order } from '../model/order';
 import { DataService } from '../services/data.service';
+import { MylocationService } from '../services/mylocation.service';
 
 @Component({
   selector: 'app-view-order',
@@ -15,6 +16,7 @@ export class ViewOrderPage implements OnInit {
 
   constructor(
     private data: DataService,
+    private myLocation: MylocationService,
     private actionSheetCtrl: ActionSheetController,
     private activatedRoute: ActivatedRoute
   ) { }
@@ -38,6 +40,16 @@ export class ViewOrderPage implements OnInit {
     // console.log('Tab change event', event);
   }
 
+  private async estimateTime(): Promise<number | null> {
+    if (!this.order) {
+      return null;
+    }
+    const source = this.order.sourceAddress;
+    const destination = this.order.destinationAddress;
+    const resp = await this.myLocation.calculateRoute(source, destination);
+    return resp.time;
+  }
+
   private reject() {
     this.data.reject(this.order);
   }
@@ -50,18 +62,18 @@ export class ViewOrderPage implements OnInit {
     this.data.cancel(this.order);
   }
 
-  private collect() {
-    // estimated time
-    this.data.collect(this.order);
+  private async collect() {
+    const estimatedTime = await this.estimateTime();
+    this.data.collect(this.order, estimatedTime);
   }
 
   private gotoStorage() {
     this.data.toStorage(this.order);
   }
 
-  private gotoDelivery() {
-    // estimated time
-    this.data.toDelivery(this.order);
+  private async gotoDelivery() {
+    const estimatedTime = await this.estimateTime();
+    this.data.toDelivery(this.order, estimatedTime);
   }
 
   private store() {
@@ -84,7 +96,7 @@ export class ViewOrderPage implements OnInit {
     if (!this.order) {
       return;
     }
-    const status = this.order.DeliveryStatus;
+    const status = this.order.deliveryStatus;
     const buttons = [];
 
     if (status === 'QUEUED' || status === 'CREATED') {
@@ -92,74 +104,74 @@ export class ViewOrderPage implements OnInit {
         text: 'Reject order',
         role: 'desctructive',
         icon: 'close',
-        handler: this.reject
+        handler: this.reject.bind(this)
       });
       buttons.push({
         text: 'Take order',
         icon: 'checkmark',
-        handler: this.take
+        handler: this.take.bind(this)
       });
     } else if (status === 'IN_ORDER') {
       buttons.push({
         text: 'Cancel order',
         role: 'desctructive',
         icon: 'close',
-        handler: this.cancel
+        handler: this.cancel.bind(this)
       });
       buttons.push({
         text: 'Collected',
         icon: 'checkmark',
-        handler: this.collect
+        handler: this.collect.bind(this)
       });
     } else if (status === 'COLLECTED' || status === 'VISIT_DONE' || status === 'VISIT_CANCELED'
                || status === 'VISIT_SUSPENDED' || status === 'RETURNED') {
       buttons.push({
         text: 'Report as lost',
         icon: 'search-circle',
-        handler: this.lost
+        handler: this.lost.bind(this)
       });
       buttons.push({
         text: 'Go to storage',
         icon: 'archive',
-        handler: this.gotoStorage
+        handler: this.gotoStorage.bind(this)
       });
       buttons.push({
         text: 'Go to delivery',
         icon: 'rocket',
-        handler: this.gotoDelivery
+        handler: this.gotoDelivery.bind(this)
       });
     } else if (status === 'READY_TO_STORAGE' || status === 'TO_STORAGE') {
       buttons.push({
         text: 'Report as lost',
         icon: 'search-circle',
-        handler: this.lost
+        handler: this.lost.bind(this)
       });
       buttons.push({
         text: 'Stored',
         icon: 'archive',
-        handler: this.store
+        handler: this.store.bind(this)
       });
     } else if (status === 'READY_TO_DELIVERY') {
       buttons.push({
         text: 'Report as lost',
         icon: 'search-circle',
-        handler: this.lost
+        handler: this.lost.bind(this)
       });
       buttons.push({
         text: 'Returned by recipient',
         icon: 'alert-circle',
-        handler: this.fail
+        handler: this.fail.bind(this)
       });
       buttons.push({
         text: 'Delivery failed',
         role: 'desctructive',
         icon: 'warning',
-        handler: this.fail
+        handler: this.fail.bind(this)
       });
       buttons.push({
         text: 'Successfully delivered',
         icon: 'checkmark-done',
-        handler: this.done
+        handler: this.done.bind(this)
       });
     }
     const actionSheet = await this.actionSheetCtrl.create({

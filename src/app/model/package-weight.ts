@@ -1,4 +1,4 @@
 export class PackageWeight {
-  Weight: number;
-  WeightUnit: string;
+  weight: number;
+  weightUnit: string;
 }

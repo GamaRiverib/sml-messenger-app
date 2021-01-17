@@ -1,6 +1,6 @@
 export class DeliveryHistoryItem {
-  PreviousStatus?: string;
-  CurrentStatus: string;
-  Date: string;
-  Notes?: string;
+  previousStatus?: string;
+  currentStatus: string;
+  date: string;
+  notes?: string;
 }

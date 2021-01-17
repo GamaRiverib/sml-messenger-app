@@ -1,20 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IonItemSliding } from '@ionic/angular';
+import { Component, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
+import { AlertController, IonItemSliding } from '@ionic/angular';
 import { OrderDto } from '../model/order-dto';
 import { DataService } from '../services/data.service';
 import { MylocationService } from '../services/mylocation.service';
 
 const icons = {
-  CREATED: 'help-circle',
+  CREATED: 'ellipse',
   QUEUED: 'help-circle',
-  IN_ORDER: 'location',
-  COLLECTED: 'location',
-  READY_TO_STORAGE: 'location',
-  READY_TO_DELIVERY: 'location',
+  IN_ORDER: 'navigate',
+  COLLECTED: 'navigate',
+  READY_TO_STORAGE: 'archive',
+  READY_TO_DELIVERY: 'navigate',
   DELIVERED: 'checkmark-done-circle',
   TO_STORAGE: 'archive',
   TO_NEXT_VISIT: 'help-circle',
-  VISIT_DONE: 'warning',
+  VISIT_DONE: 'alert-circle',
   STORAGED: 'archive',
   VISIT_CANCELED: 'warning',
   DELETED: 'close-circle',
@@ -31,18 +31,23 @@ const icons = {
 export class OrderComponent implements OnInit {
 
   @Input() order: OrderDto;
+  @Output() change: EventEmitter<any> = new EventEmitter();
   public distance: number;
   public estimatedTime: number;
   public directionsToSource: string;
   public directionsToDestination: string;
 
-  constructor(private data: DataService, private myLocation: MylocationService) { }
+  constructor(
+    private data: DataService,
+    private myLocation: MylocationService,
+    private alertCtrl: AlertController
+    ) { }
 
   async ngOnInit() {
     this.updateDistanceAndTime();
     const baseUrl = 'https://maps.google.com?saddr=My+Location&daddr=';
-    this.directionsToSource = `${baseUrl}${this.order.SourceAddress.Latitude},${this.order.SourceAddress.Longitude}`;
-    this.directionsToDestination = `${baseUrl}${this.order.DestinationAddress.Latitude},${this.order.DestinationAddress.Longitude}`;
+    this.directionsToSource = `${baseUrl}${this.order.sourceAddress.latitude},${this.order.sourceAddress.longitude}`;
+    this.directionsToDestination = `${baseUrl}${this.order.destinationAddress.latitude},${this.order.destinationAddress.longitude}`;
   }
 
   isIos() {
@@ -54,8 +59,8 @@ export class OrderComponent implements OnInit {
     if (!this.order) {
       return;
     }
-    const source = this.order.SourceAddress;
-    const destination = this.order.DestinationAddress;
+    const source = this.order.sourceAddress;
+    const destination = this.order.destinationAddress;
     const resp = this.myLocation.calculateRoute(source, destination);
     this.distance = (await resp).distance;
     this.estimatedTime = (await resp).time;
@@ -65,16 +70,19 @@ export class OrderComponent implements OnInit {
     if (!this.order) {
       return 'alert-circle';
     }
-    return icons[this.order.DeliveryStatus] || 'alert-circle'
+    return icons[this.order.deliveryStatus] || 'alert-circle'
   }
 
   get color(): string {
     if (!this.order) {
       return '';
     }
-    const s = this.order.DeliveryStatus;
-    const t = this.order.ServiceType;
-    if (s === 'QUEUED' || s === 'CREATED') {
+    const s = this.order.deliveryStatus;
+    const t = this.order.serviceType;
+    if (s === 'CREATED') {
+      return 'secondary';
+    }
+    if (s === 'QUEUED') {
       if (t === 'NEXT_DAY') {
         return 'warning';
       }
@@ -84,16 +92,19 @@ export class OrderComponent implements OnInit {
       if (t === 'NEXT_DAY') {
         return 'tertiary';
       }
-      return 'warning'
+      if (t === 'SAME_DAY') {
+        return 'warning'        
+      }
+      return 'danger'
     }
     if (s === 'COLLECTED') {
       if (t === 'NEXT_DAY') {
         return 'tertiary';
       }
-      return 'success';
+      return '';
     }
     if (s === 'READY_TO_DELIVERY') {
-      return 'warning';
+      return 'success';
     }
     if (s === 'DELIVERED') {
       return 'success';
@@ -107,52 +118,102 @@ export class OrderComponent implements OnInit {
     if (s === 'TO_STORAGE') {
       return 'tertiary';
     }
+    if (s === 'STORAGED') {
+      return 'success';
+    }
     return '';
   }
 
   async reject(slidingItem: IonItemSliding): Promise<void> {
-    await this.data.reject(this.order);
-    slidingItem.close();
+    await slidingItem.close();
+    const alert = await this.alertCtrl.create({
+      header: 'Reject order!',
+      message: 'Are you sure you want to <b>REJECT</b> the order?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Yes',
+          handler: async () => {
+            await this.data.reject(this.order);
+            this.change.emit();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   async take(slidingItem: IonItemSliding): Promise<void> {
+    await slidingItem.close();
     await this.data.take(this.order);
-    slidingItem.close();
+    this.change.emit();
   }
 
   async cancel(slidingItem: IonItemSliding): Promise<void> {
-    await this.data.cancel(this.order);
-    slidingItem.close();
+    await slidingItem.close();
+    const alert = await this.alertCtrl.create({
+      header: 'Cancel order!',
+      message: 'Are you sure you want to <b>CANCEL</b> the order?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Yes',
+          handler: async () => {
+            await this.data.cancel(this.order);
+            this.change.emit();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   async collect(slidingItem: IonItemSliding): Promise<void> {
-    await this.data.collect(this.order);
-    slidingItem.close();
+    await slidingItem.close();
+    await this.data.collect(this.order, this.estimatedTime);
+    this.change.emit();
   }
 
   async toStorage(slidingItem: IonItemSliding): Promise<void> {
+    await slidingItem.close();
     await this.data.toStorage(this.order);
-    slidingItem.close();
+    this.change.emit();
   }
 
   async toDelivery(slidingItem: IonItemSliding): Promise<void> {
-    await this.data.toDelivery(this.order);
-    slidingItem.close();
+    await slidingItem.close();
+    await this.data.toDelivery(this.order, this.estimatedTime);
+    this.change.emit();
   }
 
   async storage(slidingItem: IonItemSliding): Promise<void> {
+    await slidingItem.close();
     await this.data.storage(this.order);
-    slidingItem.close();
+    this.change.emit();
   }
 
-  async fail(slidingItem: IonItemSliding): Promise<void> {
-    await this.data.storage(this.order);
-    slidingItem.close();
+  async fail(slidingItem: IonItemSliding): Promise<void> {  
+    await slidingItem.close();
+    await this.data.fail(this.order);
+    this.change.emit();
   }
 
   async done(slidingItem: IonItemSliding): Promise<void> {
+    await slidingItem.close();
     await this.data.done(this.order);
-    slidingItem.close();
+    this.change.emit();
   }
 
 }

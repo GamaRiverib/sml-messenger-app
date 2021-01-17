@@ -33,4 +33,8 @@ export class HomePage implements OnInit {
     this.loadOrders();
   }
 
+  async onOrderChange(order: OrderDto): Promise<void> {
+    this.loadOrders();
+  }
+
 }

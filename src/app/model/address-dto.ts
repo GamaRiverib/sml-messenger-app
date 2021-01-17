@@ -1,6 +1,6 @@
 export class AddressDto {
-  Id: number;
-  FullAddress: string;
-  Latitude: number;
-  Longitude: number;
+  id: number;
+  fullAddress: string;
+  latitude: number;
+  longitude: number;
 }

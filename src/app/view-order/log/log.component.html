@@ -1,22 +1,22 @@
 <ion-content>
   <ion-list *ngIf="order">
-    <div *ngFor="let log of order.DeliveryLog; let i = index" style="margin-bottom: 12px;">
+    <div *ngFor="let log of order.deliveryLog; let i = index" style="margin-bottom: 12px;">
       <ion-list-header>
         <ion-label color="secondary">
-          {{ log.Date | date:'short' }}
+          {{ log.date | date:'short' }}
         </ion-label>
       </ion-list-header>
       <ion-item lines="none">
         <ion-label position="fixed">Status</ion-label>
-        <ion-input readonly>{{ log.CurrentStatus | deliveryStatus:'long' }}</ion-input>
+        <ion-input readonly>{{ log.currentStatus | deliveryStatus:'long' }}</ion-input>
       </ion-item>
-      <ion-item lines="none" *ngIf="log.PreviousStatus">
+      <ion-item lines="none" *ngIf="log.previousStatus">
         <ion-label position="fixed">Previous</ion-label>
-        <ion-input readonly>{{ log.PreviousStatus | deliveryStatus:'long' }}</ion-input>
+        <ion-input readonly>{{ log.previousStatus | deliveryStatus:'long' }}</ion-input>
       </ion-item>
-      <ion-item *ngIf="log.Notes">
+      <ion-item *ngIf="log.notes">
         <ion-label position="fixed">Notes</ion-label>
-        <ion-input readonly>{{ log.Notes }}</ion-input>
+        <ion-input readonly>{{ log.notes }}</ion-input>
       </ion-item>
     </div>
   </ion-list>

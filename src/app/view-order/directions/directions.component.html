@@ -7,35 +7,35 @@
     </ion-list-header>
     <ion-item
       lines="none"
-      [href]="'https://maps.google.com?saddr=My+Location&daddr=' + order.SourceAddress.Latitude + ',' + order.SourceAddress.Longitude"
+      [href]="'https://maps.google.com?saddr=My+Location&daddr=' + order.sourceAddress.latitude + ',' + order.sourceAddress.longitude"
       target="_blank">
       <ion-icon name="location-outline"></ion-icon>
-      <ion-label class="ion-padding-start ion-text-wrap">{{ order.SourceAddress.FullAddress }}</ion-label>
+      <ion-label class="ion-padding-start ion-text-wrap">{{ order.sourceAddress.fullAddress }}</ion-label>
     </ion-item>
-    <div *ngIf="order.SourceAddressInstruction" class="ion-padding-bottom">
-      <div *ngIf="order.SourceAddressInstruction.Contact">
-        <ion-item lines="none" *ngIf="order.SourceAddressInstruction.Contact.Name">
+    <div *ngIf="order.sourceAddressInstruction" class="ion-padding-bottom">
+      <div *ngIf="order.sourceAddressInstruction.contact">
+        <ion-item lines="none" *ngIf="order.sourceAddressInstruction.contact.name">
           <ion-icon name="person-outline"></ion-icon>
-          <ion-label class="ion-padding-start">{{ order.SourceAddressInstruction.Contact.Name }}</ion-label>
+          <ion-label class="ion-padding-start">{{ order.sourceAddressInstruction.contact.name }}</ion-label>
         </ion-item>
         <ion-item 
           lines="none"
-          *ngIf="order.SourceAddressInstruction.Contact.Email" 
-          [href]="'mailto:' + order.SourceAddressInstruction.Contact.Email">
+          *ngIf="order.sourceAddressInstruction.contact.email" 
+          [href]="'mailto:' + order.sourceAddressInstruction.contact.email">
           <ion-icon name="mail-outline"></ion-icon>
-          <ion-label class="ion-padding-start">{{ order.SourceAddressInstruction.Contact.Email }}</ion-label>
+          <ion-label class="ion-padding-start">{{ order.sourceAddressInstruction.contact.email }}</ion-label>
         </ion-item>
         <ion-item
           lines="none"
-          *ngIf="order.SourceAddressInstruction.Contact.Phone" 
-          [href]="'tel:' + order.SourceAddressInstruction.Contact.Phone">
+          *ngIf="order.sourceAddressInstruction.contact.phone" 
+          [href]="'tel:' + order.sourceAddressInstruction.contact.phone">
           <ion-icon name="phone-portrait-outline"></ion-icon>
-          <ion-label class="ion-padding-start">{{ order.SourceAddressInstruction.Contact.Phone }}</ion-label>
+          <ion-label class="ion-padding-start">{{ order.sourceAddressInstruction.contact.phone }}</ion-label>
         </ion-item>
       </div>
-      <ion-item lines="none" *ngIf="order.SourceAddressInstruction.Description">
+      <ion-item lines="none" *ngIf="order.sourceAddressInstruction.description">
         <ion-icon name="information-outline"></ion-icon>
-        <ion-label class="ion-padding-start ion-text-wrap">{{ order.SourceAddressInstruction.Description }}</ion-label>
+        <ion-label class="ion-padding-start ion-text-wrap">{{ order.sourceAddressInstruction.description }}</ion-label>
       </ion-item>
     </div>
     <ion-list-header>
@@ -45,35 +45,35 @@
     </ion-list-header>
     <ion-item
       lines="none"
-      [href]="'https://maps.google.com?saddr=My+Location&daddr=' + order.DestinationAddress.Latitude + ',' + order.DestinationAddress.Longitude"
+      [href]="'https://maps.google.com?saddr=My+Location&daddr=' + order.destinationAddress.latitude + ',' + order.destinationAddress.longitude"
       target="_blank">
       <ion-icon name="location-outline"></ion-icon>
-      <ion-label class="ion-padding-start ion-text-wrap">{{ order.DestinationAddress.FullAddress }}</ion-label>
+      <ion-label class="ion-padding-start ion-text-wrap">{{ order.destinationAddress.fullAddress }}</ion-label>
     </ion-item>
-    <div *ngIf="order.DestinationAddressInstruction">
-      <div *ngIf="order.DestinationAddressInstruction.Contact">
-        <ion-item lines="none" *ngIf="order.DestinationAddressInstruction.Contact.Name">
+    <div *ngIf="order.destinationAddressInstruction">
+      <div *ngIf="order.destinationAddressInstruction.contact">
+        <ion-item lines="none" *ngIf="order.destinationAddressInstruction.contact.name">
           <ion-icon name="person-outline"></ion-icon>
-          <ion-label class="ion-padding-start">{{ order.DestinationAddressInstruction.Contact.Name }}</ion-label>
+          <ion-label class="ion-padding-start">{{ order.destinationAddressInstruction.contact.name }}</ion-label>
         </ion-item>
         <ion-item 
           lines="none"
-          *ngIf="order.DestinationAddressInstruction.Contact.Email" 
-          [href]="'mailto:' + order.DestinationAddressInstruction.Contact.Email">
+          *ngIf="order.destinationAddressInstruction.contact.email" 
+          [href]="'mailto:' + order.destinationAddressInstruction.contact.email">
           <ion-icon name="mail-outline"></ion-icon>
-          <ion-label class="ion-padding-start">{{ order.DestinationAddressInstruction.Contact.Email }}</ion-label>
+          <ion-label class="ion-padding-start">{{ order.destinationAddressInstruction.contact.email }}</ion-label>
         </ion-item>
         <ion-item
           lines="none"
-          *ngIf="order.DestinationAddressInstruction.Contact.Phone" 
-          [href]="'tel:' + order.DestinationAddressInstruction.Contact.Phone">
+          *ngIf="order.destinationAddressInstruction.contact.phone" 
+          [href]="'tel:' + order.destinationAddressInstruction.contact.phone">
           <ion-icon name="phone-portrait-outline"></ion-icon>
-          <ion-label class="ion-padding-start">{{ order.DestinationAddressInstruction.Contact.Phone }}</ion-label>
+          <ion-label class="ion-padding-start">{{ order.destinationAddressInstruction.contact.phone }}</ion-label>
         </ion-item>
       </div>
-      <ion-item lines="none" *ngIf="order.DestinationAddressInstruction.Description">
+      <ion-item lines="none" *ngIf="order.destinationAddressInstruction.description">
         <ion-icon name="information-outline"></ion-icon>
-        <ion-label class="ion-padding-start ion-text-wrap">{{ order.DestinationAddressInstruction.Description }}</ion-label>
+        <ion-label class="ion-padding-start ion-text-wrap">{{ order.destinationAddressInstruction.description }}</ion-label>
       </ion-item>
     </div>
   </ion-list>

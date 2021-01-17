@@ -7,15 +7,15 @@
     </ion-list-header>
     <ion-item lines="none">
       <ion-label position="fixed">Status</ion-label>
-      <ion-input>{{ order.DeliveryStatus | deliveryStatus:'long' }}</ion-input>
+      <ion-input>{{ order.deliveryStatus | deliveryStatus:'long' }}</ion-input>
     </ion-item>
     <ion-item lines="none">
       <ion-label position="fixed">Date</ion-label>
-      <ion-input>{{ order.CreatedAt | date:'short' }}</ion-input>
+      <ion-input>{{ order.createdAt | date:'short' }}</ion-input>
     </ion-item>
     <ion-item lines="none">
       <ion-label position="fixed">Service</ion-label>
-      <ion-input>{{ order.ServiceType | serviceType }}</ion-input>
+      <ion-input>{{ order.serviceType | serviceType }}</ion-input>
     </ion-item>
     <ion-item lines="none">
       <ion-label position="fixed">Distance</ion-label>
@@ -30,27 +30,27 @@
         Customer
       </ion-label>
     </ion-list-header>
-    <div *ngIf="order.CustomerContact">
-      <ion-item lines="none" *ngIf="order.CustomerContact.Name">
+    <div *ngIf="order.customerContact">
+      <ion-item lines="none" *ngIf="order.customerContact.name">
         <ion-icon name="person-outline"></ion-icon>
-        <ion-label class="ion-padding-start">{{ order.CustomerContact.Name }}</ion-label>
+        <ion-label class="ion-padding-start">{{ order.customerContact.name }}</ion-label>
       </ion-item>
       <ion-item
         lines="none"
-        *ngIf="order.CustomerContact.Email"
-        [href]="'mailto:' + order.CustomerContact.Email">
+        *ngIf="order.customerContact.email"
+        [href]="'mailto:' + order.customerContact.email">
         <ion-icon name="mail-outline"></ion-icon>
         <ion-label class="ion-padding-start">
-          {{ order.CustomerContact.Email }}
+          {{ order.customerContact.email }}
         </ion-label>
       </ion-item>
       <ion-item
         lines="none"
-        *ngIf="order.CustomerContact.Phone"
-        [href]="'tel:' + order.CustomerContact.Phone">
+        *ngIf="order.customerContact.phone"
+        [href]="'tel:' + order.customerContact.phone">
         <ion-icon name="phone-portrait-outline"></ion-icon>
         <ion-label class="ion-padding-start">
-          {{ order.CustomerContact.Phone }}
+          {{ order.customerContact.phone }}
         </ion-label>
       </ion-item>
     </div>

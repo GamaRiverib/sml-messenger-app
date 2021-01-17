@@ -33,8 +33,8 @@ export class MylocationService {
   }
 
   async calculateDistance(source: AddressDto | Address, destination: AddressDto | Address): Promise<{ distance: number, time: number }> {
-    const pickup = new LatLonSpherical(source.Latitude, source.Longitude);
-    const dropoff = new LatLonSpherical(destination.Latitude, destination.Longitude);
+    const pickup = new LatLonSpherical(source.latitude, source.longitude);
+    const dropoff = new LatLonSpherical(destination.latitude, destination.longitude);
     let distance = 0;
     const point2 = new LatLonSpherical(pickup.lat, dropoff.lon);
     distance += pickup.distanceTo(point2);
@@ -50,8 +50,8 @@ export class MylocationService {
   }
 
   async calculateRoute(source: AddressDto | Address, destination: AddressDto | Address): Promise<{ distance: number, time: number }> {
-    const pickup = new LatLonSpherical(source.Latitude, source.Longitude);
-    const dropoff = new LatLonSpherical(destination.Latitude, destination.Longitude);
+    const pickup = new LatLonSpherical(source.latitude, source.longitude);
+    const dropoff = new LatLonSpherical(destination.latitude, destination.longitude);
     const myPosition = await this.getMyCurrentPosition();
     let distance = 0;
     if (myPosition !== null) {

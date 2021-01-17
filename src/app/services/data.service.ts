@@ -24,8 +24,8 @@ export class DataService {
 
   private sortOrders(): void {
     this.orders = this.orders.sort((a: OrderDto, b: OrderDto) => {
-      const avalue = status_priority.indexOf(a.DeliveryStatus) + service_type_priority.indexOf(a.ServiceType);
-      const bvalue = status_priority.indexOf(b.DeliveryStatus) + service_type_priority.indexOf(b.ServiceType);
+      const avalue = status_priority.indexOf(a.deliveryStatus) + service_type_priority.indexOf(a.serviceType);
+      const bvalue = status_priority.indexOf(b.deliveryStatus) + service_type_priority.indexOf(b.serviceType);
       return avalue - bvalue;
     });
   }
@@ -42,23 +42,26 @@ export class DataService {
 
   public getStorageAddress(): AddressDto {
     // TODO: En environment establecer las Address del almacén
-    const FullAddress = "Calle Vicente Guerrero s/n, Infonavit, 85120 Cd Obregón, Son."
-    const Latitude = 27.493168146428467;
-    const Longitude = -109.95447145273737;
+    const fullAddress = "Calle Vicente Guerrero s/n, Infonavit, 85120 Cd Obregón, Son."
+    const latitude = 27.493168146428467;
+    const longitude = -109.95447145273737;
     return {
-      Id: 0,
-      FullAddress,
-      Latitude,
-      Longitude
+      id: 0,
+      fullAddress,
+      latitude,
+      longitude
     };
   }
 
-  public async getOrders(): Promise<OrderDto[]> {
+  public async getOrders(cache?: boolean): Promise<OrderDto[]> {
     /*const url = `${SERVER_URL}/orders`;
     const response = await this.http.get<{ orders: OrderDto[] }>(url)
       .toPromise<{ orders: OrderDto[] }>();
     return response.orders || [];*/
     return new Promise<OrderDto[]>((resolve, reject) => {
+      if (cache) {
+        return this.orders;
+      }
       setTimeout(() => {
         this.orders = TestData.getAllOrders() || [];
         this.sortOrders();
@@ -89,13 +92,15 @@ export class DataService {
   }
 
   public async reject(order: OrderDto | Order): Promise<void> {
-    /*const url = `${SERVER_URL}/orders/${order.Id}/reject`;
+    /*const url = `${SERVER_URL}/orders/${order.id}/reject`;
     const response = await this.http.post<void>(url, {})
       .toPromise<void>();
     return;*/
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>(async (resolve, reject) => {
       setTimeout(() => {
-        order.DeliveryStatus = 'CREATED';
+        order.deliveryStatus = 'CREATED';
+        this.getOrderById(order.id)
+          .then(o => o.deliveryStatus = 'CREATED');
         this.sortOrders();
         resolve();
       }, 600);
@@ -103,13 +108,15 @@ export class DataService {
   }
 
   public async take(order: OrderDto | Order): Promise<void> {
-    /*const url = `${SERVER_URL}/orders/${order.Id}/take`;
+    /*const url = `${SERVER_URL}/orders/${order.id}/take`;
     const response = await this.http.post<void>(url, {})
       .toPromise<void>();
     return;*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.DeliveryStatus = 'IN_ORDER';
+        order.deliveryStatus = 'IN_ORDER';
+        this.getOrderById(order.id)
+          .then(o => o.deliveryStatus = 'IN_ORDER');
         this.sortOrders();
         resolve();
       }, 600);
@@ -117,10 +124,10 @@ export class DataService {
   }
 
   public async cancel(order: OrderDto | Order): Promise<void> {
-    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    /*const url = `${SERVER_URL}/orders/${order.id}`;
     const body = {
       order: {
-        DeliveryStatus: 'CREATED'
+        deliveryStatus: 'CREATED'
       }
     };
     if (estimatedTime) {
@@ -129,7 +136,9 @@ export class DataService {
     return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.DeliveryStatus = 'CREATED';
+        order.deliveryStatus = 'CREATED';
+        this.getOrderById(order.id)
+          .then(o => o.deliveryStatus = 'CREATED');
         this.sortOrders();
         resolve();
       }, 600);
@@ -137,10 +146,10 @@ export class DataService {
   }
 
   public async collect(order: OrderDto | Order, estimatedTime?: number): Promise<void> {
-    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    /*const url = `${SERVER_URL}/orders/${order.id}`;
     const body = {
       order: {
-        DeliveryStatus: 'COLLECTED'
+        deliveryStatus: 'COLLECTED'
       }
     };
     if (estimatedTime) {
@@ -149,7 +158,9 @@ export class DataService {
     return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.DeliveryStatus = 'COLLECTED';
+        order.deliveryStatus = 'COLLECTED';
+        this.getOrderById(order.id)
+          .then(o => o.deliveryStatus = 'COLLECTED');
         this.sortOrders();
         resolve();
       }, 600);
@@ -157,16 +168,18 @@ export class DataService {
   }
 
   public toStorage(order: OrderDto | Order): Promise<void> {
-    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    /*const url = `${SERVER_URL}/orders/${order.id}`;
     const body = {
       order: {
-        DeliveryStatus: 'READY_TO_STORAGE'
+        deliveryStatus: 'READY_TO_STORAGE'
       }
     };
     return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.DeliveryStatus = 'READY_TO_STORAGE';
+        order.deliveryStatus = 'READY_TO_STORAGE';
+        this.getOrderById(order.id)
+          .then(o => o.deliveryStatus = 'READY_TO_STORAGE');
         this.sortOrders();
         resolve();
       }, 600);
@@ -174,10 +187,10 @@ export class DataService {
   }
 
   public toDelivery(order: OrderDto | Order, estimatedTime?: number): Promise<void> {
-    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    /*const url = `${SERVER_URL}/orders/${order.id}`;
     const body = {
       order: {
-        DeliveryStatus: 'READY_TO_DELIVERY'
+        deliveryStatus: 'READY_TO_DELIVERY'
       }
     };
     if (estimatedTime) {
@@ -186,7 +199,9 @@ export class DataService {
     return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.DeliveryStatus = 'READY_TO_DELIVERY';
+        order.deliveryStatus = 'READY_TO_DELIVERY';
+        this.getOrderById(order.id)
+          .then(o => o.deliveryStatus = 'READY_TO_DELIVERY');
         this.sortOrders();
         resolve();
       }, 600);
@@ -194,16 +209,18 @@ export class DataService {
   }
 
   public storage(order: OrderDto | Order): Promise<void> {
-    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    /*const url = `${SERVER_URL}/orders/${order.id}`;
     const body = {
       order: {
-        DeliveryStatus: 'TO_STORAGE'
+        deliveryStatus: 'TO_STORAGE'
       }
     };
     return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.DeliveryStatus = 'TO_STORAGE';
+        order.deliveryStatus = 'STORAGED';
+        this.getOrderById(order.id)
+          .then(o => o.deliveryStatus = 'STORAGED');
         this.sortOrders();
         resolve();
       }, 600);
@@ -211,16 +228,18 @@ export class DataService {
   }
 
   public fail(order: OrderDto | Order): Promise<void> {
-    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    /*const url = `${SERVER_URL}/orders/${order.id}`;
     const body = {
       order: {
-        DeliveryStatus: 'VISIT_DONE'
+        deliveryStatus: 'VISIT_DONE'
       }
     };
     return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.DeliveryStatus = 'VISIT_DONE';
+        order.deliveryStatus = 'VISIT_DONE';
+        this.getOrderById(order.id)
+          .then(o => o.deliveryStatus = 'VISIT_DONE');
         this.sortOrders();
         resolve();
       }, 600);
@@ -228,16 +247,18 @@ export class DataService {
   }
 
   public done(order: OrderDto | Order): Promise<void> {
-    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    /*const url = `${SERVER_URL}/orders/${order.id}`;
     const body = {
       order: {
-        DeliveryStatus: 'DELIVERED'
+        deliveryStatus: 'DELIVERED'
       }
     };
     return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.DeliveryStatus = 'DELIVERED';
+        order.deliveryStatus = 'DELIVERED';
+        this.getOrderById(order.id)
+          .then(o => o.deliveryStatus = 'DELIVERED');
         this.sortOrders();
         resolve();
       }, 600);
@@ -245,16 +266,18 @@ export class DataService {
   }
 
   public lost(order: OrderDto | Order): Promise<void> {
-    /*const url = `${SERVER_URL}/orders/${order.Id}`;
+    /*const url = `${SERVER_URL}/orders/${order.id}`;
     const body = {
       order: {
-        DeliveryStatus: 'LOST'
+        deliveryStatus: 'LOST'
       }
     };
     return this.http.put<void>(url, body).toPromise<void>();*/
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        order.DeliveryStatus = 'LOST';
+        order.deliveryStatus = 'LOST';
+        this.getOrderById(order.id)
+          .then(o => o.deliveryStatus = 'LOST');
         this.sortOrders();
         resolve();
       }, 600);

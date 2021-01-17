@@ -28,8 +28,8 @@ export class GeneralComponent implements OnInit {
         setTimeout(this.ngOnInit.bind(this), 1000);
         return;
       }
-      const source = this.order.SourceAddress;
-      const destination = this.order.DestinationAddress;
+      const source = this.order.sourceAddress;
+      const destination = this.order.destinationAddress;
       const resp = this.myLocation.calculateDistance(source, destination);
       this.distance = (await resp).distance;
       this.estimatedTime = (await resp).time;

@@ -1,6 +1,6 @@
 export class PackageDimension {
-  Height: number;
-  Width: number;
-  Length: number;
-  LongitudeUnit: string;
+  height: number;
+  width: number;
+  length: number;
+  longitudeUnit: string;
 }
