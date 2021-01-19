@@ -293,7 +293,7 @@ function getRandomPackage(): Package {
       longitudeUnit: getRandomPackageLengthUnit()
     },
     weight: {
-      weight: getRandomNumber(3),
+      weightValue: getRandomNumber(3),
       weightUnit: getRandomPackageWeightUnit()
     },
     content: ""
