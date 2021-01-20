@@ -4,69 +4,11 @@ import { OrderDto } from '../model/order-dto';
 import * as TestData from '../data/test-orders';
 import { Order } from '../model/order';
 import { AddressDto } from '../model/address-dto';
+import { ORDER_PROGRESS, ORDER_PROGRESS_COLOR,
+         SERVICE_TYPE_PRIORITY, STATUS_ICONS, 
+         STATUS_ICON_COLOR, STATUS_PRIORITY } from '../app.values';
 
 // const SERVER_URL = 'http://localhost:3000';
-const STATUS_PRIORITY = [
-  "QUEUED", "READY_TO_DELIVERY", "IN_ORDER", "COLLECTED", "READY_TO_STORAGE", 
-  "TO_STORAGE", "RETURNED", "VISIT_DONE", "TO_NEXT_VISIT", "VISIT_SUSPENDED",
-  "VISIT_CANCELED", "CREATED", "STORAGED", "DELIVERED", "LOST"];
-
-const SERVICE_TYPE_PRIORITY = ["ON_DEMAND", "SAME_DAY", "NEXT_DAY"];
-
-const STATUS_ICONS = {
-  CREATED: 'ellipse',
-  QUEUED: 'help-circle',
-  IN_ORDER: 'navigate',
-  COLLECTED: 'navigate',
-  READY_TO_STORAGE: 'archive',
-  READY_TO_DELIVERY: 'navigate',
-  DELIVERED: 'checkmark-done-circle',
-  TO_STORAGE: 'archive',
-  TO_NEXT_VISIT: 'help-circle',
-  VISIT_DONE: 'alert-circle',
-  STORAGED: 'archive',
-  VISIT_CANCELED: 'warning',
-  DELETED: 'close-circle',
-  VISIT_SUSPENDED: 'warning',
-  RETURNED: 'warning',
-  LOST: 'warning'
-};
-
-const ORDER_PROGRESS = {
-  CREATED: 0.1,
-  QUEUED: 0.1,
-  IN_ORDER: 0.25,
-  COLLECTED: 0.5,
-  RETURNED: 0.5,
-  READY_TO_DELIVERY: 0.75,
-  READY_TO_STORAGE: 0.75,
-  TO_STORAGE: 0.75,
-  DELIVERED: 1,
-  STORAGED: 1,
-  LOST: 1,
-  VISIT_DONE: 0.5,
-  TO_NEXT_VISIT: 0.2,
-  VISIT_CANCELED: 0.5,
-  VISIT_SUSPENDED: 0.5
-};
-
-const ORDER_PROGRESS_COLOR = {
-  CREATED: 'secondary',
-  QUEUED: 'secondary',
-  IN_ORDER: 'primary',
-  COLLECTED: 'primary',
-  RETURNED: 'warning',
-  READY_TO_DELIVERY: 'primary',
-  READY_TO_STORAGE: 'primary',
-  TO_STORAGE: 'primary',
-  DELIVERED: 'success',
-  STORAGED: 'success',
-  LOST: 'danger',
-  VISIT_DONE: 'warning',
-  TO_NEXT_VISIT: 'tertiary',
-  VISIT_CANCELED: 'warning',
-  VISIT_SUSPENDED: 'warning'
-};
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +21,8 @@ export class DataService {
   private online: boolean = true;
   private autoAcceptOrders: boolean = false;
 
+  private static MONITOR_TIMEOUT: any = null;
+
   constructor(/*private http: HttpClient*/) { }
 
   private sortOrders(): void {
@@ -89,6 +33,20 @@ export class DataService {
     });
   }
 
+  public startMonitor(freq?: number): void {
+    freq = freq || 60000;
+    if (DataService.MONITOR_TIMEOUT !== null) {
+      clearInterval(DataService.MONITOR_TIMEOUT);
+    }
+    DataService.MONITOR_TIMEOUT = setInterval(this.getOrders.bind(this), freq);
+  }
+
+  public stopMonitor(): void {
+    if (DataService.MONITOR_TIMEOUT !== null) {
+      clearInterval(DataService.MONITOR_TIMEOUT);
+    }
+  }
+
   public getStatusIcon(order: OrderDto | Order): string {
     return STATUS_ICONS[order.deliveryStatus] || 'alert-circle';
   }
@@ -96,49 +54,13 @@ export class DataService {
   public getStatusIconColor(order: OrderDto | Order): string {
     const s = order.deliveryStatus;
     const t = order.serviceType;
-    if (s === 'CREATED') {
-      return 'secondary';
+    if (!STATUS_ICON_COLOR[t]) {
+      return ''; 
     }
-    if (s === 'QUEUED') {
-      if (t === 'NEXT_DAY') {
-        return 'warning';
-      }
-      return 'danger';
-    }
-    if (s === 'IN_ORDER') {
-      if (t === 'NEXT_DAY') {
-        return 'tertiary';
-      }
-      if (t === 'SAME_DAY') {
-        return 'warning'        
-      }
-      return 'danger'
-    }
-    if (s === 'COLLECTED') {
-      if (t === 'NEXT_DAY') {
-        return 'tertiary';
-      }
+    if (!(STATUS_ICON_COLOR[t])[s]) {
       return '';
     }
-    if (s === 'READY_TO_DELIVERY') {
-      return 'success';
-    }
-    if (s === 'DELIVERED') {
-      return 'success';
-    }
-    if (s === 'VISIT_DONE' || s === 'RETURNED' || s === 'VISIT_CANCELED') {
-      return 'danger';
-    }
-    if (s === 'VISIT_SUSPENDED') {
-      return 'warning';
-    }
-    if (s === 'TO_STORAGE') {
-      return 'tertiary';
-    }
-    if (s === 'STORAGED') {
-      return 'success';
-    }
-    return '';
+    return (STATUS_ICON_COLOR[t])[s] || '';
   }
 
   public getOrderProgress(order: OrderDto | Order): number {
@@ -195,6 +117,7 @@ export class DataService {
     return response.orders || [];*/
     // TODO: Testing purposes only
     if (cache) {
+      console.log('get orders from cache');
       return this.orders;
     }
     return new Promise<OrderDto[]>((resolve, reject) => {

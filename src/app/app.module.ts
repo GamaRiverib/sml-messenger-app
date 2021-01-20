@@ -10,6 +10,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Toast } from '@ionic-native/toast/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
+import { ForegroundService } from '@ionic-native/foreground-service/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -26,6 +27,7 @@ import { AppRoutingModule } from './app-routing.module';
     NativeStorage,
     Toast,
     Vibration,
+    ForegroundService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
