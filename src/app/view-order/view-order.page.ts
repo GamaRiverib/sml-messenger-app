@@ -14,6 +14,8 @@ import { ToastService } from '../services/toast.service';
 export class ViewOrderPage implements OnInit, OnDestroy {
 
   public order: Order;
+  public loadingMessage: string = '';
+  public loading: boolean = false;
 
   constructor(
     private data: DataService,
@@ -24,13 +26,13 @@ export class ViewOrderPage implements OnInit, OnDestroy {
     private alertCtrl: AlertController
   ) { }
 
-  private async loadOrder(id: number): Promise<void> {
-    this.order = await this.data.selectOrderById(id);
-  }
-
   async ngOnInit() {
+    this.loadingMessage = 'Loading...';
+    this.loading = true;
     const id = this.activatedRoute.snapshot.paramMap.get('id');
-    await this.loadOrder(parseInt(id));
+    this.order = await this.data.selectOrderById(parseInt(id));
+    this.loadingMessage = '';
+    this.loading = false;
   }
 
   ngOnDestroy() {

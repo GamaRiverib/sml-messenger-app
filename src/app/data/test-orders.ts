@@ -333,7 +333,7 @@ function getRandomDeliveryLog(): DeliveryHistoryItem[] {
 function getRandomOrder(): Order {
   return {
     id: ++counter,
-    createdAt: new Date("2021-01-12T16:51:11.352Z").toString(),
+    createdAt: new Date().toString(),
     sourceAddress: createRandomAddress(),
     sourceAddressInstruction: getRandomAddressInstruction(),
     destinationAddress: getRandomAddress(),
@@ -359,7 +359,7 @@ let lastOrderAt = 0;
 
 function getAllOrders(): OrderDto[] {
   let now: number = Date.now();
-  if (now - lastOrderAt >= 60*1000) {
+  if (now - lastOrderAt >= 15*1000) {
     const max = Math.floor(Math.random() * 3);
     for (let i = 0; i < max; i++) {
       const order = getRandomOrder();

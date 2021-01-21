@@ -1,4 +1,15 @@
-<ion-tabs (ionTabsDidChange)="tabChange($event)">    
+<ion-grid class="ion-padding-top" *ngIf="!order">
+  <ion-row class="ion-padding-top ion-padding-bottom ion-align-items-center">
+    <ion-col size="12" class="ion-text-center">
+      <ion-spinner color="primary" *ngIf="loading"></ion-spinner>
+      <ion-text>
+        {{ loadingMessage }}
+      </ion-text>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
+<ion-tabs (ionTabsDidChange)="tabChange($event)" *ngIf="order">    
   <ion-header>
     <ion-toolbar>
       <ion-buttons slot="start">

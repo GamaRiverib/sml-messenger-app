@@ -11,8 +11,7 @@ import { GeneralComponent } from './general/general.component';
 import { DirectionsComponent } from './directions/directions.component';
 import { PackagesComponent } from './packages/packages.component';
 import { LogComponent } from './log/log.component';
-import { ServiceTypePipe } from '../pipes/service-type.pipe';
-import { DeliveryStatusPipe } from '../pipes/delivery-status.pipe';
+import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
   entryComponents: [
@@ -25,24 +24,21 @@ import { DeliveryStatusPipe } from '../pipes/delivery-status.pipe';
     CommonModule,
     FormsModule,
     IonicModule,
-    ViewOrderPageRoutingModule
+    ViewOrderPageRoutingModule,
+    PipesModule
   ],
   declarations: [
     ViewOrderPage,
     GeneralComponent,
     DirectionsComponent,
     PackagesComponent,
-    LogComponent,
-    DeliveryStatusPipe,
-    ServiceTypePipe
+    LogComponent
   ],
   exports: [
     GeneralComponent,
     DirectionsComponent,
     PackagesComponent,
-    LogComponent,
-    DeliveryStatusPipe,
-    ServiceTypePipe
+    LogComponent
   ],
 })
 export class ViewOrderPageModule {}

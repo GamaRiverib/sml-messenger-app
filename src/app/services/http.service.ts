@@ -19,6 +19,8 @@ export class HttpService {
       if (this.platform.is('hybrid')) {
         console.log('Running on hybrid platform');
         this.useWeb = false;
+      } else {
+        console.log('Running on web platform');
       }
     }
 

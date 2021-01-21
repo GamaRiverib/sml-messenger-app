@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { OrderDto } from '../model/order-dto';
 import { DataService } from '../services/data.service';
 import { OptionsComponent } from './options/options.component';
@@ -9,7 +10,7 @@ import { OptionsComponent } from './options/options.component';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
 
   public allOrders: OrderDto[] = [];
   public orders: OrderDto[] = [];
@@ -19,7 +20,7 @@ export class HomePage implements OnInit {
   constructor(private data: DataService, private popoverCtrl: PopoverController) {}
 
   private async loadOrders(): Promise<void> {
-    if (this.orders.length === 0) {
+    if (this.allOrders.length === 0) {
       this.loadingMessage = 'Loading...'
     }
     this.loading = true;
@@ -39,7 +40,11 @@ export class HomePage implements OnInit {
   }
 
   async ngOnInit() {
+    console.log('Home Page on init');
     this.loadOrders();
+  }
+
+  ngOnDestroy(): void {
   }
 
   async onOrderChange(order: OrderDto): Promise<void> {

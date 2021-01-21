@@ -6,12 +6,17 @@ import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { OrderComponent } from './order.component';
-import { DeliveryStatusPipe } from '../pipes/delivery-status.pipe';
-import { ServiceTypePipe } from '../pipes/service-type.pipe';
+import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
-  imports: [ CommonModule, FormsModule, IonicModule, RouterModule],
-  declarations: [ OrderComponent, DeliveryStatusPipe, ServiceTypePipe ],
-  exports: [ OrderComponent, DeliveryStatusPipe, ServiceTypePipe ]
+  imports: [ 
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    RouterModule,
+    PipesModule
+  ],
+  declarations: [ OrderComponent ],
+  exports: [ OrderComponent ]
 })
 export class OrderComponentModule {}
