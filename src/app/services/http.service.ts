@@ -10,20 +10,26 @@ export type HttpHeaders = { [header: string]: string };
 })
 export class HttpService {
 
-  public useWeb = true;
+  public _useWeb = true;
 
   constructor(
     private http: HTTP,
     private httpClient: HttpClient,
     private platform: Platform) {
       if (this.platform.is('hybrid')) {
-        console.log('Running on hybrid platform');
-        this.useWeb = false;
+        this._useWeb = false;
       } else {
-        console.log('Running on web platform');
+        this._useWeb = true;
       }
-    }
+  }
 
+  get useWeb(): boolean {
+    return this._useWeb;
+  }
+
+  set useWeb(val: boolean) {
+    this._useWeb = val;
+  }
 
   private throwError(reason: { status: number }): void {
     console.log(reason);
@@ -74,23 +80,33 @@ export class HttpService {
   }
 
   private async getNative(url: string, headers?: HttpHeaders, options?: any): Promise<any> {
-    this.http.clearCookies();
-    const response: HTTPResponse = await this.http.get(url, {}, headers);
-    if (response.status >= 300) {
-      console.log('get request error', { status: response.status, error: response.error });
-      throw { error: -1 };
+    try {
+      this.http.clearCookies();
+      const response: HTTPResponse = await this.http.get(url, {}, headers);
+      if (response.status >= 300) {
+        console.log('get request error', { status: response.status, error: response.error });
+        throw { error: -1 };
+      }
+      return response.data;
+    } catch (err) {
+      console.log(err);
+      return null;
     }
-    return response.data;
   }
 
   private async postNative(url: string, body: any, headers?: HttpHeaders, options?: any): Promise<any> {
-    this.http.clearCookies();
-    const response: HTTPResponse = await this.http.post(url, body, headers);
-    if (response.status >= 300) {
-      console.log('post request error', { status: response.status, error: response.error });
-      throw { error: -1 };
+    try {
+      this.http.clearCookies();
+      const response: HTTPResponse = await this.http.post(url, body, headers);
+      if (response.status >= 300) {
+        console.log('post request error', { status: response.status, error: response.error });
+        throw { error: -1 };
+      }
+      return response.data;
+    } catch (err) {
+      console.log(err);
+      return null;
     }
-    return response.data;
   }
 
   private async putNative(url: string, body?: any, headers?: HttpHeaders, options?: any): Promise<any> {
@@ -109,38 +125,43 @@ export class HttpService {
   }
 
   private async deleteNative(url: string, headers?: HttpHeaders, options?: any): Promise<any> {
-    this.http.clearCookies();
-    const response: HTTPResponse = await this.http.delete(url, {}, headers);
-    if (response.status >= 300) {
-      console.log('delete request error', { status: response.status, error: response.error });
-      throw { error: -1 };
+    try {
+      this.http.clearCookies();
+      const response: HTTPResponse = await this.http.delete(url, {}, headers);
+      if (response.status >= 300) {
+        console.log('delete request error', { status: response.status, error: response.error });
+        throw { error: -1 };
+      }
+      return response.data;
+    } catch (err) {
+      console.log(err);
+      return {};
     }
-    return response.data;
   }
 
   public get(url: string, headers?: HttpHeaders, options?: any): Promise<any> {
-    if (this.platform.is('hybrid') && !this.useWeb) {
+    if (this.platform.is('hybrid') && !this._useWeb) {
       return this.getNative(url, headers, options);
     }
     return this.getWeb(url, headers, options);
   }
 
   public post(url: string, body: any, headers?: HttpHeaders, options?: any): Promise<any> {
-    if (this.platform.is('hybrid') && !this.useWeb) {
+    if (this.platform.is('hybrid') && !this._useWeb) {
       return this.postNative(url, body, headers, options);
     }
     return this.postWeb(url, body, headers, options);
   }
 
   public put(url: string, body?: any, headers?: HttpHeaders, options?: any): Promise<any> {
-    if (this.platform.is('hybrid') && !this.useWeb) {
+    if (this.platform.is('hybrid') && !this._useWeb) {
       return this.putNative(url, body, headers, options);
     }
     return this.putWeb(url, body, headers, options);
   }
 
   public delete(url: string, headers?: HttpHeaders, options?: any): Promise<any> {
-    if (this.platform.is('hybrid') && !this.useWeb) {
+    if (this.platform.is('hybrid') && !this._useWeb) {
       return this.deleteNative(url, headers, options);
     }
     return this.deleteWeb(url, headers, options);

@@ -19,19 +19,24 @@ export class HomePage implements OnInit, OnDestroy {
 
   constructor(private data: DataService, private popoverCtrl: PopoverController) {}
 
-  private async loadOrders(): Promise<void> {
+  private async loadOrders(cache?: boolean): Promise<void> {
     if (this.allOrders.length === 0) {
       this.loadingMessage = 'Loading...'
     }
     this.loading = true;
-    this.allOrders = await this.data.getOrders() || [];
-    this.orders = this.allOrders;
-    if (this.allOrders.length === 0) {
-      this.loadingMessage = 'No orders';
-    } else {
-      this.loadingMessage = '';
+    try {
+      this.allOrders = await this.data.getOrders(cache) || [];
+      this.orders = this.allOrders;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      if (this.allOrders.length === 0) {
+        this.loadingMessage = 'No orders';
+      } else {
+        this.loadingMessage = '';
+      }
+      this.loading = false;
     }
-    this.loading = false;
   }
 
   async refresh(ev: any) {
@@ -39,16 +44,25 @@ export class HomePage implements OnInit, OnDestroy {
     ev.detail.complete();
   }
 
+  private orderStatusChangeHandler() {
+    this.allOrders = [];
+    this.loadOrders(true);
+  }
+
+  private newOrdersHandler() {
+    this.allOrders = [];
+    this.loadOrders(true);
+  }
+
   async ngOnInit() {
-    console.log('Home Page on init');
     this.loadOrders();
+    this.data.addSubscriber(DataService.EVENTS.ORDER_STATUS_CHANGE, this.orderStatusChangeHandler.bind(this));
+    this.data.addSubscriber(DataService.EVENTS.NEW_ORDERS, this.newOrdersHandler.bind(this));
   }
 
   ngOnDestroy(): void {
-  }
-
-  async onOrderChange(order: OrderDto): Promise<void> {
-    // this.loadOrders();
+    this.data.removeSubscriber(DataService.EVENTS.ORDER_STATUS_CHANGE, this.orderStatusChangeHandler);
+    this.data.removeSubscriber(DataService.EVENTS.NEW_ORDERS, this.newOrdersHandler);
   }
 
   async showOptions(ev: any): Promise<void> {
@@ -59,7 +73,6 @@ export class HomePage implements OnInit, OnDestroy {
       backdropDismiss: true
     });
     popover.onDidDismiss().then(async (res: any) => {
-      console.log('popover dismiss');
     });
     return popover.present();
   }

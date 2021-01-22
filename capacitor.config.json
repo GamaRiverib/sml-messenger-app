@@ -12,9 +12,7 @@
   "cordova": {},
   "server": {
     "androidScheme": "https",
-    "allowNavigation": [
-      "smlapiobr.azurewebsites.net"
-    ]
+    "allowNavigation": []
   },
   "android": {
     "allowMixedContent": true

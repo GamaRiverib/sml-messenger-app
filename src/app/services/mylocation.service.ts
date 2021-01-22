@@ -27,7 +27,6 @@ export class MylocationService {
       const lon = geoposition.coords.longitude;
       latlon = new LatLonSpherical(lat, lon);
     } catch (err) {
-      console.log(err);
       console.log('Using test position');
       if (err && err.code && err.code === 1) {
         latlon = new LatLonSpherical(27.495495276788983, -109.96622502330013);

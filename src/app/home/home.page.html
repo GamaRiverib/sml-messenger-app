@@ -32,7 +32,7 @@
   </ion-header>
   
   <ion-list *ngIf="orders && orders.length > 0">
-    <app-order *ngFor="let order of orders" [order]="order" (change)="onOrderChange(order)"></app-order>
+    <app-order *ngFor="let order of orders" [order]="order"></app-order>
   </ion-list>
   <ion-grid class="ion-padding-top" *ngIf="!orders || orders.length == 0">
     <ion-row class="ion-padding-top ion-padding-bottom ion-align-items-center">

@@ -8,10 +8,9 @@ import { ORDER_PROGRESS, ORDER_PROGRESS_COLOR,
          SERVICE_TYPE_PRIORITY, STATUS_ICONS, 
          STATUS_ICON_COLOR, STATUS_PRIORITY } from '../app.values';
 import { HttpService } from './http.service';
+import { SERVER_URL } from 'src/environments/environment';
 
 // import * as TestData from '../data/test-orders';
-
-const SERVER_URL = 'https://smlapiobr.azurewebsites.net';
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +25,21 @@ export class DataService {
 
   private static MONITOR_TIMEOUT: any = null;
 
-  private observers: ((count: number) => void)[] = [];
+  private observers: { [event: string]: ((data?: any) => void)[] } = {};
+
+  public static EVENTS = {
+    NEW_ORDERS: 'DataService::NewOrders',
+    ORDER_STATUS_CHANGE: 'DataService::OrderStatusChange'
+  };
 
   constructor(private http: HttpService) {
     // TODO: Test force use web
-    // this.http.useWeb = true;
+    this.http.useWeb = true;
   }
 
-  private notify(count: number): void {
-    if (this.observers.length > 0) {
-      this.observers.forEach(o => o(count));
+  private notify(event: string, data?: any): void {
+    if (this.observers[event] && this.observers[event].length > 0) {
+      this.observers[event].forEach(o => o(data));
     }
   }
 
@@ -54,7 +58,15 @@ export class DataService {
       body.order['EstimatedDeliveryTime'] = estimatedTime;
     }
     await this.http.put(url, body);
+    if (this.selected && this.selected.id === id) {
+      this.selected.deliveryStatus = deliveryStatus;
+    }
+    const dto = this.orders.find(d => d.id == id);
+    if (dto) {
+      dto.deliveryStatus = deliveryStatus;
+    }
     this.sortOrders();
+    this.notify(DataService.EVENTS.ORDER_STATUS_CHANGE, { id, deliveryStatus });
     return;
   }
 
@@ -64,7 +76,6 @@ export class DataService {
       clearInterval(DataService.MONITOR_TIMEOUT);
     }
     DataService.MONITOR_TIMEOUT = setInterval(() => {
-      console.log('monitor timeout expire', freq);
       this.getOrders();
     }, freq);
   }
@@ -140,21 +151,20 @@ export class DataService {
 
   public async getOrders(cache?: boolean): Promise<OrderDto[]> {
     if (cache) {
-      console.log('get orders from cache');
       return this.orders;
     }
+    const headers = { 'Content-Type': 'application/json' };
     const url = `${SERVER_URL}/orders`;
-    const response: { orders: OrderDto[] } = await this.http.get(url);
+    const response: { orders: OrderDto[] } = await this.http.get(url, headers);
     let count = 0;
     (response.orders || []).forEach((o: OrderDto) => {
       const index = this.orders.findIndex(v => { return v.id === o.id; });
-      console.log('index', index);
       if (index < 0) {
         count++;
       }
     });
     if (count > 0) {
-      this.notify(count);
+      this.notify(DataService.EVENTS.NEW_ORDERS, { count });
     }
     this.orders = response.orders || [];
     this.sortOrders();
@@ -166,8 +176,9 @@ export class DataService {
     if (!force && this.selected && this.selected.id === id) {
       return this.selected;
     }
+    const headers = { 'Content-Type': 'application/json' };
     const url = `${SERVER_URL}/orders/${id}`;
-    const response: { order: Order } = await this.http.get(url);
+    const response: { order: Order } = await this.http.get(url, headers);
     this.selected = response.order;
     return response.order;
   }
@@ -181,17 +192,11 @@ export class DataService {
   }
 
   public async reject(order: OrderDto | Order): Promise<void> {
-    const url = `${SERVER_URL}/orders/${order.id}/reject`;
-    await this.http.post(url, {});
-    this.sortOrders();
-    return;
+    return this.changeStatus(order.id, 'CREATED');
   }
 
   public async take(order: OrderDto | Order): Promise<void> {
-    const url = `${SERVER_URL}/orders/${order.id}/take`;
-    await this.http.post(url, {});
-    this.sortOrders();
-    return;
+    return this.changeStatus(order.id, 'IN_ORDER');
   }
 
   public async cancel(order: OrderDto | Order): Promise<void> {
@@ -211,7 +216,7 @@ export class DataService {
   }
 
   public async storage(order: OrderDto | Order): Promise<void> {
-    return this.changeStatus(order.id, 'TO_STORAGE');
+    return this.changeStatus(order.id, 'STORAGED');
   }
 
   public async fail(order: OrderDto | Order): Promise<void> {
@@ -226,14 +231,19 @@ export class DataService {
     return this.changeStatus(order.id, 'LOST');
   }
 
-  public addSubscriber(handler: (count: number) => void): void {
-    this.observers.push(handler);
+  public addSubscriber(event: string, handler: (data?: any) => void): void {
+    if (!this.observers[event]) {
+      this.observers[event] = [];
+    }
+    this.observers[event].push(handler);
   }
 
-  public removeSubscriber(handler: (count: number) => void): void {
-    const index = this.observers.findIndex(o => o === handler);
-    if (index >= 0) {
-      this.observers.splice(index, 1);
+  public removeSubscriber(event: string, handler: (data?: any) => void): void {
+    if (this.observers[event]) {
+      const index = this.observers[event].findIndex(o => o === handler);
+      if (index >= 0) {
+        this.observers[event].splice(index, 1);
+      }
     }
   }
 

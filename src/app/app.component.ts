@@ -8,6 +8,8 @@ import { ILocalNotification, LocalNotifications } from '@ionic-native/local-noti
 
 import { DataService } from './services/data.service';
 import { ToastService } from './services/toast.service';
+import { HTTP } from '@ionic-native/http/ngx';
+import { MONITOR_DELAY, MONITOR_DELAY_ON_PAUSE } from './app.values';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +25,8 @@ export class AppComponent {
     private foreground: ForegroundService,
     private data: DataService,
     private toast: ToastService,
-    private localNotifications: LocalNotifications
+    private localNotifications: LocalNotifications,
+    private http: HTTP,
   ) {
     this.initializeApp();
   }
@@ -42,11 +45,20 @@ export class AppComponent {
     }
   }
 
-  private newOrdersHandler(count: number): void {
-    console.log('new orders');
-    const text = count === 1 ? 'There is a new order.' : `There are ${count} new orders.`
-    const title = 'New Orders';
-    this.showNotification(text, title);
+  private newOrdersHandler(data?: { count: number }): void {
+    if (data) {
+      const text = data.count === 1 ? 'There is a new order.' : `There are ${data.count} new orders.`
+      const title = 'New Orders';
+      this.showNotification(text, title);
+    }
+  }
+
+  private orderStatusChangeHandler(data?: { id: number, deliveryStatus: string }) {
+    if (data) {
+      const text = `Changes to ${data.deliveryStatus}`;
+      const title = `Order #${data.id} updated`;
+      this.showNotification(text, title);
+    }
   }
 
   initializeApp() {
@@ -55,36 +67,38 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
+      const mode = 'nocheck'; //SERVER_TRUST_MODE as 'nocheck' | 'default' | 'legacy' | 'pinned';
+      this.http.setServerTrustMode(mode).then(() => {
+        console.log(`Set server trust mode ${mode} successful`);
+      }).catch((reason: any) => {
+        console.log(`Set server trust mode ${mode} fails`, reason);
+      });
 
       this.platform.resume.subscribe(async () => {
-        console.log('on resume');
         this.foreground.stop();
-        this.data.startMonitor(60000);
+        this.data.startMonitor(MONITOR_DELAY);
       });
   
       this.platform.pause.subscribe(async () => {
-        console.log('on pause');
         if (this.data.getOnlineMode())   {
-          console.log('enable background mode');
           this.foreground.start('SML Messenger App', 'Waiting for new orders', 'icon');
-          console.log('start monitor', 90000);
-          this.data.startMonitor(90000);
+          this.data.startMonitor(MONITOR_DELAY_ON_PAUSE);
         } else {
           this.foreground.stop();
           this.data.stopMonitor();
-          this.data.removeSubscriber(this.newOrdersHandler);
+          this.data.removeSubscriber(DataService.EVENTS.NEW_ORDERS, this.newOrdersHandler);
+          this.data.removeSubscriber(DataService.EVENTS.ORDER_STATUS_CHANGE, this.orderStatusChangeHandler);
         }
       });
   
-      this.data.addSubscriber(this.newOrdersHandler.bind(this));
+      this.data.addSubscriber(DataService.EVENTS.NEW_ORDERS, this.newOrdersHandler.bind(this));
+      this.data.addSubscriber(DataService.EVENTS.ORDER_STATUS_CHANGE, this.orderStatusChangeHandler.bind(this));
   
       this.localNotifications.on('click').toPromise().then((val: any) => {
         console.log('notification click', val);
       });
-  
-      console.log('start monitor', 60000);
-      this.data.startMonitor(60000);
-  
+
+      this.data.startMonitor(MONITOR_DELAY);
 
     });
   }

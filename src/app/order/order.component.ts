@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AlertController, IonItemSliding } from '@ionic/angular';
 import { AddressDto } from '../model/address-dto';
 import { OrderDto } from '../model/order-dto';
@@ -11,7 +11,7 @@ import { ToastService } from '../services/toast.service';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnDestroy {
   
   @Input() order: OrderDto;
   @Output() change: EventEmitter<any> = new EventEmitter();
@@ -28,11 +28,22 @@ export class OrderComponent implements OnInit {
     private alertCtrl: AlertController
     ) { }
 
+  private orderStatusChangeHandler(data: {id: number, deliveryStatus: string}) {
+    if (data && this.order.id === data.id) {
+      this.order.deliveryStatus = data.deliveryStatus; 
+    }
+  }
+
   async ngOnInit() {
     this.updateDistanceAndTime();
     const baseUrl = 'https://maps.google.com?saddr=My+Location&daddr=';
     this.directionsToSource = `${baseUrl}${this.order.sourceAddress.latitude},${this.order.sourceAddress.longitude}`;
     this.directionsToDestination = `${baseUrl}${this.order.destinationAddress.latitude},${this.order.destinationAddress.longitude}`;
+    this.data.addSubscriber(DataService.EVENTS.ORDER_STATUS_CHANGE, this.orderStatusChangeHandler.bind(this));
+  }
+
+  ngOnDestroy(): void {
+    this.data.removeSubscriber(DataService.EVENTS.ORDER_STATUS_CHANGE, this.orderStatusChangeHandler);
   }
 
   isIos() {
