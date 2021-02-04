@@ -4,7 +4,7 @@
     <div *ngFor="let log of order.deliveryLog; let i = index" style="margin-bottom: 12px;">
       <ion-list-header>
         <ion-label color="secondary">
-          {{ log.date | date:'short' }}
+          {{ log.date | date:'short':'-0700' }}
         </ion-label>
       </ion-list-header>
       <ion-item lines="none">

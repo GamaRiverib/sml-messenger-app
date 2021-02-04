@@ -13,6 +13,8 @@ import { Toast } from '@ionic-native/toast/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { ForegroundService } from '@ionic-native/foreground-service/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -36,6 +38,8 @@ import { AppRoutingModule } from './app-routing.module';
     Vibration,
     ForegroundService,
     LocalNotifications,
+    FileChooser,
+    FileTransfer,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
