@@ -12,10 +12,12 @@ import { DataService } from 'src/app/services/data.service';
 export class DirectionsComponent implements OnInit {
 
   public order: Order;
-
-  public evidenceImageFile: string | null = null;
-
-  public evidenceImageFileUploaded: boolean = false;
+  public collectedEvidenceFile: string | null = null;
+  public deliveredEvidenceFile: string | null = null;
+  public collectedEvidenceFileUploaded: boolean = false;
+  public deliveredEvidenceFileUploaded: boolean = false;
+  public collectedEvidenceFileUploadProgress: number = 0;
+  public deliveredEvidenceFileUploadProgress: number = 0;
 
   constructor(
     private data: DataService,
@@ -40,30 +42,69 @@ export class DirectionsComponent implements OnInit {
     return this.data.getOrderProgressColor(this.order);
   }
 
-  async selectEvidenceImageFile(): Promise<void> {
+  async selectCollectedEvidenceFile(): Promise<void> {
     try {
       const options: FileChooserOptions = { mime: 'image/*' };
-      this.evidenceImageFile = await this.fileChooser.open(options)
+      this.collectedEvidenceFile = await this.fileChooser.open(options)
     } catch (error) {
       console.log(error);
     }
   }
 
-  async uploadEvidenceImageFile(): Promise<void> {
-    console.log('uploading evidence image file');
+  async uploadCollectedEvidenceFile(): Promise<void> {
+    console.log('uploading collected evidence image file');
     const transfer: FileTransferObject = this.fileTransfer.create();
-    const url: string = 'http://192.168.1.28:3000/upload';
+    const url: string = `http://192.168.0.212:3000/upload?order=${this.order.id}&evidenceType=collected`;
     const options: FileUploadOptions = {
       httpMethod: 'post',
       fileName: `evidence-order-${this.order.id}`
     };
+    this.collectedEvidenceFileUploadProgress = 0.1;
     try {
-      const r = await transfer.upload(this.evidenceImageFile, url, options)
+      transfer.onProgress((event: ProgressEvent<EventTarget>) => {
+        this.collectedEvidenceFileUploadProgress = event.loaded / event.total;
+      });
+      const r = await transfer.upload(this.collectedEvidenceFile, url, options)
       console.log(r);
       if (r.response) {
         const data = JSON.parse(r.response);
         if (data.success) {
-          this.evidenceImageFileUploaded = true;
+          this.collectedEvidenceFileUploaded = true;
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async selectDeliveredEvidenceFile(): Promise<void> {
+    try {
+      const options: FileChooserOptions = { mime: 'image/*' };
+      this.deliveredEvidenceFile = await this.fileChooser.open(options)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async uploadDeliveredEvidenceFile(): Promise<void> {
+    console.log('uploading evidence image file');
+    const transfer: FileTransferObject = this.fileTransfer.create();
+    const url: string = `http://192.168.0.212:3000/upload?order=${this.order.id}&evidenceType=delivered`;
+    const options: FileUploadOptions = {
+      httpMethod: 'post',
+      fileName: `evidence-order-${this.order.id}`
+    };
+    this.deliveredEvidenceFileUploadProgress = 0.1;
+    try {
+      transfer.onProgress((event: ProgressEvent<EventTarget>) => {
+        this.deliveredEvidenceFileUploadProgress = event.loaded / event.total;
+      });
+      const r = await transfer.upload(this.deliveredEvidenceFile, url, options)
+      console.log(r);
+      if (r.response) {
+        const data = JSON.parse(r.response);
+        if (data.success) {
+          this.deliveredEvidenceFileUploaded = true;
         }
       }
     } catch (error) {
