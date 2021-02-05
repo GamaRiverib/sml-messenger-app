@@ -115,7 +115,6 @@ export class OrderComponent implements OnInit, OnDestroy {
       KEYS.NO, KEYS.YES,
     ];
     const values: { [key: string]: string } = await this.translate.get(keys).toPromise();
-    console.log({values});
     const alert = await this.alertCtrl.create({
       header: `${values.REJECT} ${values.ORDER.toLowerCase()}!`,
       message: values[KEYS.ORDER_PAGE.CONFIRM_REJECT],
@@ -158,7 +157,6 @@ export class OrderComponent implements OnInit, OnDestroy {
       KEYS.NO, KEYS.YES,
     ];
     const values: { [key: string]: string } = await this.translate.get(keys).toPromise();
-    console.log({values});
     const alert = await this.alertCtrl.create({
       header: `${values.SUSPEND} ${values.ORDER.toLowerCase()}!`,
       message: values[KEYS.ORDER_PAGE.CONFIRM_SUSPEND],

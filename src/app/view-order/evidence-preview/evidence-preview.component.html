@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ 'EVIDENCE_PREVIEW_COMPONENT.EVIDENCE_OF' | translate }} {{ status | translate | lowercase }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="remove()" *ngIf="!readonly">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <ion-card *ngIf="log">
+    <img 
+      [src]="baseUrl + '/' + log.evidence"
+      [alt]="altText" />
+    <ion-card-header>
+      <ion-card-subtitle>{{ 'EVIDENCE_PREVIEW_COMPONENT.EVIDENCE_OF' | translate }} {{ status | translate | lowercase }}</ion-card-subtitle>
+      <ion-card-title>{{ 'ORDER' | translate }} #{{ order.id }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item lines="none">
+          <ion-label position="fixed">{{ 'LOG_COMPONENT.DATE' | translate }}</ion-label>
+          <ion-input readonly>{{ log.date | date:'short':'-0700' }}</ion-input>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label position="fixed">{{ 'LOG_COMPONENT.STATUS' | translate }}</ion-label>
+          <ion-input readonly>{{ log.currentStatus | deliveryStatus:'long' | translate }}</ion-input>
+        </ion-item>
+        <ion-item lines="none" *ngIf="log.previousStatus">
+          <ion-label position="fixed">{{ 'LOG_COMPONENT.PREVIOUS' | translate }}</ion-label>
+          <ion-input readonly>{{ log.previousStatus | deliveryStatus:'long' | translate }}</ion-input>
+        </ion-item>
+        <ion-item *ngIf="log.notes">
+          <ion-label position="fixed">{{ 'LOG_COMPONENT.NOTES' | translate }}</ion-label>
+          <ion-input readonly>{{ log.notes }}</ion-input>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

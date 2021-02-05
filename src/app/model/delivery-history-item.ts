@@ -3,4 +3,5 @@ export class DeliveryHistoryItem {
   currentStatus: string;
   date: string;
   notes?: string;
+  evidence?: string;
 }

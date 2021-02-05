@@ -19,6 +19,14 @@
         <ion-label position="fixed">{{ 'LOG_COMPONENT.NOTES' | translate }}</ion-label>
         <ion-input readonly>{{ log.notes }}</ion-input>
       </ion-item>
+      <ion-item *ngIf="log.evidence" (click)="viewEvidenceFile(log)">
+        <ion-label position="fixed">{{ 'LOG_COMPONENT.EVIDENCE' | translate }}</ion-label>
+        <ion-input readonly>{{ log.evidence.replace(basePath, '') }}</ion-input>
+        <ion-icon 
+          slot="end"
+          name="eye-outline">
+        </ion-icon>
+      </ion-item>
     </div>
   </ion-list>
 </ion-content>

@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FileChooser, FileChooserOptions } from '@ionic-native/file-chooser/ngx';
 import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer/ngx';
+import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { KEYS } from 'src/app/app.values';
+import { EVIDENCE_FILE_BASE_PATH, KEYS, STATUS } from 'src/app/app.values';
 import { Order } from 'src/app/model/order';
 import { DataService } from 'src/app/services/data.service';
 import { SERVER_URL } from 'src/environments/environment';
+import { EvidencePreviewComponent } from '../evidence-preview/evidence-preview.component';
 
 @Component({
   selector: 'app-directions',
@@ -26,6 +28,7 @@ export class DirectionsComponent implements OnInit {
   public selectCollectedEvidenceMessage: string = '';
 
   constructor(
+    private modalController: ModalController,
     private data: DataService,
     private translate: TranslateService,
     private fileChooser: FileChooser,
@@ -40,10 +43,28 @@ export class DirectionsComponent implements OnInit {
         this.selectCollectedEvidenceMessage = v[KEYS.DIRECTIONS_COMPONENT.SELECT_COLLECTED_EVIDENCE_FILE];
       });
 
+  }
+
+  private checkUploadedImages() {
+    if (this.order.deliveryLog && this.order.deliveryLog.length > 0) {
+      const collectedLog = this.order.deliveryLog.find(l => l.currentStatus === STATUS.COLLECTED);
+      this.collectedEvidenceFile = collectedLog ? 
+        collectedLog.evidence.replace(EVIDENCE_FILE_BASE_PATH, '') : null;
+      if (this.collectedEvidenceFile !== null) {
+        this.collectedEvidenceFileUploaded = true;
+      }
+      const deliveredLog = this.order.deliveryLog.find(l => l.currentStatus === STATUS.DELIVERED);
+      this.deliveredEvidenceFile = deliveredLog ? 
+        deliveredLog.evidence.replace(EVIDENCE_FILE_BASE_PATH, '') : null;
+      if (this.deliveredEvidenceFile !== null) {
+        this.deliveredEvidenceFileUploaded = true;
+      }
     }
+  }
 
   ngOnInit() {
     this.order = this.data.getSelectedOrder();
+    this.checkUploadedImages();
   }
 
   get progress(): number {
@@ -63,7 +84,8 @@ export class DirectionsComponent implements OnInit {
   async selectCollectedEvidenceFile(): Promise<void> {
     try {
       const options: FileChooserOptions = { mime: 'image/jpeg' };
-      this.collectedEvidenceFile = await this.fileChooser.open(options)
+      this.collectedEvidenceFile = await this.fileChooser.open(options);
+      this.collectedEvidenceFileUploaded = false;
     } catch (error) {
       console.log(error);
     }
@@ -84,6 +106,8 @@ export class DirectionsComponent implements OnInit {
       });
       const r = await transfer.upload(this.collectedEvidenceFile, url, options);
       if (r.responseCode >= 200 && r.responseCode < 300) {
+        this.order = await this.data.selectOrderById(this.order.id, true);
+        this.checkUploadedImages();
         this.collectedEvidenceFileUploaded = true;
       }
     } catch (error) {
@@ -97,7 +121,8 @@ export class DirectionsComponent implements OnInit {
   async selectDeliveredEvidenceFile(): Promise<void> {
     try {
       const options: FileChooserOptions = { mime: 'image/jpeg' };
-      this.deliveredEvidenceFile = await this.fileChooser.open(options)
+      this.deliveredEvidenceFile = await this.fileChooser.open(options);
+      this.deliveredEvidenceFileUploaded = false;
     } catch (error) {
       console.log(error);
     }
@@ -117,6 +142,8 @@ export class DirectionsComponent implements OnInit {
       });
       const r = await transfer.upload(this.deliveredEvidenceFile, url, options);
       if (r.responseCode >= 200 && r.responseCode < 300) {
+        this.order = await this.data.selectOrderById(this.order.id, true);
+        this.checkUploadedImages();
         this.deliveredEvidenceFileUploaded = true;
       }
     } catch (error) {
@@ -125,6 +152,44 @@ export class DirectionsComponent implements OnInit {
       this.deliveredEvidenceFile = null;
       this.deliveredEvidenceFileUploaded = false;
     }
+  }
+
+  async viewCollectedEvidenceFile() {
+    const modal = await this.modalController.create({
+      component: EvidencePreviewComponent,
+      componentProps: { order: this.order, status: STATUS.COLLECTED }
+    });
+    modal.onWillDismiss().then(async (res: any) => {
+      if (res.role === 'remove') {
+        // TODO: remove from server
+        this.collectedEvidenceFileUploadProgress = 0;
+        this.collectedEvidenceFile = null;
+        this.collectedEvidenceFileUploaded = false;
+      }
+    }).catch(reason => console.log(reason))
+    .finally(() => {
+      // TODO
+    });
+    return await modal.present();
+  }
+
+  async viewDeliveredEvidenceFile() {
+    const modal = await this.modalController.create({
+      component: EvidencePreviewComponent,
+      componentProps: { order: this.order, status: STATUS.DELIVERED }
+    });
+    modal.onWillDismiss().then(async (res: any) => {
+      if (res.role === 'remove') {
+        // TODO: remove from server
+        this.deliveredEvidenceFileUploadProgress = 0;
+        this.deliveredEvidenceFile = null;
+        this.deliveredEvidenceFileUploaded = false;
+      }
+    }).catch(reason => console.log(reason))
+    .finally(() => {
+      // TODO
+    });
+    return await modal.present();
   }
 
 }

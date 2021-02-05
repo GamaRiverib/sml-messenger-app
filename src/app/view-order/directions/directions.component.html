@@ -62,8 +62,14 @@
         (click)="uploadCollectedEvidenceFile()"
         [color]="collectedEvidenceFileUploaded ? 'success' : ''"
         slot="end"
-        *ngIf="collectedEvidenceFile !== null"
+        *ngIf="collectedEvidenceFile !== null && collectedEvidenceFileUploaded === false"
         name="cloud-upload-outline">
+      </ion-icon>
+      <ion-icon 
+        (click)="viewCollectedEvidenceFile()"
+        slot="end"
+        *ngIf="collectedEvidenceFile !== null && collectedEvidenceFileUploaded === true"
+        name="eye-outline">
       </ion-icon>
     </ion-item>
     <ion-list-header>
@@ -122,8 +128,14 @@
         (click)="uploadDeliveredEvidenceFile()"
         [color]="deliveredEvidenceFileUploaded ? 'success' : ''"
         slot="end"
-        *ngIf="deliveredEvidenceFile !== null"
+        *ngIf="deliveredEvidenceFile !== null && deliveredEvidenceFileUploaded === false"
         name="cloud-upload-outline">
+      </ion-icon>
+      <ion-icon 
+        (click)="viewDeliveredEvidenceFile()"
+        slot="end"
+        *ngIf="collectedEvidenceFile !== null && deliveredEvidenceFileUploaded === true"
+        name="eye-outline">
       </ion-icon>
     </ion-item>
   </ion-list>

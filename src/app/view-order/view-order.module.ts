@@ -13,13 +13,15 @@ import { PackagesComponent } from './packages/packages.component';
 import { LogComponent } from './log/log.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { EvidencePreviewComponent } from './evidence-preview/evidence-preview.component';
 
 @NgModule({
   entryComponents: [
     GeneralComponent,
     DirectionsComponent,
     PackagesComponent,
-    LogComponent
+    LogComponent,
+    EvidencePreviewComponent
   ],  
   imports: [
     CommonModule,
@@ -34,13 +36,15 @@ import { TranslateModule } from '@ngx-translate/core';
     GeneralComponent,
     DirectionsComponent,
     PackagesComponent,
-    LogComponent
+    LogComponent,
+    EvidencePreviewComponent
   ],
   exports: [
     GeneralComponent,
     DirectionsComponent,
     PackagesComponent,
-    LogComponent
+    LogComponent,
+    EvidencePreviewComponent
   ],
 })
 export class ViewOrderPageModule {}

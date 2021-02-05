@@ -65,7 +65,9 @@ export class AppComponent {
 
   private async orderStatusChangeHandler(data?: { id: number, deliveryStatus: string }) {
     if (data) {
-      const params = {  id: data.id, count: data.deliveryStatus };
+      const key: string = KEYS.STATUS[data.deliveryStatus] ? KEYS.STATUS[data.deliveryStatus].SHORT : KEYS.STATUS.UNKNOW;
+      const status = await this.translate.get(key).toPromise();
+      const params = {  id: data.id, status };
       const text = await this.translate.get(KEYS.APP.CHANGES_TO_STATUS, params).toPromise();
       const title = await this.translate.get(KEYS.APP.ORDER_UPDATED_TITLE, params).toPromise();
       this.showNotification(text, title);
@@ -76,6 +78,7 @@ export class AppComponent {
 
     this.globalization.getPreferredLanguage().then((v: { value: string }) => {
       console.log('globalization', v.value);
+      this.translate.setDefaultLang('es');
       this.translate.setDefaultLang(v.value.split('-')[0] || 'es');
     });
 

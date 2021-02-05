@@ -79,7 +79,6 @@ export class ViewOrderPage implements OnInit, OnDestroy {
       KEYS.NO, KEYS.YES,
     ];
     const values: { [key: string]: string } = await this.translate.get(keys).toPromise();
-    console.log({values});
     const alert = await this.alertCtrl.create({
       header: `${values.REJECT} ${values.ORDER.toLowerCase()}!`,
       message: values[KEYS.ORDER_PAGE.CONFIRM_REJECT],
@@ -115,7 +114,6 @@ export class ViewOrderPage implements OnInit, OnDestroy {
       KEYS.NO, KEYS.YES,
     ];
     const values: { [key: string]: string } = await this.translate.get(keys).toPromise();
-    console.log({values});
     const alert = await this.alertCtrl.create({
       header: `${values.SUSPEND} ${values.ORDER.toLowerCase()}!`,
       message: values[KEYS.ORDER_PAGE.CONFIRM_SUSPEND],
@@ -208,7 +206,6 @@ export class ViewOrderPage implements OnInit, OnDestroy {
     if (status === STATUS.QUEUED || status === STATUS.CREATED) {
       const keys: string[] = [KEYS.REJECT, KEYS.ORDER, KEYS.TAKE];
       const values: { [key: string]: string } = await this.translate.get(keys).toPromise();
-      console.log({values});
       buttons.push({
         text: `${values.REJECT} ${values.ORDER.toLowerCase()}`,
         role: 'desctructive',
@@ -223,7 +220,6 @@ export class ViewOrderPage implements OnInit, OnDestroy {
     } else if (status === STATUS.IN_ORDER) {
       const keys: string[] = [KEYS.SUSPEND, KEYS.ORDER, KEYS.COLLECTED];
       const values: { [key: string]: string } = await this.translate.get(keys).toPromise();
-      console.log({values});
       buttons.push({
         text: `${values.SUSPEND} ${values.ORDER.toLowerCase()}`,
         role: 'desctructive',

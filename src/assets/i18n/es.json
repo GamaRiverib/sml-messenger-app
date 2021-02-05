@@ -90,13 +90,23 @@
   },
 
   "LOG_COMPONENT": {
+    "DATE": "Fecha",
     "NOTES": "Notas",
     "PREVIOUS": "Previo",
-    "STATUS": "Estatus"
+    "STATUS": "Estatus",
+    "EVIDENCE": "Evidencia"
   },
 
   "PACKAGE_COMPONENT": {
     "PACKAGE": "Paquete"
+  },
+
+  "EVIDENCE_PREVIEW_COMPONENT": {
+    "EVIDENCE_OF": "Evidencia de",
+    "REMOVE_EVIDENCE": "Eliminar evidencia",
+    "REMOVE_EVIDENCE_QUESTION": "¿Estás seguro de eliminar esta evidencia?",
+    "CANCEL": "Cancelar",
+    "REMOVE": "Eliminar"
   },
 
   "SERVICE_TYPE": {
