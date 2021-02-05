@@ -9,7 +9,9 @@ import { ILocalNotification, LocalNotifications } from '@ionic-native/local-noti
 import { DataService } from './services/data.service';
 import { ToastService } from './services/toast.service';
 import { HTTP } from '@ionic-native/http/ngx';
-import { MONITOR_DELAY, MONITOR_DELAY_ON_PAUSE } from './app.values';
+import { KEYS, MONITOR_DELAY, MONITOR_DELAY_ON_PAUSE } from './app.values';
+import { TranslateService } from '@ngx-translate/core';
+import { Globalization } from '@ionic-native/globalization/ngx';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +21,8 @@ import { MONITOR_DELAY, MONITOR_DELAY_ON_PAUSE } from './app.values';
 export class AppComponent {
 
   constructor(
+    private translate: TranslateService,
+    private globalization: Globalization,
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
@@ -45,27 +49,41 @@ export class AppComponent {
     }
   }
 
-  private newOrdersHandler(data?: { count: number }): void {
+  private async newOrdersHandler(data?: { count: number }): Promise<void> {
     if (data) {
-      const text = data.count === 1 ? 'There is a new order.' : `There are ${data.count} new orders.`
-      const title = 'New Orders';
+      let text = '';
+      if (data.count === 1) {
+        text = await this.translate.get(KEYS.APP.NEW_ORDER_MESSAGE).toPromise();
+      } else {
+        const params = { count: data.count };
+        text = await this.translate.get(KEYS.APP.NEW_ORDERS_MESSAGE, params).toPromise();
+      }
+      const title = await this.translate.get(KEYS.APP.NEW_ORDER_TITLE).toPromise();
       this.showNotification(text, title);
     }
   }
 
-  private orderStatusChangeHandler(data?: { id: number, deliveryStatus: string }) {
+  private async orderStatusChangeHandler(data?: { id: number, deliveryStatus: string }) {
     if (data) {
-      const text = `Changes to ${data.deliveryStatus}`;
-      const title = `Order #${data.id} updated`;
+      const params = {  id: data.id, count: data.deliveryStatus };
+      const text = await this.translate.get(KEYS.APP.CHANGES_TO_STATUS, params).toPromise();
+      const title = await this.translate.get(KEYS.APP.ORDER_UPDATED_TITLE, params).toPromise();
       this.showNotification(text, title);
     }
   }
 
   initializeApp() {
 
+    this.globalization.getPreferredLanguage().then((v: { value: string }) => {
+      console.log('globalization', v.value);
+      this.translate.setDefaultLang(v.value.split('-')[0] || 'es');
+    });
+
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      // this.translate.setDefaultLang('es');
 
       const mode = 'nocheck'; //SERVER_TRUST_MODE as 'nocheck' | 'default' | 'legacy' | 'pinned';
       this.http.setServerTrustMode(mode).then(() => {
@@ -81,7 +99,9 @@ export class AppComponent {
   
       this.platform.pause.subscribe(async () => {
         if (this.data.getOnlineMode())   {
-          this.foreground.start('SML Messenger App', 'Waiting for new orders', 'icon');
+          const appName = await this.translate.get(KEYS.APP.NAME,).toPromise();
+          const msg = await this.translate.get(KEYS.APP.WAITING_NEW_ORDERS).toPromise();
+          this.foreground.start(appName, msg, 'icon');
           this.data.startMonitor(MONITOR_DELAY_ON_PAUSE);
         } else {
           this.foreground.stop();
@@ -99,7 +119,6 @@ export class AppComponent {
       });
 
       this.data.startMonitor(MONITOR_DELAY);
-
     });
   }
 }

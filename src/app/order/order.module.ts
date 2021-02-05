@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { OrderComponent } from './order.component';
 import { PipesModule } from '../pipes/pipes.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [ 
@@ -14,7 +15,8 @@ import { PipesModule } from '../pipes/pipes.module';
     FormsModule,
     IonicModule,
     RouterModule,
-    PipesModule
+    PipesModule,
+    TranslateModule.forChild()
   ],
   declarations: [ OrderComponent ],
   exports: [ OrderComponent ]

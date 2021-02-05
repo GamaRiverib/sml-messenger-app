@@ -1,36 +1,26 @@
 <ion-item-sliding *ngIf="order" #slidingItem>
-
   <ion-item-options side="start">
     <ion-item-option 
       *ngIf="order.deliveryStatus == 'IN_ORDER'"
       [href]="directionsToSource"
       target="_blank">
       <ion-icon slot="icon-only" name="compass-outline"></ion-icon>
-      Directions
+      {{ 'DIRECTIONS' | translate }}
     </ion-item-option>
     <ion-item-option 
       *ngIf="order.deliveryStatus == 'READY_TO_DELIVERY'"
       [href]="directionsToDestination"
       target="_blank">
       <ion-icon slot="icon-only" name="compass-outline"></ion-icon>
-      Directions
+      {{ 'DIRECTIONS' | translate }}
     </ion-item-option>
   </ion-item-options>
-
-  <!--ion-item-options side="start" *ngIf="order.deliveryStatus == 'READY_TO_DELIVERY'">
-    <ion-item-option 
-      [href]="directionsToDestination"
-      target="_blank">
-      <ion-icon slot="icon-only" name="compass-outline"></ion-icon>
-      Directions
-    </ion-item-option>
-  </ion-item-options-->
 
   <ion-item [routerLink]="'/order/' + order.id" [detail]="false">
     <ion-icon [name]="icon + '-outline'" [color]="color"></ion-icon>
     <ion-label class="ion-text-wrap">
       <h3>
-        Order #{{ order.id }}
+        {{ 'ORDER' | translate }} #{{ order.id }}
       </h3>
       <h2> 
         {{ nextAddress }}
@@ -39,15 +29,15 @@
         </span>
       </h2>
       <h3>
-        <ion-text color="primary">{{ order.deliveryStatus | deliveryStatus:'action' | uppercase }}</ion-text>
+        <ion-text color="primary">{{ order.deliveryStatus | deliveryStatus:'action' | translate | uppercase }}</ion-text>
         <span class="note">
-          <ion-note>{{ order.serviceType | serviceType | uppercase }}</ion-note>
+          <ion-note>{{ order.serviceType | serviceType | translate | uppercase }}</ion-note>
         </span>
       </h3>
       <h3 *ngIf="distance > 0 || estimatedTime > 0">
         {{ distance | number:'.1-1' }} Km.
         <span class="note">
-          <ion-note>{{ estimatedTime }} minutes</ion-note>
+          <ion-note>{{ estimatedTime }} {{ 'MINUTES' | translate | lowercase }}</ion-note>
         </span>
       </h3>
     </ion-label>
@@ -56,91 +46,39 @@
   <ion-item-options side="end">
     <ion-item-option color="danger" (click)="reject(slidingItem)" *ngIf="order.deliveryStatus == 'QUEUED' || order.deliveryStatus == 'CREATED'">
       <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-      Reject
+      {{ 'REJECT' | translate }}
     </ion-item-option>
     <ion-item-option (click)="take(slidingItem)" *ngIf="order.deliveryStatus == 'QUEUED' || order.deliveryStatus == 'CREATED'">
       <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
-      Take
+      {{ 'TAKE' | translate }}
     </ion-item-option>
     <ion-item-option color="danger" (click)="suspend(slidingItem)" *ngIf="order.deliveryStatus == 'IN_ORDER'">
       <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-      Suspend
+      {{ 'SUSPEND' | translate }}
     </ion-item-option>
     <ion-item-option (click)="collect(slidingItem)" *ngIf="order.deliveryStatus == 'IN_ORDER'">
       <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
-      Collect
+      {{ 'COLLECT' | translate }}
     </ion-item-option>
     <ion-item-option color="secondary" (click)="toStorage(slidingItem)" *ngIf="order.deliveryStatus == 'COLLECTED' || order.deliveryStatus == 'VISIT_DONE' || order.deliveryStatus == 'VISIT_CANCELED' || order.deliveryStatus == 'VISIT_SUSPENDED' || order.deliveryStatus == 'RETURNED'">
       <ion-icon slot="icon-only" name="archive-outline"></ion-icon>
-      To storage
+      {{ 'TO_STORAGE' | translate }}
     </ion-item-option>
     <ion-item-option (click)="toDelivery(slidingItem)" *ngIf="order.deliveryStatus == 'COLLECTED' || order.deliveryStatus == 'VISIT_DONE' || order.deliveryStatus == 'VISIT_CANCELED' || order.deliveryStatus == 'VISIT_SUSPENDED' || order.deliveryStatus == 'RETURNED'">
       <ion-icon slot="icon-only" name="navigate-outline"></ion-icon>
-      Delivery
+      {{ 'DELIVERY' | translate }}
     </ion-item-option>
     <ion-item-option color="tertiary" (click)="storage(slidingItem)" *ngIf="order.deliveryStatus == 'READY_TO_STORAGE' || order.deliveryStatus == 'TO_STORAGE'">
       <ion-icon slot="icon-only" name="archive-outline"></ion-icon>
-      Store
+      {{ 'STORE' | translate }}
     </ion-item-option>
     <ion-item-option color="danger" (click)="fail(slidingItem)" *ngIf="order.deliveryStatus == 'READY_TO_DELIVERY'">
       <ion-icon slot="icon-only" name="warning-outline"></ion-icon>
-      Fail
+      {{ 'FAIL' | translate }}
     </ion-item-option>
     <ion-item-option (click)="done(slidingItem)" *ngIf="order.deliveryStatus == 'READY_TO_DELIVERY'">
       <ion-icon slot="icon-only" name="checkmark-done-outline"></ion-icon>
-      Done
+      {{ 'DONE' | translate }}
     </ion-item-option>
   </ion-item-options>
-
-  <!--ion-item-options side="end" *ngIf="order.deliveryStatus == 'QUEUED' || order.deliveryStatus == 'CREATED'">
-    <ion-item-option color="danger" (click)="reject(slidingItem)">
-      <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-      Reject
-    </ion-item-option>
-    <ion-item-option (click)="take(slidingItem)">
-      <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
-      Take
-    </ion-item-option>
-  </ion-item-options>
-
-  <ion-item-options side="end" *ngIf="order.deliveryStatus == 'IN_ORDER'">
-    <ion-item-option color="danger" (click)="suspend(slidingItem)">
-      <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-      Suspend
-    </ion-item-option>
-    <ion-item-option (click)="collect(slidingItem)">
-      <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
-      Collect
-    </ion-item-option>
-  </ion-item-options>
-
-  <ion-item-options side="end" *ngIf="order.deliveryStatus == 'COLLECTED' || order.deliveryStatus == 'VISIT_DONE' || order.deliveryStatus == 'VISIT_CANCELED' || order.deliveryStatus == 'VISIT_SUSPENDED' || order.deliveryStatus == 'RETURNED'">
-    <ion-item-option color="secondary" (click)="toStorage(slidingItem)">
-      <ion-icon slot="icon-only" name="archive-outline"></ion-icon>
-      To storage
-    </ion-item-option>
-    <ion-item-option (click)="toDelivery(slidingItem)">
-      <ion-icon slot="icon-only" name="navigate-outline"></ion-icon>
-      Delivery
-    </ion-item-option>
-  </ion-item-options>
-
-  <ion-item-options side="end" *ngIf="order.deliveryStatus == 'READY_TO_STORAGE' || order.deliveryStatus == 'TO_STORAGE'">
-    <ion-item-option color="tertiary" (click)="storage(slidingItem)">
-      <ion-icon slot="icon-only" name="archive-outline"></ion-icon>
-      Store
-    </ion-item-option>
-  </ion-item-options>
-
-  <ion-item-options side="end" *ngIf="order.deliveryStatus == 'READY_TO_DELIVERY'">
-    <ion-item-option color="danger" (click)="fail(slidingItem)">
-      <ion-icon slot="icon-only" name="warning-outline"></ion-icon>
-      Fail
-    </ion-item-option>
-    <ion-item-option (click)="done(slidingItem)">
-      <ion-icon slot="icon-only" name="checkmark-done-outline"></ion-icon>
-      Done
-    </ion-item-option>
-  </ion-item-options-->
-
 </ion-item-sliding>

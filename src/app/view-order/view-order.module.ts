@@ -12,6 +12,7 @@ import { DirectionsComponent } from './directions/directions.component';
 import { PackagesComponent } from './packages/packages.component';
 import { LogComponent } from './log/log.component';
 import { PipesModule } from '../pipes/pipes.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   entryComponents: [
@@ -25,7 +26,8 @@ import { PipesModule } from '../pipes/pipes.module';
     FormsModule,
     IonicModule,
     ViewOrderPageRoutingModule,
-    PipesModule
+    PipesModule,
+    TranslateModule.forChild()
   ],
   declarations: [
     ViewOrderPage,

@@ -4,12 +4,12 @@
     <div *ngFor="let package of order.packages; let i = index" class="ion-padding-bottom">
       <ion-list-header>
         <ion-label color="secondary">
-          Package {{ i + 1 }}
+          {{ 'PACKAGE_COMPONENT.PACKAGE' | translate }} {{ i + 1 }}
         </ion-label>
       </ion-list-header>
       <ion-item lines="none">
         <ion-icon name="expand-outline"></ion-icon>
-        <ion-label class="ion-padding-start">{{ package.size }}</ion-label>
+        <ion-label class="ion-padding-start">{{ 'PACKAGE_SIZE.' + package.size | translate }}</ion-label>
       </ion-item>
       <ion-item lines="none" *ngIf="package.dimension">
         <ion-icon name="cube-outline"></ion-icon>

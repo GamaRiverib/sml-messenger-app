@@ -3,32 +3,32 @@
   <ion-list *ngIf="order">
     <ion-list-header>
       <ion-label color="secondary">
-        Information
+        {{ 'GENERAL_COMPONENT.INFORMATION' | translate }}
       </ion-label>
     </ion-list-header>
     <ion-item lines="none">
-      <ion-label position="fixed">Status</ion-label>
-      <ion-input>{{ order.deliveryStatus | deliveryStatus:'long' }}</ion-input>
+      <ion-label position="fixed">{{ 'GENERAL_COMPONENT.STATUS' | translate }}</ion-label>
+      <ion-input>{{ order.deliveryStatus | deliveryStatus:'long' | translate }}</ion-input>
     </ion-item>
     <ion-item lines="none">
-      <ion-label position="fixed">Date</ion-label>
+      <ion-label position="fixed">{{ 'GENERAL_COMPONENT.DATE' | translate }}</ion-label>
       <ion-input>{{ order.createdAt | date:'short':'-0700' }}</ion-input>
     </ion-item>
     <ion-item lines="none">
-      <ion-label position="fixed">Service</ion-label>
-      <ion-input>{{ order.serviceType | serviceType }}</ion-input>
+      <ion-label position="fixed">{{ 'GENERAL_COMPONENT.SERVICE' | translate }}</ion-label>
+      <ion-input>{{ order.serviceType | serviceType | translate }}</ion-input>
     </ion-item>
     <ion-item lines="none">
-      <ion-label position="fixed">Distance</ion-label>
+      <ion-label position="fixed">{{ 'GENERAL_COMPONENT.DISTANCE' | translate }}</ion-label>
       <ion-input>{{ distance | number:'.1-1' }} Km.</ion-input>
     </ion-item>
     <ion-item lines="none" class="ion-padding-bottom">
-      <ion-label position="fixed">Time</ion-label>
-      <ion-input>{{ estimatedTime }} minutes</ion-input>
+      <ion-label position="fixed">{{ 'GENERAL_COMPONENT.TIME' | translate }}</ion-label>
+      <ion-input>{{ estimatedTime }} {{ 'MINUTES' | translate | lowercase }}</ion-input>
     </ion-item>
     <ion-list-header>
       <ion-label color="secondary">
-        Customer
+        {{ 'GENERAL_COMPONENT.CUSTOMER' | translate }}
       </ion-label>
     </ion-list-header>
     <div *ngIf="order.customerContact">

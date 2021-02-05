@@ -1,0 +1,206 @@
+{
+  "APP": {
+    "NAME": "SML Messenger App",
+    "WAITING_NEW_ORDERS": "Waiting for new orders",
+    "NEW_ORDER_MESSAGE": "There is a new order",
+    "NEW_ORDERS_MESSAGE": "There are {{ count }} new orders",
+    "NEW_ORDER_TITLE": "New orders",
+    "CHANGES_TO_STATUS": "Changes to {{ status }}",
+    "ORDER_UPDATED_TITLE": "Order #{{ id }} updated"
+  },
+  "LOADING": "Loading",
+  "ORDERS": "Orders",
+  "ORDER": "Order",
+  "CLOSE": "Close",
+  "YES": "Yes",
+  "NO": "No",
+  "SEARCH": "Search",
+  "ACTIONS": "Actions",
+  "DIRECTIONS": "Directions",
+  "MINUTES": "Minutes",
+  
+  "REJECT": "Reject",
+  "TAKE": "Take",
+  "SUSPEND": "Suspend",
+  "COLLECT": "Collect",
+  "TO_STORAGE": "To storage",
+  "DELIVERY": "Delivery",
+  "STORE": "Store",
+  "FAIL": "Fail",
+  "DONE": "Done",
+  "REJECTED": "Rejected",
+  "TAKED": "Taked",
+  "SUSPENDED": "Suspended",
+  "COLLECTED": "Collected",
+  "DELIVERED": "Delivered",
+  "STORED": "Stored",
+  "IN_DELIVERY": "In delivery",
+  "IN_WAREHOUSE": "In the warehouse",
+
+  "HOME_PAGE": {
+    "TITLE": "Orders",
+    "NO_ORDERS": "No orders",
+    "MODE_ONLINE": "Mode online",
+    "AUTOTAKE": "Take automatically all orders"
+  },
+  
+  "ORDER_PAGE": {
+    "CONFIRM_REJECT": "Are you sure you want to <b>REJECT</b> the order?",
+    "CONFIRM_SUSPEND": "Are you sure you want to <b>SUSPEND</b> the order?",
+    "ORDER_ASSIGNED": "Order #{{ id }} was assigned to you",
+    "REJECTED_MESSAGE": "Order #{{ id }} rejected",
+    "SUSPENDED_MESSAGE": "Order #{{ id }} suspended",
+    "COLLECTED_MESSAGE": "Order #{{ id }} collected",
+    "ON_WAY_TO_WAREHOUSE": "Order #{{ id }} on the way to the warehouse",
+    "IN_DELIVERY": "Order #{{ id }} in delivery",
+    "IN_THE_WAREHOUSE": "Order #{{ id }} in the warehouse",
+    "COULD_NOT_BE_DELIVERED": "Order #{{ id }} could not be delivered",
+    "WAS_DELIVERED": "Order #{{ id }} was delivered"
+  },
+
+  "VIEW_ORDER_PAGE": {
+    "IS_LOST": "Order #{{ id }} is lost",
+    "REPORT_AS_LOST": "Report as lost",
+    "GO_TO_STORAGE": "Go to storage",
+    "GO_TO_DELIVERY": "Go to delivery",
+    "RETURNED_BY_RECIPIENT": "Returned by recipient",
+    "DELIVERY_FAILED": "Delivery failed",
+    "SUCCESSFULLY_DELIVERED": "Successfully delivered",
+    "GENERAL": "General",
+    "DIRECTIONS": "Directions",
+    "PACKAGES": "Packages",
+    "LOG": "Log"
+  },
+
+  "DIRECTIONS_COMPONENT": {
+    "PICKUP": "Pickup",
+    "DROPOFF": "Dropoff",
+    "SELECT_DELIVERED_EVIDENCE_FILE": "Select delivered evidence",
+    "SELECT_COLLECTED_EVIDENCE_FILE": "Select collected evidence"
+  },
+  
+  "GENERAL_COMPONENT": {
+    "INFORMATION": "Information",
+    "CUSTOMER": "Customer",
+    "TIME": "Time",
+    "DISTANCE": "Distance",
+    "SERVICE": "Service",
+    "DATE": "Date",
+    "STATUS": "Status"
+  },
+
+  "LOG_COMPONENT": {
+    "NOTES": "Notes",
+    "PREVIOUS": "Previous",
+    "STATUS": "Status"
+  },
+
+  "PACKAGE_COMPONENT": {
+    "PACKAGE": "Package"
+  },
+
+  "SERVICE_TYPE": {
+    "UNKNOW": "Unknow service",
+    "SHORT": {
+      "ON_DEMAND": "On demand",
+      "SAME_DAY": "Same day",
+      "NEXT_DAY": "Next day"
+    },
+    "LONG": {
+      "ON_DEMAND": "On demand service",
+      "SAME_DAY": "Same day service",
+      "NEXT_DAY": "Next day service"
+    }
+  },
+  
+  "STATUS": {
+    "UNKNOW": "Unknow status",
+    "CREATED": {
+      "SHORT": "Created",
+      "ACTION": "Take or reject",
+      "LONG": "Package was registered"
+    },
+    "QUEUED": {
+      "SHORT": "Queued",
+      "ACTION": "Take or reject",
+      "LONG": "Package is waiting to be assigned"
+    },
+    "IN_ORDER": {
+      "SHORT": "In order",
+      "ACTION": "Go to collect",
+      "LONG": "Package is assigned"
+    },
+    "COLLECTED": {
+      "SHORT": "Collected",
+      "ACTION": "Start delivery",
+      "LONG": "Package was collected"
+    },
+    "READY_TO_STORAGE": {
+      "SHORT": "Ready to storage",
+      "ACTION": "Take to warehouse",
+      "LONG": "Package in storage process"
+    },
+    "READY_TO_DELIVERY": {
+      "SHORT": "Ready to delivery",
+      "ACTION": "Go to delivery",
+      "LONG": "Package in delivery process"
+    },
+    "DELIVERED": {
+      "SHORT": "Delivered",
+      "ACTION": "Delivered",
+      "LONG": "Package was delivered"
+    },
+    "TO_STORAGE": {
+      "SHORT": "To storage",
+      "ACTION": "Take to warehouse",
+      "LONG": "Package returns to the warehouse"
+    },
+    "TO_NEXT_VISIT": {
+      "SHORT": "To next visit",
+      "ACTION": "Take or reject",
+      "LONG": "Package ready to a new delivery attempt"
+    },
+    "VISIT_DONE": {
+      "SHORT": "Visit done",
+      "ACTION": "Delivery failed",
+      "LONG": "Destination was visited without success"
+    },
+    "STORAGED": {
+      "SHORT": "Storaged",
+      "ACTION": "Storaged",
+      "LONG": "Package is in the warehouse"
+    },
+    "VISIT_CANCELED": {
+      "SHORT": "Visit canceled",
+      "ACTION": "Visit canceled",
+      "LONG": "Visit was canceled by the customer"
+    },
+    "DELETED": {
+      "SHORT": "Deleted",
+      "ACTION": "Deleted",
+      "LONG": "Delivery service is eliminated"
+    },
+    "VISIT_SUSPENDED": {
+      "SHORT": "Visit suspended",
+      "ACTION": "Visit suspended",
+      "LONG": "Courier suspended the visit"
+    },
+    "RETURNED": {
+      "SHORT": "Returned",
+      "ACTION": "Return to collect address",
+      "LONG": "Package was returned"
+    },
+    "LOST": {
+      "SHORT": "Lost",
+      "ACTION": "Lost",
+      "LONG": "Package is lost"
+    }
+  },
+
+  "PACKAGE_SIZE": {
+    "ENVELOP": "Envelop",
+    "SMALL": "Small package",
+    "MEDIUM": "Medium package",
+    "LARGE": "Large package"
+  }
+}

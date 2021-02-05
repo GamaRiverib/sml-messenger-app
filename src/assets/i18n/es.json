@@ -1,0 +1,206 @@
+{
+  "APP": {
+    "NAME": "SML Repartidor App",
+    "WAITING_NEW_ORDERS": "Esperando nuevos pedidos",
+    "NEW_ORDER_MESSAGE": "Hay un pedido nuevo",
+    "NEW_ORDERS_MESSAGE": "Hay {{ count }} pedidos nuevos",
+    "NEW_ORDER_TITLE": "Pedidos nuevos",
+    "CHANGES_TO_STATUS": "El estatus cambió a {{ status }}",
+    "ORDER_UPDATED_TITLE": "Pedido #{{ id }} actualizado"
+  },
+  "LOADING": "Cargando",
+  "ORDERS": "Pedidos",
+  "ORDER": "Pedido",
+  "CLOSE": "Cerrar",
+  "YES": "Sí",
+  "NO": "No",
+  "SEARCH": "Buscar",
+  "ACTIONS": "Acciones",
+  "DIRECTIONS": "Indicaciones",
+  "MINUTES": "Minutos",
+  
+  "REJECT": "Rechazar",
+  "TAKE": "Aceptar",
+  "SUSPEND": "Suspender",
+  "COLLECT": "Recolectar",
+  "TO_STORAGE": "Al almacén",
+  "DELIVERY": "Repartir",
+  "STORE": "Almacenar",
+  "FAIL": "Falló",
+  "DONE": "Listo",
+  "REJECTED": "Rechazado",
+  "TAKED": "Aceptado",
+  "SUSPENDED": "Suspendido",
+  "COLLECTED": "Recolectado",
+  "DELIVERED": "Entregado",
+  "STORED": "Almacenado",
+  "IN_DELIVERY": "En repartición",
+  "IN_WAREHOUSE": "En el almacén",
+
+  "HOME_PAGE": {
+    "TITLE": "Pedidos",
+    "NO_ORDERS": "No hay pedidos",
+    "MODE_ONLINE": "Modo en línea",
+    "AUTOTAKE": "Aceptar todos"
+  },
+  
+  "ORDER_PAGE": {
+    "CONFIRM_REJECT": "¿Estás seguro que quieres <b>RECHAZAR</b> el pedido?",
+    "CONFIRM_SUSPEND": "¿Estás seguro que quieres <b>SUSPENDER</b> el pedido?",
+    "ORDER_ASSIGNED": "Se te asignó el pedido #{{ id }}",
+    "REJECTED_MESSAGE": "Pedido #{{ id }} fue rechazado",
+    "SUSPENDED_MESSAGE": "Pedido #{{ id }} fue suspendido",
+    "COLLECTED_MESSAGE": "Pedido #{{ id }} fue recolectado",
+    "ON_WAY_TO_WAREHOUSE": "Pedido #{{ id }} en camino al almacén",
+    "IN_DELIVERY": "Pedido #{{ id }} en proceso de entrega",
+    "IN_THE_WAREHOUSE": "Pedido #{{ id }} en el almacén",
+    "COULD_NOT_BE_DELIVERED": "Pedido #{{ id }} no pudo ser entregado",
+    "WAS_DELIVERED": "Pedido #{{ id }} fue entregado"
+  },
+
+  "VIEW_ORDER_PAGE": {
+    "IS_LOST": "Pedido #{{ id }} está perdido",
+    "REPORT_AS_LOST": "Reportar como perdido",
+    "GO_TO_STORAGE": "Llevar al almacén",
+    "GO_TO_DELIVERY": "Ir a la entrega",
+    "RETURNED_BY_RECIPIENT": "Devuelto por el destinatario",
+    "DELIVERY_FAILED": "Entrega fallida",
+    "SUCCESSFULLY_DELIVERED": "Entrega exitosa",
+    "GENERAL": "General",
+    "DIRECTIONS": "Indicaciones",
+    "PACKAGES": "Paquetes",
+    "LOG": "Bitácora"
+  },
+
+  "DIRECTIONS_COMPONENT": {
+    "PICKUP": "Recolección",
+    "DROPOFF": "Entrega",
+    "SELECT_DELIVERED_EVIDENCE_FILE": "Seleccionar imagen de evidencia",
+    "SELECT_COLLECTED_EVIDENCE_FILE": "Seleccionar imagen de evidencia"
+  },
+  
+  "GENERAL_COMPONENT": {
+    "INFORMATION": "Información",
+    "CUSTOMER": "Cliente",
+    "TIME": "Tiempo",
+    "DISTANCE": "Distancia",
+    "SERVICE": "Servicio",
+    "DATE": "Fecha",
+    "STATUS": "Estatus"
+  },
+
+  "LOG_COMPONENT": {
+    "NOTES": "Notas",
+    "PREVIOUS": "Previo",
+    "STATUS": "Estatus"
+  },
+
+  "PACKAGE_COMPONENT": {
+    "PACKAGE": "Paquete"
+  },
+
+  "SERVICE_TYPE": {
+    "UNKNOW": "Desconocido",
+    "SHORT": {
+      "ON_DEMAND": "Bajo demanda",
+      "SAME_DAY": "Mismo día",
+      "NEXT_DAY": "Siguiente día"
+    },
+    "LONG": {
+      "ON_DEMAND": "Servicio bajo demanda",
+      "SAME_DAY": "Servicio el mismo día",
+      "NEXT_DAY": "Servicio al siguiente día"
+    }
+  },
+  
+  "STATUS": {
+    "UNKNOW": "Estatus desconocido",
+    "CREATED": {
+      "SHORT": "Creado",
+      "ACTION": "Aceptar o rechazar",
+      "LONG": "Pedido registrado"
+    },
+    "QUEUED": {
+      "SHORT": "En espera",
+      "ACTION": "Aceptar o rechazar",
+      "LONG": "Pedido esperando ser asignado"
+    },
+    "IN_ORDER": {
+      "SHORT": "Asignado",
+      "ACTION": "Ir a recolectar",
+      "LONG": "Pedido asignado"
+    },
+    "COLLECTED": {
+      "SHORT": "Recolectado",
+      "ACTION": "Iniciar entrega",
+      "LONG": "Pedido recolectado"
+    },
+    "READY_TO_STORAGE": {
+      "SHORT": "Listo para almacenar",
+      "ACTION": "Llevar al almacén",
+      "LONG": "Pedido en proceso de almacenamiento"
+    },
+    "READY_TO_DELIVERY": {
+      "SHORT": "Listo para entregar",
+      "ACTION": "Iniciar entrega",
+      "LONG": "Pedido en proceso de entrega"
+    },
+    "DELIVERED": {
+      "SHORT": "Entregado",
+      "ACTION": "Entregado",
+      "LONG": "Pedido entregado"
+    },
+    "TO_STORAGE": {
+      "SHORT": "Al almacenamiento",
+      "ACTION": "Llevar al almacén",
+      "LONG": "Pedido regresa al almacén"
+    },
+    "TO_NEXT_VISIT": {
+      "SHORT": "Nueva visita",
+      "ACTION": "Aceptar o rechazar",
+      "LONG": "Pedido listo para nuevo intento"
+    },
+    "VISIT_DONE": {
+      "SHORT": "Visita realizada",
+      "ACTION": "Entrega fallida",
+      "LONG": "El destino fue visitado sin éxito"
+    },
+    "STORAGED": {
+      "SHORT": "Almacenado",
+      "ACTION": "Almacenado",
+      "LONG": "Pedido está en el almacén"
+    },
+    "VISIT_CANCELED": {
+      "SHORT": "Visita cancelada",
+      "ACTION": "Visita cancelada",
+      "LONG": "Visita cancelada por el cliente"
+    },
+    "DELETED": {
+      "SHORT": "Eliminado",
+      "ACTION": "Eliminado",
+      "LONG": "Pedido eliminado"
+    },
+    "VISIT_SUSPENDED": {
+      "SHORT": "Visita suspendida",
+      "ACTION": "Visita suspendida",
+      "LONG": "Visita suspendida por el repartidor"
+    },
+    "RETURNED": {
+      "SHORT": "Devuelto",
+      "ACTION": "Devuelto a la dirección de origen",
+      "LONG": "Pedido devuelto"
+    },
+    "LOST": {
+      "SHORT": "Perdido",
+      "ACTION": "Perdido",
+      "LONG": "Paquete perdido"
+    }
+  },
+
+  "PACKAGE_SIZE": {
+    "ENVELOP": "Sobre",
+    "SMALL": "Paquete pequeño",
+    "MEDIUM": "Paquete mediano",
+    "LARGE": "Paquete grande"
+  }
+}

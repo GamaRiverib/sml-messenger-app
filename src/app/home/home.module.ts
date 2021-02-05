@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { OrderComponentModule } from '../order/order.module';
+import { TranslateModule } from '@ngx-translate/core';
+
 import { OptionsComponent } from './options/options.component';
 
 @NgModule({
@@ -20,7 +22,8 @@ import { OptionsComponent } from './options/options.component';
     FormsModule,
     IonicModule,
     OrderComponentModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    TranslateModule.forChild()
   ],
   declarations: [
     OptionsComponent,

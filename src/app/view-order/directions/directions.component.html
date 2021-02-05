@@ -3,7 +3,7 @@
   <ion-list *ngIf="order">
     <ion-list-header>
       <ion-label color="secondary">
-        Pickup
+        {{ 'DIRECTIONS_COMPONENT.PICKUP' | translate }}
       </ion-label>
     </ion-list-header>
     <ion-item
@@ -56,7 +56,7 @@
     <ion-item class="ion-padding-bottom">
       <ion-icon name="image-outline"></ion-icon>
       <ion-label class="ion-padding-start" (click)="selectCollectedEvidenceFile()">
-        {{ collectedEvidenceFile || 'Select collected evidence image file' }}
+        {{ collectedEvidenceFile || selectCollectedEvidenceMessage }}
       </ion-label>
       <ion-icon 
         (click)="uploadCollectedEvidenceFile()"
@@ -68,7 +68,7 @@
     </ion-item>
     <ion-list-header>
       <ion-label color="secondary">
-        Dropoff
+        {{ 'DIRECTIONS_COMPONENT.DROPOFF' | translate }}
       </ion-label>
     </ion-list-header>
     <ion-item
@@ -116,7 +116,7 @@
     <ion-item class="ion-padding-bottom">
       <ion-icon name="image-outline"></ion-icon>
       <ion-label class="ion-padding-start" (click)="selectDeliveredEvidenceFile()">
-        {{ deliveredEvidenceFile || 'Select delivered evidence image file' }}
+        {{ deliveredEvidenceFile || selectDeliveredEvidenceMessage }}
       </ion-label>
       <ion-icon 
         (click)="uploadDeliveredEvidenceFile()"

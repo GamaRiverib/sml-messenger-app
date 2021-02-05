@@ -8,15 +8,15 @@
         </ion-label>
       </ion-list-header>
       <ion-item lines="none">
-        <ion-label position="fixed">Status</ion-label>
-        <ion-input readonly>{{ log.currentStatus | deliveryStatus:'long' }}</ion-input>
+        <ion-label position="fixed">{{ 'LOG_COMPONENT.STATUS' | translate }}</ion-label>
+        <ion-input readonly>{{ log.currentStatus | deliveryStatus:'long' | translate }}</ion-input>
       </ion-item>
       <ion-item lines="none" *ngIf="log.previousStatus">
-        <ion-label position="fixed">Previous</ion-label>
-        <ion-input readonly>{{ log.previousStatus | deliveryStatus:'long' }}</ion-input>
+        <ion-label position="fixed">{{ 'LOG_COMPONENT.PREVIOUS' | translate }}</ion-label>
+        <ion-input readonly>{{ log.previousStatus | deliveryStatus:'long' | translate }}</ion-input>
       </ion-item>
       <ion-item *ngIf="log.notes">
-        <ion-label position="fixed">Notes</ion-label>
+        <ion-label position="fixed">{{ 'LOG_COMPONENT.NOTES' | translate }}</ion-label>
         <ion-input readonly>{{ log.notes }}</ion-input>
       </ion-item>
     </div>

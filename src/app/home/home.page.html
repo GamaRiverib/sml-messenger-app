@@ -1,13 +1,8 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Orders
+      {{ 'HOME_PAGE.TITLE' | translate }}
     </ion-title>
-    <!--ion-buttons slot="end">
-      <ion-button (click)="onlineMode($event)">
-        <ion-toggle checked></ion-toggle>
-      </ion-button>
-    </ion-buttons-->
     <ion-buttons slot="end">
       <ion-button (click)="showOptions($event)">
         <ion-icon slot="icon-only" name="person-circle-outline" size="large"></ion-icon>
@@ -15,7 +10,7 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar *ngIf="orders && orders.length > 0">
-    <ion-searchbar (ionChange)="onSearchChange($event)"></ion-searchbar>
+    <ion-searchbar (ionChange)="onSearchChange($event)" [placeholder]="searchPlaceholder"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -26,7 +21,7 @@
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">
-        Orders
+        {{ 'HOME_PAGE.TITLE' | translate }}
       </ion-title>
     </ion-toolbar>
   </ion-header>

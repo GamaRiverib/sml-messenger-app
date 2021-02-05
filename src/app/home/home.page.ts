@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { KEYS } from '../app.values';
+
 import { OrderDto } from '../model/order-dto';
 import { DataService } from '../services/data.service';
 import { OptionsComponent } from './options/options.component';
@@ -16,12 +18,23 @@ export class HomePage implements OnInit, OnDestroy {
   public orders: OrderDto[] = [];
   public loadingMessage: string = '';
   public loading: boolean = false;
+  public searchPlaceholder: string = 'Search';
 
-  constructor(private data: DataService, private popoverCtrl: PopoverController) {}
+  constructor(
+    private data: DataService,
+    private translate: TranslateService,
+    private popoverCtrl: PopoverController) {
+      // this.translate.setDefaultLang('es');
+      this.translate.get(KEYS.SEARCH).subscribe((v: string) => {
+        this.searchPlaceholder = `${v || 'Search'}`;
+      });
+    }
 
   private async loadOrders(cache?: boolean): Promise<void> {
     if (this.allOrders.length === 0) {
-      this.loadingMessage = 'Loading...'
+      this.translate.get(KEYS.LOADING).subscribe((v: string) => {
+        this.loadingMessage = `${v || 'Loading'}...`;
+      });
     }
     this.loading = true;
     try {
@@ -31,7 +44,7 @@ export class HomePage implements OnInit, OnDestroy {
       console.log(err);
     } finally {
       if (this.allOrders.length === 0) {
-        this.loadingMessage = 'No orders';
+        this.translate.get(KEYS.HOME_PAGE.NO_ORDERS).subscribe(v => this.loadingMessage = v);
       } else {
         this.loadingMessage = '';
       }

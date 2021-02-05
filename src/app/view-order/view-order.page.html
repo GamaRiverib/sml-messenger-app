@@ -15,7 +15,7 @@
       <ion-buttons slot="start">
         <ion-back-button [text]="getBackButtonText()" defaultHref="/"></ion-back-button>
       </ion-buttons>
-      <ion-title>{{ order ? 'Order #' + order.id : '' }}</ion-title>
+      <ion-title>{{ 'ORDER' | translate }} #{{ order.id }}</ion-title>
       <ion-buttons slot="end">
         <ion-button (click)="showOptions($event)">
           <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
@@ -26,23 +26,22 @@
   <ion-tab-bar slot="bottom">
     <ion-tab-button tab="general" selected="true">
       <ion-icon name="information-circle-outline"></ion-icon>
-      <ion-label>General</ion-label>
+      <ion-label>{{ 'VIEW_ORDER_PAGE.GENERAL' | translate }}</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="directions">
       <ion-icon name="compass-outline"></ion-icon>
-      <ion-label>Directions</ion-label>
+      <ion-label>{{ 'VIEW_ORDER_PAGE.DIRECTIONS' | translate }}</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="packages">
       <ion-icon name="cube-outline"></ion-icon>
-      <ion-label>Packages</ion-label>
+      <ion-label>{{ 'VIEW_ORDER_PAGE.PACKAGES' | translate }}</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="log">
       <ion-icon name="list-outline"></ion-icon>
-      <ion-label>Log</ion-label>
-      <!--ion-badge>6</ion-badge-->
+      <ion-label>{{ 'VIEW_ORDER_PAGE.LOG' | translate }}</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>
