@@ -10,6 +10,10 @@ export const SERVICE_TYPE_PRIORITY = ['ON_DEMAND', 'SAME_DAY', 'NEXT_DAY'];
 
 export const EVIDENCE_FILE_BASE_PATH = 'Resources\\Images\\';
 
+export const HOME_PAGE_PATH = 'home';
+
+export const LOGIN_PAGE_PATH = 'login';
+
 export const STATUS_ICONS = {
   CREATED: 'ellipse',
   QUEUED: 'help-circle',
@@ -182,6 +186,15 @@ export const KEYS = {
   STORED: 'STORED',
   IN_DELIVERY: 'IN_DELIVERY',
   IN_WAREHOUSE: 'IN_WAREHOUSE',
+
+  LOGIN_PAGE: {
+    SIGN_IN: 'LOGIN_PAGE.SIGN_IN',
+    USERNAME: 'LOGIN_PAGE.USERNAME',
+    PASSWORD: 'LOGIN_PAGE.PASSWORD',
+    AUTHENTICATING: 'LOGIN_PAGE.AUTHENTICATING',
+    AUTH_FAILED: 'LOGIN_PAGE.AUTH_FAILED'
+  },
+
   HOME_PAGE: {
     TITLE: 'HOME_PAGE.TITLE',
     NO_ORDERS: 'HOME_PAGE.NO_ORDERS',

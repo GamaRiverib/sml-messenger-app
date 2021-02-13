@@ -37,6 +37,14 @@
   "IN_DELIVERY": "In delivery",
   "IN_WAREHOUSE": "In the warehouse",
 
+  "LOGIN_PAGE": {
+    "SIGN_IN": "Sign in",
+    "USERNAME": "Username",
+    "PASSWORD": "Password",
+    "AUTHENTICATING": "Authenticating",
+    "AUTH_FAILED": "Authentication failed"
+  },
+
   "HOME_PAGE": {
     "TITLE": "Orders",
     "NO_ORDERS": "No orders",

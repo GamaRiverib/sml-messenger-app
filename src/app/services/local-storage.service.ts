@@ -21,10 +21,12 @@ export interface AuthData {
 })
 export class LocalStorageService {
 
+  private authData: AuthData;
+
   constructor(
     private nativeStorage: NativeStorage,
     private platform: Platform) {
-
+      this.getAuthData();
   }
 
   private async getItem<T>(key: string): Promise<T> {
@@ -66,15 +68,21 @@ export class LocalStorageService {
     try {
       const key = `${KEY}::${KEY_AUTH_DATA}`;
       await this.setItem(key, data);
+      this.authData = data;
     } catch (reason) {
       throw new Error('Error saving auth data');
     }
+  }
+
+  getAuthDataSync(): AuthData {
+    return this.authData;
   }
 
   async getAuthData(): Promise<AuthData> {
     const key = `${KEY}::${KEY_AUTH_DATA}`;
     try {
       const authData: AuthData = await this.getItem(key);
+      this.authData = authData;
       return authData;
     } catch (reason) {
       if (reason.code && reason.code === 2) {

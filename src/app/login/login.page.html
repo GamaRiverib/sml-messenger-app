@@ -1,0 +1,21 @@
+<ion-content fullscreen>
+  <ion-grid class="fullheight">
+    <ion-row class="fullheight-row text-align-center">
+      <!--img src="assets/images/logo.png" alt="Tasmota logo" class="logo" /-->
+      <h2>{{ 'APP.NAME' | translate }}</h2>
+      <ion-list>
+        <ion-item class="ion-margin-bottom">
+          <ion-label color="medium" position="stacked">{{ 'LOGIN_PAGE.USERNAME' | translate }}</ion-label>
+          <ion-input autocomplete="off" type="text" minlen="3" name="user" [(ngModel)]="username" required></ion-input>
+        </ion-item>
+        <ion-item class="ion-margin-bottom">
+          <ion-label color="medium" position="stacked">{{ 'LOGIN_PAGE.PASSWORD' | translate }}</ion-label>
+          <ion-input autocomplete="off" type="password" minlen="3" name="password" [(ngModel)]="password" required></ion-input>
+        </ion-item>
+      </ion-list>
+      <ion-button expand="block" share="round" color="tertiary" (click)="login()" [disabled]="!username || !password">
+        {{ 'LOGIN_PAGE.SIGN_IN' | translate }}
+      </ion-button>
+    </ion-row>
+  </ion-grid>
+</ion-content>

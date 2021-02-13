@@ -6,7 +6,7 @@ export const environment = {
   production: false
 };
 
-export const SERVER_URL = '';
+export const SERVER_URL = 'https://smlapiobr.azurewebsites.net';
 
 /*
  * For easier debugging in development mode, you can import the following file

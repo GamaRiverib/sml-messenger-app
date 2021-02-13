@@ -37,6 +37,14 @@
   "IN_DELIVERY": "En repartición",
   "IN_WAREHOUSE": "En el almacén",
 
+  "LOGIN_PAGE": {
+    "SIGN_IN": "Iniciar sesión",
+    "USERNAME": "Nombre de usuario",
+    "PASSWORD": "Contraseña",
+    "AUTHENTICATING": "Autenticando",
+    "AUTH_FAILED": "Autenticación fallida"
+  },
+
   "HOME_PAGE": {
     "TITLE": "Pedidos",
     "NO_ORDERS": "No hay pedidos",
