@@ -155,12 +155,12 @@
     },
     "READY_TO_STORAGE": {
       "SHORT": "Listo para almacenar",
-      "ACTION": "Llevar al almacén",
+      "ACTION": "En camino al almacén",
       "LONG": "Pedido en proceso de almacenamiento"
     },
     "READY_TO_DELIVERY": {
       "SHORT": "Listo para entregar",
-      "ACTION": "Iniciar entrega",
+      "ACTION": "En camino al destino",
       "LONG": "Pedido en proceso de entrega"
     },
     "DELIVERED": {

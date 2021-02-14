@@ -9,9 +9,10 @@ import { ILocalNotification, LocalNotifications } from '@ionic-native/local-noti
 import { DataService } from './services/data.service';
 import { ToastService } from './services/toast.service';
 import { HTTP } from '@ionic-native/http/ngx';
-import { KEYS, MONITOR_DELAY, MONITOR_DELAY_ON_PAUSE } from './app.values';
+import { KEYS, LOGIN_PAGE_PATH, MONITOR_DELAY, MONITOR_DELAY_ON_PAUSE } from './app.values';
 import { TranslateService } from '@ngx-translate/core';
 import { Globalization } from '@ionic-native/globalization/ngx';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,7 @@ export class AppComponent {
     private toast: ToastService,
     private localNotifications: LocalNotifications,
     private http: HTTP,
+    private router: Router
   ) {
     this.initializeApp();
   }
@@ -71,6 +73,15 @@ export class AppComponent {
       const text = await this.translate.get(KEYS.APP.CHANGES_TO_STATUS, params).toPromise();
       const title = await this.translate.get(KEYS.APP.ORDER_UPDATED_TITLE, params).toPromise();
       this.showNotification(text, title);
+    }
+  }
+
+  private async authenticatedChangeHandler(data?: { authenticated: boolean }) {
+    if (data.authenticated) {
+      this.data.startMonitor(MONITOR_DELAY);
+    } else {
+      this.data.stopMonitor();
+      this.router.navigate([ LOGIN_PAGE_PATH ]);
     }
   }
 
@@ -116,12 +127,16 @@ export class AppComponent {
   
       this.data.addSubscriber(DataService.EVENTS.NEW_ORDERS, this.newOrdersHandler.bind(this));
       this.data.addSubscriber(DataService.EVENTS.ORDER_STATUS_CHANGE, this.orderStatusChangeHandler.bind(this));
+      this.data.addSubscriber(DataService.EVENTS.AUTHENTICATED, this.authenticatedChangeHandler.bind(this));
   
       this.localNotifications.on('click').toPromise().then((val: any) => {
         console.log('notification click', val);
       });
 
-      this.data.startMonitor(MONITOR_DELAY);
+      if (this.data.authenticated) {
+        this.data.startMonitor(MONITOR_DELAY);
+      }
+
     });
   }
 }

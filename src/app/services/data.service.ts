@@ -9,6 +9,7 @@ import { ORDER_PROGRESS, ORDER_PROGRESS_COLOR,
          STATUS_ICON_COLOR, STATUS_PRIORITY } from '../app.values';
 import { HttpService } from './http.service';
 import { SERVER_URL } from 'src/environments/environment';
+import { AuthData, LocalStorageService } from './local-storage.service';
 
 // import * as TestData from '../data/test-orders';
 
@@ -20,6 +21,8 @@ export class DataService {
   private orders: OrderDto[] = [];
   private selected: Order = null;
 
+  private authData: AuthData | null = null;
+
   private online: boolean = true;
   private autoAcceptOrders: boolean = false;
 
@@ -29,12 +32,25 @@ export class DataService {
 
   public static EVENTS = {
     NEW_ORDERS: 'DataService::NewOrders',
-    ORDER_STATUS_CHANGE: 'DataService::OrderStatusChange'
+    ORDER_STATUS_CHANGE: 'DataService::OrderStatusChange',
+    AUTHENTICATED: 'DataService::Authenticated'
   };
 
-  constructor(private http: HttpService) {
+  constructor(private http: HttpService, private localStorage: LocalStorageService) {
     // TODO: Test force use web
     this.http.useWeb = true;
+    this.loadAuthData();
+  }
+
+  private async loadAuthData(): Promise<void> {
+    this.authData = await this.localStorage.getAuthData()
+    if (this.authData && this.authData.access_token) {
+      const now = Date.now();
+      if (this.authData.refresh_at && now > this.authData.refresh_at) {
+        return;
+      }
+      this.http.token = this.authData.access_token;
+    }
   }
 
   private notify(event: string, data?: any): void {
@@ -70,7 +86,12 @@ export class DataService {
     return;
   }
 
+  public get authenticated(): boolean {
+    return this.authData !== null;
+  }
+
   public startMonitor(freq?: number): void {
+    console.log('Start monitor');
     freq = freq || 60000;
     if (DataService.MONITOR_TIMEOUT !== null) {
       clearInterval(DataService.MONITOR_TIMEOUT);
@@ -81,6 +102,7 @@ export class DataService {
   }
 
   public stopMonitor(): void {
+    console.log('Stop monitor');
     if (DataService.MONITOR_TIMEOUT !== null) {
       clearInterval(DataService.MONITOR_TIMEOUT);
     }
@@ -147,6 +169,31 @@ export class DataService {
 
   public setAutoAcceptOrders(val: boolean): void {
     this.autoAcceptOrders = val;
+  }
+
+  public async signin(user: string, password: string): Promise<boolean> {
+    const headers = { 'Content-Type': 'application/json' };
+    const url = `${SERVER_URL}/login`;
+    const response: { token: string } = await this.http.post(url, { user, password }, headers);
+    if (response && response.token) {
+      this.authData = { access_token: response.token, refresh_at: 60 * 60 * 1000 };
+      await this.localStorage.setAuthData(this.authData);
+      this.http.token = this.authData.access_token;
+      this.notify(DataService.EVENTS.AUTHENTICATED, { authenticated: true });
+      return true;
+    }
+    return false;
+  }
+
+  public async signout(): Promise<void> {
+    this.authData = null;
+    this.http.token = null;
+    this.notify(DataService.EVENTS.AUTHENTICATED, { authenticated: false });
+    return this.localStorage.removeAuthData();
+  }
+
+  public getAuthData(): AuthData | null {
+    return this.authData;
   }
 
   public async getOrders(cache?: boolean): Promise<OrderDto[]> {

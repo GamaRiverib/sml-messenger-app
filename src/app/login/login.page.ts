@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { SERVER_URL } from 'src/environments/environment';
 import { HOME_PAGE_PATH, KEYS } from '../app.values';
-import { HttpService } from '../services/http.service';
-import { AuthData, LocalStorageService } from '../services/local-storage.service';
+import { DataService } from '../services/data.service';
 import { ToastService } from '../services/toast.service';
 
 @Component({
@@ -18,19 +16,26 @@ export class LoginPage implements OnInit {
   username: string;
   password: string;
 
+  showLogo: boolean = true;
+
   constructor(
-    private localStorage: LocalStorageService,
+    private data: DataService,
     private toast: ToastService,
     private translate: TranslateService,
     private loadingController: LoadingController,
-    private http: HttpService,
-    private router: Router) {
-      this.http.useWeb = true;
-    }
+    private router: Router,
+    private platform: Platform) { }
 
-  async ngOnInit() {
-    const authData: AuthData = await this.localStorage.getAuthData();
-    if (authData && authData.access_token) {
+  ngOnInit() {
+    this.platform.keyboardDidShow.subscribe(() => {
+      this.showLogo = false;
+      console.log('keyboard did show');
+    });
+    this.platform.keyboardDidHide.subscribe(() => {
+      this.showLogo = true;
+      console.log('keyboard did hide');
+    });
+    if (this.data.authenticated) {
       this.router.navigate([ HOME_PAGE_PATH ]);
     }
   }
@@ -47,16 +52,15 @@ export class LoginPage implements OnInit {
     });
     await loading.present();
     try {
-      const url = `${SERVER_URL}/login`;
-      const body = { username: this.username, password: this.password };
-      const response: { token: string } = await this.http.post(url, body);
-      await this.localStorage.setAuthData({ access_token: response.token, refresh_at: Date.now() + 6000 * 30 });
-      console.log(response);
-      this.router.navigate([ HOME_PAGE_PATH ]);
+      const auth: boolean = await this.data.signin(this.username, this.password);
+      if (auth) {
+        this.router.navigate([ HOME_PAGE_PATH ]);
+      } else {
+        this.toast.showLongTop(values[KEYS.LOGIN_PAGE.AUTH_FAILED]);
+      }
     } catch (error) {
-      const values: { [key: string]: string } = await this.translate.get(keys).toPromise();
-      this.toast.showLongTop(values[KEYS.LOGIN_PAGE.AUTH_FAILED]);
       console.log(error);
+      this.toast.showLongTop(values[KEYS.LOGIN_PAGE.AUTH_FAILED]);
     } finally {
       loading.dismiss();
     }

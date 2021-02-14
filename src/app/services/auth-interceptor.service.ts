@@ -3,18 +3,19 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthData, LocalStorageService } from './local-storage.service';
+import { AuthData } from './local-storage.service';
 import { LOGIN_PAGE_PATH } from '../app.values';
+import { DataService } from './data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthInterceptorService implements HttpInterceptor {
 
-  constructor(private localStorage: LocalStorageService, private router: Router) { }
+  constructor(private data: DataService, private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const authData: AuthData = this.localStorage.getAuthDataSync();
+    const authData: AuthData = this.data.getAuthData();
     if (!authData || !authData.access_token) {
       return next.handle(req);
     }

@@ -48,13 +48,13 @@ export class DirectionsComponent implements OnInit {
   private checkUploadedImages() {
     if (this.order.deliveryLog && this.order.deliveryLog.length > 0) {
       const collectedLog = this.order.deliveryLog.find(l => l.currentStatus === STATUS.COLLECTED);
-      this.collectedEvidenceFile = collectedLog ? 
+      this.collectedEvidenceFile = collectedLog && collectedLog.evidence ? 
         collectedLog.evidence.replace(EVIDENCE_FILE_BASE_PATH, '') : null;
       if (this.collectedEvidenceFile !== null) {
         this.collectedEvidenceFileUploaded = true;
       }
       const deliveredLog = this.order.deliveryLog.find(l => l.currentStatus === STATUS.DELIVERED);
-      this.deliveredEvidenceFile = deliveredLog ? 
+      this.deliveredEvidenceFile = deliveredLog && deliveredLog.evidence ? 
         deliveredLog.evidence.replace(EVIDENCE_FILE_BASE_PATH, '') : null;
       if (this.deliveredEvidenceFile !== null) {
         this.deliveredEvidenceFileUploaded = true;
@@ -94,16 +94,20 @@ export class DirectionsComponent implements OnInit {
   async uploadCollectedEvidenceFile(): Promise<void> {
     const transfer: FileTransferObject = this.fileTransfer.create();
     const url: string = `${SERVER_URL}/orders/${this.order.id}/evidence?deliveryStatus=COLLECTED`;
-    
+    const { access_token } = this.data.getAuthData();
     const options: FileUploadOptions = {
       httpMethod: 'post',
-      fileName: `collected-evidence-order-${this.order.id}.jpeg`
+      fileName: `collected-evidence-order-${this.order.id}.jpeg`,
+      headers: {
+        Authorization: `Bearer ${access_token}`
+      }
     };
     this.collectedEvidenceFileUploadProgress = 0.1;
     try {
       transfer.onProgress((event: ProgressEvent<EventTarget>) => {
         this.collectedEvidenceFileUploadProgress = event.loaded / event.total;
       });
+      console.log({options});
       const r = await transfer.upload(this.collectedEvidenceFile, url, options);
       if (r.responseCode >= 200 && r.responseCode < 300) {
         this.order = await this.data.selectOrderById(this.order.id, true);
@@ -131,15 +135,20 @@ export class DirectionsComponent implements OnInit {
   async uploadDeliveredEvidenceFile(): Promise<void> {
     const transfer: FileTransferObject = this.fileTransfer.create();
     const url: string = `${SERVER_URL}/orders/${this.order.id}/evidence?deliveryStatus=DELIVERED`;
+    const { access_token } = this.data.getAuthData();
     const options: FileUploadOptions = {
       httpMethod: 'post',
-      fileName: `delivered-evidence-order-${this.order.id}.jpeg`
+      fileName: `delivered-evidence-order-${this.order.id}.jpeg`,
+      headers: {
+        Authorization: `Bearer ${access_token}`
+      }
     };
     this.deliveredEvidenceFileUploadProgress = 0.1;
     try {
       transfer.onProgress((event: ProgressEvent<EventTarget>) => {
         this.deliveredEvidenceFileUploadProgress = event.loaded / event.total;
       });
+      console.log({options});
       const r = await transfer.upload(this.deliveredEvidenceFile, url, options);
       if (r.responseCode >= 200 && r.responseCode < 300) {
         this.order = await this.data.selectOrderById(this.order.id, true);
