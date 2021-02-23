@@ -84,7 +84,8 @@
     "PICKUP": "Recolección",
     "DROPOFF": "Entrega",
     "SELECT_DELIVERED_EVIDENCE_FILE": "Seleccionar imagen de evidencia",
-    "SELECT_COLLECTED_EVIDENCE_FILE": "Seleccionar imagen de evidencia"
+    "SELECT_COLLECTED_EVIDENCE_FILE": "Seleccionar imagen de evidencia",
+    "ERROR_UPLOADING_EVIDENCE_FILE": "Error al intentar subir la imagen de evidencia"
   },
   
   "GENERAL_COMPONENT": {

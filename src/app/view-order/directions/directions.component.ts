@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { EVIDENCE_FILE_BASE_PATH, KEYS, STATUS } from 'src/app/app.values';
 import { Order } from 'src/app/model/order';
 import { DataService } from 'src/app/services/data.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { SERVER_URL } from 'src/environments/environment';
 import { EvidencePreviewComponent } from '../evidence-preview/evidence-preview.component';
 
@@ -24,12 +25,16 @@ export class DirectionsComponent implements OnInit {
   public collectedEvidenceFileUploadProgress: number = 0;
   public deliveredEvidenceFileUploadProgress: number = 0;
 
+  public canUploadCollectedEvidenceFile: boolean = false;
+  public canUploadDeliveredEvidenceFile: boolean = false;
+
   public selectDeliveredEvidenceMessage: string = '';
   public selectCollectedEvidenceMessage: string = '';
 
   constructor(
     private modalController: ModalController,
     private data: DataService,
+    private toast: ToastService,
     private translate: TranslateService,
     private fileChooser: FileChooser,
     private fileTransfer: FileTransfer) {
@@ -48,12 +53,14 @@ export class DirectionsComponent implements OnInit {
   private checkUploadedImages() {
     if (this.order.deliveryLog && this.order.deliveryLog.length > 0) {
       const collectedLog = this.order.deliveryLog.find(l => l.currentStatus === STATUS.COLLECTED);
+      this.canUploadCollectedEvidenceFile = collectedLog !== undefined;
       this.collectedEvidenceFile = collectedLog && collectedLog.evidence ? 
         collectedLog.evidence.replace(EVIDENCE_FILE_BASE_PATH, '') : null;
       if (this.collectedEvidenceFile !== null) {
         this.collectedEvidenceFileUploaded = true;
       }
       const deliveredLog = this.order.deliveryLog.find(l => l.currentStatus === STATUS.DELIVERED);
+      this.canUploadDeliveredEvidenceFile = deliveredLog !== undefined;
       this.deliveredEvidenceFile = deliveredLog && deliveredLog.evidence ? 
         deliveredLog.evidence.replace(EVIDENCE_FILE_BASE_PATH, '') : null;
       if (this.deliveredEvidenceFile !== null) {
@@ -116,6 +123,13 @@ export class DirectionsComponent implements OnInit {
       }
     } catch (error) {
       console.log(error);
+      const keys = [
+        KEYS.DIRECTIONS_COMPONENT.ERROR_UPLOADING_EVIDENCE_FILE
+      ];
+      this.translate.get(keys).toPromise().then(v => {
+        const message = v[KEYS.DIRECTIONS_COMPONENT.ERROR_UPLOADING_EVIDENCE_FILE];
+        this.toast.showLongTop(message);
+      });
       this.collectedEvidenceFileUploadProgress = 0;
       this.collectedEvidenceFile = null;
       this.collectedEvidenceFileUploaded = false;
@@ -157,6 +171,13 @@ export class DirectionsComponent implements OnInit {
       }
     } catch (error) {
       console.log(error);
+      const keys = [
+        KEYS.DIRECTIONS_COMPONENT.ERROR_UPLOADING_EVIDENCE_FILE
+      ];
+      this.translate.get(keys).toPromise().then(v => {
+        const message = v[KEYS.DIRECTIONS_COMPONENT.ERROR_UPLOADING_EVIDENCE_FILE];
+        this.toast.showLongTop(message);
+      });
       this.deliveredEvidenceFileUploadProgress = 0;
       this.deliveredEvidenceFile = null;
       this.deliveredEvidenceFileUploaded = false;

@@ -84,7 +84,8 @@
     "PICKUP": "Pickup",
     "DROPOFF": "Dropoff",
     "SELECT_DELIVERED_EVIDENCE_FILE": "Select delivered evidence",
-    "SELECT_COLLECTED_EVIDENCE_FILE": "Select collected evidence"
+    "SELECT_COLLECTED_EVIDENCE_FILE": "Select collected evidence",
+    "ERROR_UPLOADING_EVIDENCE_FILE": "Error uploading evidence file"
   },
   
   "GENERAL_COMPONENT": {
