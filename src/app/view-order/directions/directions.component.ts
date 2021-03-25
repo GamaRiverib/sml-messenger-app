@@ -90,7 +90,7 @@ export class DirectionsComponent implements OnInit {
 
   async selectCollectedEvidenceFile(): Promise<void> {
     try {
-      const options: FileChooserOptions = { mime: 'image/jpeg' };
+      const options: FileChooserOptions = { mime: 'image/*' };
       this.collectedEvidenceFile = await this.fileChooser.open(options);
       this.collectedEvidenceFileUploaded = false;
     } catch (error) {
@@ -104,7 +104,6 @@ export class DirectionsComponent implements OnInit {
     const { access_token } = this.data.getAuthData();
     const options: FileUploadOptions = {
       httpMethod: 'post',
-      fileName: `collected-evidence-order-${this.order.id}.jpeg`,
       headers: {
         Authorization: `Bearer ${access_token}`
       }
@@ -138,7 +137,7 @@ export class DirectionsComponent implements OnInit {
 
   async selectDeliveredEvidenceFile(): Promise<void> {
     try {
-      const options: FileChooserOptions = { mime: 'image/jpeg' };
+      const options: FileChooserOptions = { mime: 'image/*' };
       this.deliveredEvidenceFile = await this.fileChooser.open(options);
       this.deliveredEvidenceFileUploaded = false;
     } catch (error) {
@@ -152,7 +151,6 @@ export class DirectionsComponent implements OnInit {
     const { access_token } = this.data.getAuthData();
     const options: FileUploadOptions = {
       httpMethod: 'post',
-      fileName: `delivered-evidence-order-${this.order.id}.jpeg`,
       headers: {
         Authorization: `Bearer ${access_token}`
       }
